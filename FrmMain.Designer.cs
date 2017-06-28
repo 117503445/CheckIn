@@ -48,11 +48,11 @@
             "周四",
             "周五",
             "周六",
-            "周七"});
-            this.comboBoxDay.Location = new System.Drawing.Point(73, 470);
+            "周日"});
+            this.comboBoxDay.Location = new System.Drawing.Point(43, 530);
             this.comboBoxDay.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxDay.Name = "comboBoxDay";
-            this.comboBoxDay.Size = new System.Drawing.Size(56, 25);
+            this.comboBoxDay.Size = new System.Drawing.Size(142, 54);
             this.comboBoxDay.TabIndex = 0;
             this.comboBoxDay.Text = "周一";
             // 
@@ -64,10 +64,10 @@
             "早",
             "午",
             "晚"});
-            this.comboBoxTime.Location = new System.Drawing.Point(135, 470);
+            this.comboBoxTime.Location = new System.Drawing.Point(212, 530);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxTime.Name = "comboBoxTime";
-            this.comboBoxTime.Size = new System.Drawing.Size(38, 25);
+            this.comboBoxTime.Size = new System.Drawing.Size(94, 54);
             this.comboBoxTime.TabIndex = 1;
             this.comboBoxTime.Text = "早";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
@@ -76,10 +76,10 @@
             // 
             this.comboBoxType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Location = new System.Drawing.Point(179, 470);
+            this.comboBoxType.Location = new System.Drawing.Point(334, 530);
             this.comboBoxType.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(38, 25);
+            this.comboBoxType.Size = new System.Drawing.Size(103, 54);
             this.comboBoxType.TabIndex = 2;
             this.comboBoxType.Text = "读";
             // 
@@ -87,17 +87,17 @@
             // 
             this.listBox.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.listBox.FormattingEnabled = true;
-            this.listBox.ItemHeight = 17;
-            this.listBox.Location = new System.Drawing.Point(800, 13);
+            this.listBox.ItemHeight = 46;
+            this.listBox.Location = new System.Drawing.Point(1051, 144);
             this.listBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(230, 633);
+            this.listBox.Size = new System.Drawing.Size(230, 602);
             this.listBox.TabIndex = 3;
             // 
             // buttonLoad
             // 
             this.buttonLoad.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonLoad.Location = new System.Drawing.Point(494, 448);
+            this.buttonLoad.Location = new System.Drawing.Point(517, 545);
             this.buttonLoad.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(131, 67);
@@ -109,7 +109,7 @@
             // buttonSave
             // 
             this.buttonSave.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonSave.Location = new System.Drawing.Point(631, 448);
+            this.buttonSave.Location = new System.Drawing.Point(654, 545);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(131, 67);
@@ -121,7 +121,7 @@
             // buttonEnd
             // 
             this.buttonEnd.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonEnd.Location = new System.Drawing.Point(631, 529);
+            this.buttonEnd.Location = new System.Drawing.Point(791, 545);
             this.buttonEnd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonEnd.Name = "buttonEnd";
             this.buttonEnd.Size = new System.Drawing.Size(131, 67);
@@ -132,10 +132,9 @@
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(22F, 46F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1036, 661);
+            this.ClientSize = new System.Drawing.Size(1305, 850);
             this.Controls.Add(this.buttonEnd);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonLoad);

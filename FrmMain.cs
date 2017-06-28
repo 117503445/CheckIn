@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.OleDb;
 
 namespace CheckIn
 {
@@ -161,6 +162,31 @@ namespace CheckIn
                     if (studentID[i] != 0 & !studentQd[i] & studentID[i] == j) { listBox.Items.Add(studentID[i] + studentName[i]); break; }
                 }
             }
+
+            OleDbConnection conn = new OleDbConnection(@"Provider = Microsoft.Jet.OLEDB.4.0; Data Source ="+ System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase+@"file/mdb/log.mdb");
+            conn.Open();
+            OleDbCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "select * from Students";
+            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter()
+            {
+                SelectCommand = cmd
+            };
+            DataSet myDataSet = new DataSet();
+            myDataAdapter.Fill(myDataSet, "Students");
+            DataTable myTable = myDataSet.Tables["Students"];
+            foreach (DataRow myrow in myTable.Rows)
+            {
+                for (int i=0;i<89;i++) {
+                    if ((int)myrow["ID"]==studentID[i]) {myrow[filedsName] = studentQd[i]; break; } 
+
+                }
+               
+            }
+            OleDbCommandBuilder myOleDeCommandBuilder = new OleDbCommandBuilder(myDataAdapter);
+            myDataAdapter.Update(myDataSet, "Students");
+
+
+
         }
 
         private void buttonEnd_Click(object sender, EventArgs e)
