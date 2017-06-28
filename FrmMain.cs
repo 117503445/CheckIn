@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
 
@@ -13,23 +9,38 @@ namespace CheckIn
 {
     public partial class FrmMain : Form
     {
-        public string[] studentData;
+        public string filedsName = "";//例如 周四早眼
 
+        public string[] studentData;
         public string[] studentName = new string[89];//姓名
         public int[] studentID = new int[89];//学号
         public bool[] studentQd = new bool[89];//签到
-        public string filedsName = "";//例如 周四早眼
         public int[] studentColor = new int[89];//0 为白色，1为红色，2为灰色
         public Button[] btnStudents = new Button[89];//学生们
+
+
+
         public FrmMain()
         {
             InitializeComponent();
+
+            Students[] students = new Students[51];
+            for (int i=0; i<students.Length;i++) {
+                students[i] = new Students();
+            }
             #region 初始化
-            for (int i = 0; i < 89; i++) { studentQd[i] = true; btnStudents[i] = new Button(); this.Controls.Add(btnStudents[i]); btnStudents[i].Visible = false;
+            for (int i = 0; i < 89; i++) { studentQd[i] = true;
+                btnStudents[i] = new Button();
+                this.Controls.Add(btnStudents[i]);//注册按钮
+                btnStudents[i].Visible = false;
                 btnStudents[i].BackColor = Color.AliceBlue;
+                btnStudents[i].FlatStyle = System.Windows.Forms.FlatStyle.Popup;//Style
+                btnStudents[i].Click += new System.EventHandler(this.btnStudents_Click);//注册单击事件
             }
             #endregion
-            #region LoadStudent
+            #region 界面布局
+ 
+            Console.WriteLine(Screen.PrimaryScreen.Bounds.Width);
             int Top = 0;
             int left = 0;
             for (int i = 0; i < 9; i++)
@@ -40,16 +51,15 @@ namespace CheckIn
                 {
                     btnStudents[10 * i + j].Top = Top;
                     btnStudents[10 * i + j].Left = left;
-                    btnStudents[10 * i + j].FlatStyle = System.Windows.Forms.FlatStyle.Popup;//Style
-                    btnStudents[10 * i + j].Click += new System.EventHandler(this.btnStudents_Click);//注册单击事件
+                    
                     Top += 30;
                 }
                 left += 80;
             }
             #endregion
-
             #region 读取students.txt
-            studentData = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory + "/file/txt/students.txt", Encoding.Default);
+            studentData = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
+                "/file/txt/students.txt", Encoding.Default);//读取students.txt
             System.Console.WriteLine("读取students.txt");
             foreach (string i in studentData)
             {
@@ -59,6 +69,13 @@ namespace CheckIn
                 studentID[index] = Int32.Parse(i.Substring(6, 2));
                 btnStudents[index].Text = studentName[index];
                 btnStudents[index].Visible = true;
+
+                //以下搞事情
+                int id = Int32.Parse(i.Substring(6, 2));
+                students[id].Name = i.Substring(2, 4);
+                students[id].Enabled = true;
+                students[id].PositionX = Int32.Parse( i.Substring(0,1));
+                students[id].PositionY = Int32.Parse(i.Substring(1,1));
             }
             #endregion
             #region 填充comboBox
@@ -77,19 +94,24 @@ namespace CheckIn
             int hourint = currentTime.Hour;
             switch (hourint)
             {
-                case (6): comboBoxTime.Text = "早"; comboBoxType.Text = "读"; break;
-                case (10): comboBoxTime.Text = "早"; comboBoxType.Text = "眼"; break;
-                case (12): comboBoxTime.Text = "午"; comboBoxType.Text = "休"; break;
-                case (15): comboBoxTime.Text = "午"; comboBoxType.Text = "眼"; break;
-                case (5): comboBoxTime.Text = "晚"; comboBoxType.Text = "修"; break;
-                case (8): comboBoxTime.Text = "晚"; comboBoxType.Text = "眼"; break;
+                case 6:
+                case 10: comboBoxTime.Text = "早"; break;
+                case 12: 
+                case 15: comboBoxTime.Text = "午"; break;
+                case 5: 
+                case 8: comboBoxTime.Text = "晚"; break;
                 default: listBox.Items.Add("[Warn]奇怪的时间"); break;
             }
+            switch(comboBoxTime.Text){
+                case "早": comboBoxType.Items.Add  ("读"); break;
+                case "午": comboBoxType.Items.Add("休"); break;
+                case "晚": comboBoxType.Items.Add("修"); break;
+            }
+            comboBoxType.Items.Add("眼");
 
             #endregion
 
         }
-
         private void btnStudents_Click(object sender, System.EventArgs e)
         {
             String[] arrs = ((Button)sender).Text.Split('\n');
@@ -128,7 +150,6 @@ namespace CheckIn
 
 
         }
-
         private void comboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
 
 
@@ -147,7 +168,6 @@ namespace CheckIn
             comboBoxType.Items.Add("眼");
 
         }
-
         private void buttonSave_Click(object sender, EventArgs e)
         {
             filedsName = comboBoxDay.Text + comboBoxTime.Text + comboBoxType.Text;
@@ -188,12 +208,10 @@ namespace CheckIn
 
 
         }
-
         private void buttonEnd_Click(object sender, EventArgs e)
         {
             System.Environment.Exit(0);
         }
-
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             string[] tempReceiver = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory + "/file/txt/temp.txt", Encoding.Default);
@@ -211,6 +229,26 @@ namespace CheckIn
             }
 
         }
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            this.Top = 0;
+            this.Height = Screen.PrimaryScreen.Bounds.Height;
+            this.Width = Screen.PrimaryScreen.Bounds.Width * 3 / 4;
+            this.Left = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
+        }
     }
-
+    public class Students {
+        private string name = "";
+        private int positionX = 0;
+        private int positionY = 0;
+        private int color = 0;
+        private bool isCheck = true;
+        private bool enabled = false;
+        public string Name { get => name; set => name = value; }
+        public int PositionX { get => positionX; set => positionX = value; }
+        public int PositionY { get => positionY; set => positionY = value; }
+        public int Color { get => color; set => color = value; }
+        public bool IsCheck { get => isCheck; set => isCheck = value; }
+        public bool Enabled { get => enabled; set => enabled = value; }
+    }
 }
