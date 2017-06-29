@@ -49,10 +49,10 @@
             "周五",
             "周六",
             "周日"});
-            this.comboBoxDay.Location = new System.Drawing.Point(43, 530);
+            this.comboBoxDay.Location = new System.Drawing.Point(262, 1128);
             this.comboBoxDay.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxDay.Name = "comboBoxDay";
-            this.comboBoxDay.Size = new System.Drawing.Size(142, 54);
+            this.comboBoxDay.Size = new System.Drawing.Size(143, 54);
             this.comboBoxDay.TabIndex = 0;
             this.comboBoxDay.Text = "周一";
             // 
@@ -64,10 +64,10 @@
             "早",
             "午",
             "晚"});
-            this.comboBoxTime.Location = new System.Drawing.Point(212, 530);
+            this.comboBoxTime.Location = new System.Drawing.Point(431, 1128);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxTime.Name = "comboBoxTime";
-            this.comboBoxTime.Size = new System.Drawing.Size(94, 54);
+            this.comboBoxTime.Size = new System.Drawing.Size(95, 54);
             this.comboBoxTime.TabIndex = 1;
             this.comboBoxTime.Text = "早";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
@@ -76,31 +76,31 @@
             // 
             this.comboBoxType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBoxType.FormattingEnabled = true;
-            this.comboBoxType.Location = new System.Drawing.Point(334, 530);
+            this.comboBoxType.Location = new System.Drawing.Point(553, 1128);
             this.comboBoxType.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(103, 54);
+            this.comboBoxType.Size = new System.Drawing.Size(104, 54);
             this.comboBoxType.TabIndex = 2;
             this.comboBoxType.Text = "读";
             // 
             // listBox
             // 
-            this.listBox.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.listBox.Font = new System.Drawing.Font("微软雅黑", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.listBox.FormattingEnabled = true;
-            this.listBox.ItemHeight = 46;
-            this.listBox.Location = new System.Drawing.Point(1051, 144);
+            this.listBox.ItemHeight = 39;
+            this.listBox.Location = new System.Drawing.Point(2414, 133);
             this.listBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(230, 602);
+            this.listBox.Size = new System.Drawing.Size(362, 1135);
             this.listBox.TabIndex = 3;
             // 
             // buttonLoad
             // 
             this.buttonLoad.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonLoad.Location = new System.Drawing.Point(517, 545);
+            this.buttonLoad.Location = new System.Drawing.Point(884, 1128);
             this.buttonLoad.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(131, 67);
+            this.buttonLoad.Size = new System.Drawing.Size(452, 159);
             this.buttonLoad.TabIndex = 4;
             this.buttonLoad.Text = "读取";
             this.buttonLoad.UseVisualStyleBackColor = true;
@@ -109,10 +109,10 @@
             // buttonSave
             // 
             this.buttonSave.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonSave.Location = new System.Drawing.Point(654, 545);
+            this.buttonSave.Location = new System.Drawing.Point(1365, 1128);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(131, 67);
+            this.buttonSave.Size = new System.Drawing.Size(452, 159);
             this.buttonSave.TabIndex = 5;
             this.buttonSave.Text = "保存";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -121,10 +121,10 @@
             // buttonEnd
             // 
             this.buttonEnd.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonEnd.Location = new System.Drawing.Point(791, 545);
+            this.buttonEnd.Location = new System.Drawing.Point(1841, 1128);
             this.buttonEnd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonEnd.Name = "buttonEnd";
-            this.buttonEnd.Size = new System.Drawing.Size(131, 67);
+            this.buttonEnd.Size = new System.Drawing.Size(452, 159);
             this.buttonEnd.TabIndex = 6;
             this.buttonEnd.Text = "退出";
             this.buttonEnd.UseVisualStyleBackColor = true;
@@ -134,8 +134,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(22F, 46F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1305, 850);
+            this.ClientSize = new System.Drawing.Size(2844, 1577);
             this.Controls.Add(this.buttonEnd);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonLoad);
@@ -148,6 +147,9 @@
             this.Name = "FrmMain";
             this.Text = "CheckIn";
             this.Load += new System.EventHandler(this.FrmMain_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FrmMain_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FrmMain_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.FrmMain_MouseUp);
             this.ResumeLayout(false);
 
         }
