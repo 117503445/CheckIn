@@ -195,6 +195,9 @@ namespace CheckIn
             conn.Close();             // 关闭数据库连接
             conn.Dispose();           // 释放数据库连接对象
             listBox.Items.Add("成功签到");
+            string[] strBackups;
+            strBackups = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
+                    "/file/txt/backup.txt", Encoding.Default);//读取backup.txt
         }
 
         private void buttonEnd_Click(object sender, EventArgs e)
