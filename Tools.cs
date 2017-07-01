@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CheckIn
 {
-    class Tools
+   public static class  Tools
     {
-
-
+        public static bool isFormAdminActive = false;
+        public static bool tDEBUG = false;
 
     }
 }

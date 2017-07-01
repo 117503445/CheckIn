@@ -15,7 +15,7 @@ namespace CheckIn
         public Button[] btnStudents = new Button[51];//学生按钮
         Point mouseOff;//鼠标移动位置变量
         bool leftFlag;//标签是否为左键
-        public static bool isFormAdminActive = false;
+       
         
         public FrmMain()
         {
@@ -102,7 +102,7 @@ namespace CheckIn
                 case 15: comboBoxTime.Text = "午"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("休"); break;
                 case 5: comboBoxTime.Text = "晚"; comboBoxType.Text = "修"; comboBoxType.Items.Add("修"); break;
                 case 8: comboBoxTime.Text = "晚"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("修"); break;
-                default: listBox.Items.Add("[Warn]奇怪的时间"); break;
+                default: listBox.Items.Add("[Warn]奇怪的时间"); comboBoxType.Items.Add("读"); break;
             }
             comboBoxType.Items.Add("眼");
 
@@ -249,16 +249,29 @@ namespace CheckIn
                         case "default":
                         Console.WriteLine("Type=default");
                        targetPath =strTemp[1]+"/"+timeName+@".mdb";
-                        Console.WriteLine("sourcePath=" + sourcePath);
-                        Console.WriteLine("targetPath="+ targetPath);
+                        Console.WriteLine("  sourcePath=" + sourcePath);
+                        Console.WriteLine("  targetPath="+ targetPath);
                         System.IO.File.Copy(sourcePath, targetPath, true);
                         Console.WriteLine("BackupFinished");
                         break;
                         case "AppPath":
                         Console.WriteLine("Type:AppPath");
+                        Console.WriteLine("功能没做");
                         break;
                         case "NoDisk":
                         Console.WriteLine("Type:NoDisk");
+                        for (char i = 'A'; i <= 'Z'; i++)
+                        {
+                           
+                            if (System.IO.Directory.Exists(i+strTemp[1])) {
+                                targetPath = i + strTemp[1] + "/" + timeName + @".mdb";
+                                Console.WriteLine("  sourcePath=" + sourcePath);
+                                Console.WriteLine("  targetPath=" + targetPath);
+                                System.IO.File.Copy(sourcePath, targetPath, true);
+                                Console.WriteLine("BackupFinished");
+                                break;
+                            }
+                        }
                         break;
                 }
                 
@@ -330,7 +343,7 @@ namespace CheckIn
                 default:break;
             }
 
-            if (FrmAdmin.tDEBUG)
+            if (Tools.tDEBUG)
             {
                 FrmAdmin frmAdmin = new FrmAdmin();
                 frmAdmin.Show();
@@ -339,10 +352,10 @@ namespace CheckIn
         private void FrmMain_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button==MouseButtons.Right) {
-                if (!isFormAdminActive) {
+                if (!Tools.isFormAdminActive) {
                     FrmAdmin frmAdmin = new FrmAdmin();
                     frmAdmin.Show();
-                    isFormAdminActive = true;
+                    Tools.isFormAdminActive = true;
                 }
                
                 

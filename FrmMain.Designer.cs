@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.comboBoxDay = new System.Windows.Forms.ComboBox();
             this.comboBoxTime = new System.Windows.Forms.ComboBox();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
@@ -143,6 +144,7 @@
             this.Controls.Add(this.comboBoxTime);
             this.Controls.Add(this.comboBoxDay);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FrmMain";
             this.Text = "CheckIn";

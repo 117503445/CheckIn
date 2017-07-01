@@ -54,6 +54,9 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>file\other\CheckIn.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -139,6 +142,7 @@
     <Content Include="file\mdb\log.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="file\other\CheckIn.ico" />
     <Content Include="file\txt\backup.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
