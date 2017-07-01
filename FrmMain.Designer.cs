@@ -52,7 +52,7 @@
             this.comboBoxDay.Location = new System.Drawing.Point(262, 1128);
             this.comboBoxDay.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxDay.Name = "comboBoxDay";
-            this.comboBoxDay.Size = new System.Drawing.Size(143, 54);
+            this.comboBoxDay.Size = new System.Drawing.Size(143, 32);
             this.comboBoxDay.TabIndex = 0;
             this.comboBoxDay.Text = "周一";
             // 
@@ -67,7 +67,7 @@
             this.comboBoxTime.Location = new System.Drawing.Point(431, 1128);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxTime.Name = "comboBoxTime";
-            this.comboBoxTime.Size = new System.Drawing.Size(95, 54);
+            this.comboBoxTime.Size = new System.Drawing.Size(95, 32);
             this.comboBoxTime.TabIndex = 1;
             this.comboBoxTime.Text = "早";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
@@ -79,7 +79,7 @@
             this.comboBoxType.Location = new System.Drawing.Point(553, 1128);
             this.comboBoxType.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(104, 54);
+            this.comboBoxType.Size = new System.Drawing.Size(104, 32);
             this.comboBoxType.TabIndex = 2;
             this.comboBoxType.Text = "读";
             // 
@@ -87,11 +87,11 @@
             // 
             this.listBox.Font = new System.Drawing.Font("微软雅黑", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.listBox.FormattingEnabled = true;
-            this.listBox.ItemHeight = 39;
+            this.listBox.ItemHeight = 20;
             this.listBox.Location = new System.Drawing.Point(2414, 133);
             this.listBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(362, 1135);
+            this.listBox.Size = new System.Drawing.Size(362, 1124);
             this.listBox.TabIndex = 3;
             // 
             // buttonLoad
@@ -132,9 +132,9 @@
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(22F, 46F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2844, 1577);
+            this.ClientSize = new System.Drawing.Size(1910, 1036);
             this.Controls.Add(this.buttonEnd);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonLoad);
