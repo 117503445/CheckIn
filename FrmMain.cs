@@ -15,8 +15,8 @@ namespace CheckIn
         public Button[] btnStudents = new Button[51];//学生按钮
         Point mouseOff;//鼠标移动位置变量
         bool leftFlag;//标签是否为左键
-       
-        
+
+
         public FrmMain()
         {
             InitializeComponent();
@@ -46,11 +46,11 @@ namespace CheckIn
             }
             #endregion
             #region 读取students.txt
-            string[] studentData;
-            studentData = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
+
+            Tools.studentData = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
                     "/file/txt/students.txt", Encoding.Default);//读取students.txt
             System.Console.WriteLine("Loading students.txt");
-            foreach (string i in studentData)
+            foreach (string i in Tools.studentData)
             {
                 int id = Int32.Parse(i.Substring(6, 2));
                 students[id].Name = i.Substring(2, 4);
@@ -58,22 +58,11 @@ namespace CheckIn
                 students[id].Enabled = true;
                 students[id].PositionX = Int32.Parse(i.Substring(1, 1));
                 students[id].PositionY = Int32.Parse(i.Substring(0, 1));
+
                 btnStudents[id].Text = students[id].Name;
                 btnStudents[id].Visible = true;
-
-                switch (Screen.PrimaryScreen.Bounds.Width)
-                {
-
-                    case 1280:
-                        btnStudents[id].Top =45 * students[id].PositionX;
-                        btnStudents[id].Left = 90 * students[id].PositionY;
-                        break;
-                    case 3840:
-                    default:
-                        btnStudents[id].Top = 130 * students[id].PositionX;
-                        btnStudents[id].Left = 260 * students[id].PositionY;
-                        break;
-                }
+                btnStudents[id].Top = (int)(0.035 * Screen.PrimaryScreen.Bounds.Width * students[id].PositionX);
+                btnStudents[id].Left = (int)(0.07 * Screen.PrimaryScreen.Bounds.Width * students[id].PositionY);
 
             }
             Console.WriteLine("Finish Loading");
@@ -178,8 +167,8 @@ namespace CheckIn
             {
                 if (students[i].Enabled & !students[i].IsCheck) { listBox.Items.Add(i + students[i].Name); }
             }
-            string databasePath = System.Environment.CurrentDirectory + @"\\file\\mdb\\log.mdb";
-            OleDbConnection conn = new OleDbConnection(@"Provider = Microsoft.Jet.OLEDB.4.0; Data Source =" +databasePath);
+            #region 数据库连接
+            OleDbConnection conn = new OleDbConnection(@"Provider = Microsoft.Jet.OLEDB.4.0; Data Source =" + Tools.databasePath);
             conn.Open();
             OleDbCommand cmd = conn.CreateCommand();
             cmd.CommandText = "select * from Students";
@@ -221,6 +210,7 @@ namespace CheckIn
             myDataAdapter.Dispose();    // 释放SqlDataAdapter对象
             conn.Close();             // 关闭数据库连接
             conn.Dispose();           // 释放数据库连接对象
+            #endregion
             listBox.Items.Add("签到成功");
             Console.WriteLine("签到成功");
             string[] strBackups;
@@ -229,41 +219,44 @@ namespace CheckIn
             string BpVersion = "";
             System.DateTime currentTime = new System.DateTime();
             currentTime = System.DateTime.Now;
-            string timeName = currentTime.Month.ToString()+"_"+
-                    currentTime.Day.ToString()+ "_" + 
-                    currentTime.Hour.ToString()+ "_" + 
-                    currentTime.Minute.ToString()+ "_" + 
-                    currentTime.Second.ToString()+"_" +
+            string timeName = currentTime.Month.ToString() + "_" +
+                    currentTime.Day.ToString() + "_" +
+                    currentTime.Hour.ToString() + "_" +
+                    currentTime.Minute.ToString() + "_" +
+                    currentTime.Second.ToString() + "_" +
                     filedsName;
 
-            Console.WriteLine("timeName=" + timeName);        
-            foreach (string s in strBackups) {
+            Console.WriteLine("timeName=" + timeName);
+            foreach (string s in strBackups)
+            {
                 string[] strTemp = s.Split(';');
-                string sourcePath = databasePath;
+                string sourcePath = Tools.databasePath;
                 string targetPath = "";
-                switch (strTemp[0]) {
-                        case "BpVersion":
+                switch (strTemp[0])
+                {
+                    case "BpVersion":
                         BpVersion = strTemp[1];
-                        Console.WriteLine("BpVersion="+ BpVersion);
+                        Console.WriteLine("BpVersion=" + BpVersion);
                         break;
-                        case "default":
+                    case "default":
                         Console.WriteLine("Type=default");
-                       targetPath =strTemp[1]+"/"+timeName+@".mdb";
+                        targetPath = strTemp[1] + "/" + timeName + @".mdb";
                         Console.WriteLine("  sourcePath=" + sourcePath);
-                        Console.WriteLine("  targetPath="+ targetPath);
+                        Console.WriteLine("  targetPath=" + targetPath);
                         System.IO.File.Copy(sourcePath, targetPath, true);
                         Console.WriteLine("BackupFinished");
                         break;
-                        case "AppPath":
+                    case "AppPath":
                         Console.WriteLine("Type:AppPath");
                         Console.WriteLine("功能没做");
                         break;
-                        case "NoDisk":
+                    case "NoDisk":
                         Console.WriteLine("Type:NoDisk");
                         for (char i = 'A'; i <= 'Z'; i++)
                         {
-                           
-                            if (System.IO.Directory.Exists(i+strTemp[1])) {
+
+                            if (System.IO.Directory.Exists(i + strTemp[1]))
+                            {
                                 targetPath = i + strTemp[1] + "/" + timeName + @".mdb";
                                 Console.WriteLine("  sourcePath=" + sourcePath);
                                 Console.WriteLine("  targetPath=" + targetPath);
@@ -274,7 +267,7 @@ namespace CheckIn
                         }
                         break;
                 }
-                
+
             }
 
         }
@@ -301,15 +294,16 @@ namespace CheckIn
         }
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            Height= Screen.PrimaryScreen.Bounds.Height * 7 / 9;
+            Height = Screen.PrimaryScreen.Bounds.Height * 7 / 9;
             Top = Screen.PrimaryScreen.Bounds.Height * 2 / 9;
-            Width= Screen.PrimaryScreen.Bounds.Width*6 / 8;
+            Width = Screen.PrimaryScreen.Bounds.Width * 6 / 8;
             Left = Screen.PrimaryScreen.Bounds.Width / 8;
 
-            switch (Screen.PrimaryScreen.Bounds.Width) {
+            switch (Screen.PrimaryScreen.Bounds.Width)
+            {
                 case 1280:
                     listBox.Left = this.Width - 150;
-                    listBox.Top =  0;
+                    listBox.Top = 0;
                     listBox.Height = Height;
                     #region buttonLoad
                     buttonLoad.Width = btnStudents[1].Width;
@@ -329,8 +323,8 @@ namespace CheckIn
                     buttonEnd.Left = listBox.Left - buttonEnd.Width - 10;
                     buttonEnd.Top = 450;
                     #endregion
-                    comboBoxDay.Left = buttonLoad.Left- comboBoxDay.Width-20;
-                    comboBoxDay.Top = buttonLoad.Top+1;
+                    comboBoxDay.Left = buttonLoad.Left - comboBoxDay.Width - 20;
+                    comboBoxDay.Top = buttonLoad.Top + 1;
 
                     comboBoxTime.Left = buttonSave.Left - comboBoxTime.Width - 20;
                     comboBoxTime.Top = buttonSave.Top + 1;
@@ -340,7 +334,7 @@ namespace CheckIn
                     break;
 
                 case 3840:
-                default:break;
+                default: break;
             }
 
             if (Tools.tDEBUG)
@@ -351,25 +345,27 @@ namespace CheckIn
         }
         private void FrmMain_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button==MouseButtons.Right) {
-                if (!Tools.isFormAdminActive) {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (!Tools.isFormAdminActive)
+                {
                     FrmAdmin frmAdmin = new FrmAdmin();
                     frmAdmin.Show();
                     Tools.isFormAdminActive = true;
                 }
-               
-                
+
+
             }
             if (e.Button == MouseButtons.Left)
             {
                 mouseOff = new Point(-e.X, -e.Y); //得到变量的值
                 leftFlag = true;                  //点击左键按下时标注为true;
             }
-            
+
         }
         private void FrmMain_MouseMove(object sender, MouseEventArgs e)
         {
-            
+
             if (leftFlag)
             {
                 Point mouseSet = Control.MousePosition;
@@ -383,7 +379,7 @@ namespace CheckIn
             {
                 leftFlag = false;//释放鼠标后标注为false;
             }
-             
+
         }
     }
 

@@ -10,6 +10,7 @@ namespace CheckIn
     {
         public static bool isFormAdminActive = false;
         public static bool tDEBUG = false;
-
+        public static string databasePath = System.Environment.CurrentDirectory + @"\\file\\mdb\\log.mdb";
+        public static string[] studentData;
     }
 }
