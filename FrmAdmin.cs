@@ -12,9 +12,20 @@ namespace CheckIn
 {
     public partial class FrmAdmin : Form
     {
+        public static bool tDEBUG = true;
         public FrmAdmin()
         {
             InitializeComponent();
+        }
+
+        private void FrmAdmin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            FrmMain.isFormAdminActive = false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

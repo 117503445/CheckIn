@@ -15,6 +15,8 @@ namespace CheckIn
         public Button[] btnStudents = new Button[51];//学生按钮
         Point mouseOff;//鼠标移动位置变量
         bool leftFlag;//标签是否为左键
+        public static bool isFormAdminActive = false;
+        
         public FrmMain()
         {
             InitializeComponent();
@@ -47,7 +49,7 @@ namespace CheckIn
             string[] studentData;
             studentData = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
                     "/file/txt/students.txt", Encoding.Default);//读取students.txt
-            System.Console.WriteLine("读取students.txt");
+            System.Console.WriteLine("Loading students.txt");
             foreach (string i in studentData)
             {
                 int id = Int32.Parse(i.Substring(6, 2));
@@ -74,7 +76,7 @@ namespace CheckIn
                 }
 
             }
-
+            Console.WriteLine("Finish Loading");
             #endregion
             #region 填充comboBox
             string weekstr = DateTime.Now.DayOfWeek.ToString();
@@ -149,7 +151,7 @@ namespace CheckIn
 
 
         }
-        private void comboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
 
 
         {
@@ -327,12 +329,21 @@ namespace CheckIn
                 case 3840:
                 default:break;
             }
+
+            if (FrmAdmin.tDEBUG)
+            {
+                FrmAdmin frmAdmin = new FrmAdmin();
+                frmAdmin.Show();
+            }
         }
         private void FrmMain_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button==MouseButtons.Right) {
-                FrmAdmin frmAdmin = new FrmAdmin();
-                frmAdmin.Show();
+                if (!isFormAdminActive) {
+                    FrmAdmin frmAdmin = new FrmAdmin();
+                    frmAdmin.Show();
+                    isFormAdminActive = true;
+                }
                
                 
             }
@@ -362,18 +373,5 @@ namespace CheckIn
              
         }
     }
-    public class Students
-    {
-        private string name = "";
-        private int positionX = 0;
-        private int positionY = 0;
-        public int color = 0;
-        private bool isCheck = true;
-        private bool enabled = false;
-        public string Name { get => name; set => name = value; }
-        public int PositionX { get => positionX; set => positionX = value; }
-        public int PositionY { get => positionY; set => positionY = value; }
-        public bool IsCheck { get => isCheck; set => isCheck = value; }
-        public bool Enabled { get => enabled; set => enabled = value; }
-    }
+
 }

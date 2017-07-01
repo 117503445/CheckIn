@@ -70,7 +70,7 @@
             this.comboBoxTime.Size = new System.Drawing.Size(95, 32);
             this.comboBoxTime.TabIndex = 1;
             this.comboBoxTime.Text = "早";
-            this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
+            this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.ComboBoxTime_SelectedIndexChanged);
             // 
             // comboBoxType
             // 
