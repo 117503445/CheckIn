@@ -284,9 +284,9 @@ namespace CheckIn
                 Console.WriteLine(tempstr[0]);
                 switch (tempstr[0])
                 {
-                    case "0": btnStudents[i].BackColor = Color.AliceBlue; students[i].IsCheck = true; break;
-                    case "1": btnStudents[i].BackColor = Color.Orange; students[i].IsCheck = false; break;
-                    case "2": btnStudents[i].BackColor = Color.LightSteelBlue; students[i].IsCheck = true; break;
+                    case "0": btnStudents[i].BackColor = Color.AliceBlue;students[i].color=0; students[i].IsCheck = true; break;
+                    case "1": btnStudents[i].BackColor = Color.Orange; students[i].color = 1; students[i].IsCheck = false; break;
+                    case "2": btnStudents[i].BackColor = Color.LightSteelBlue; students[i].color = 2; students[i].IsCheck = true; break;
                 }
 
             }
