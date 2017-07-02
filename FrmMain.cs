@@ -10,7 +10,6 @@ namespace CheckIn
     public partial class FrmMain : Form
     {
         public string filedsName = "";//例如 周四早眼
-
         public Students[] students = new Students[51];
         public Button[] btnStudents = new Button[51];//学生按钮
         Point mouseOff;//鼠标移动位置变量
@@ -52,12 +51,13 @@ namespace CheckIn
             System.Console.WriteLine("Loading students.txt");
             foreach (string i in Tools.studentData)
             {
-                int id = Int32.Parse(i.Substring(6, 2));
-                students[id].Name = i.Substring(2, 4);
-                if (students[id].Name.Substring(3, 1) != " ") { btnStudents[id].Font = new Font(btnStudents[id].Font.FontFamily, 13, btnStudents[id].Font.Style); }
+                string[] strTemp = i.Split(';');
+                int id = Int32.Parse(strTemp[3]);
+                students[id].Name = strTemp[2];
+                if (students[id].Name.Length>3) { btnStudents[id].Font = new Font(btnStudents[id].Font.FontFamily, 13, btnStudents[id].Font.Style); }
                 students[id].Enabled = true;
-                students[id].PositionX = Int32.Parse(i.Substring(1, 1));
-                students[id].PositionY = Int32.Parse(i.Substring(0, 1));
+                students[id].PositionX = Int32.Parse(strTemp[1]);
+                students[id].PositionY = Int32.Parse(strTemp[0]);
 
                 btnStudents[id].Text = students[id].Name;
                 btnStudents[id].Visible = true;
@@ -106,9 +106,7 @@ namespace CheckIn
             {
                 if (arrs[0] == students[i].Name) { ID = i; break; }//查找学号
             }
-            Console.WriteLine("当前学号:" + ID);
-            Console.WriteLine("当前姓名" + students[ID].Name);
-            Console.WriteLine("当前颜色" + ((Button)sender).BackColor);
+
             if (((Button)sender).BackColor == Color.Orange)
             {
                 ((Button)sender).BackColor = Color.LightSteelBlue;
@@ -126,7 +124,9 @@ namespace CheckIn
                 students[ID].color = 1;
                 students[ID].IsCheck = false;
             }
-
+            Console.WriteLine("当前学号:" + ID);
+            Console.WriteLine("当前姓名" + students[ID].Name);
+            Console.WriteLine("当前颜色" + ((Button)sender).BackColor);
             Console.WriteLine("当前签到情况" + students[ID].IsCheck);
 
             string[] tempstr = new string[students.Length];

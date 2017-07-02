@@ -93,20 +93,29 @@ namespace CheckIn
             conn.Dispose();           // 释放数据库连接对象
             listBoxOutput.Items.Add("设置数据库所有数据为：" + isTrue);
         }
-
         private void buttonMoveSeats_Click(object sender, EventArgs e)
         {
-            //string[] strResult = new string[Tools.studentData.Length];
-            //int t = 0;
-            //foreach (string i in Tools.studentData) {
-            //    t++;
-            //    int PositionY = Int32.Parse(i.Substring(0, 1));
-            //    PositionY += 2;
-            //    if (PositionY > 8) PositionY -= 8;
-            //    strResult[t] = PositionY.ToString() + Int32.Parse(i.Substring(1, 7));
-            //}
-        }
+            string sourcePath = System.Environment.CurrentDirectory+@"\file\txt\students.txt";
+            string targetPath= System.Environment.CurrentDirectory + @"\file\txt\students备份.txt";
 
+            System.IO.File.Copy(sourcePath, targetPath,true);
+            string[] strOutput=new string[Tools.studentData.Length];
+            int j = 0;
+            foreach (string i in Tools.studentData) {
+                
+                int row = Int32.Parse(i.Substring(0,1));
+                row += 2;
+                if (row > 8)
+                {
+                    row -= 8;
+                }
+                strOutput[j] = row.ToString() + i.Substring(1,i.Length-1);
+                j++;
+            }
+
+            System.IO.File.WriteAllLines(sourcePath,strOutput, Encoding.Default);
+            listBoxOutput.Items.Add("更换座位");
+        }
         private void buttonOneKey_Click(object sender, EventArgs e)
         {
             listBoxOutput.Items.Add("这周是" + textBoxGetWeek.Text + "周");

@@ -34,7 +34,6 @@
             this.buttonSetFalse = new System.Windows.Forms.Button();
             this.buttonSetTrue = new System.Windows.Forms.Button();
             this.buttonMoveSeats = new System.Windows.Forms.Button();
-            this.buttonSettings = new System.Windows.Forms.Button();
             this.listBoxOutput = new System.Windows.Forms.ListBox();
             this.labelWeek = new System.Windows.Forms.Label();
             this.textBoxGetWeek = new System.Windows.Forms.TextBox();
@@ -90,15 +89,6 @@
             this.buttonMoveSeats.UseVisualStyleBackColor = true;
             this.buttonMoveSeats.Click += new System.EventHandler(this.buttonMoveSeats_Click);
             // 
-            // buttonSettings
-            // 
-            this.buttonSettings.Location = new System.Drawing.Point(12, 272);
-            this.buttonSettings.Name = "buttonSettings";
-            this.buttonSettings.Size = new System.Drawing.Size(139, 40);
-            this.buttonSettings.TabIndex = 5;
-            this.buttonSettings.Text = "设置";
-            this.buttonSettings.UseVisualStyleBackColor = true;
-            // 
             // listBoxOutput
             // 
             this.listBoxOutput.FormattingEnabled = true;
@@ -132,7 +122,6 @@
             this.Controls.Add(this.textBoxGetWeek);
             this.Controls.Add(this.labelWeek);
             this.Controls.Add(this.listBoxOutput);
-            this.Controls.Add(this.buttonSettings);
             this.Controls.Add(this.buttonMoveSeats);
             this.Controls.Add(this.buttonSetTrue);
             this.Controls.Add(this.buttonSetFalse);
@@ -154,7 +143,6 @@
         private System.Windows.Forms.Button buttonSetFalse;
         private System.Windows.Forms.Button buttonSetTrue;
         private System.Windows.Forms.Button buttonMoveSeats;
-        private System.Windows.Forms.Button buttonSettings;
         private System.Windows.Forms.ListBox listBoxOutput;
         private System.Windows.Forms.Label labelWeek;
         private System.Windows.Forms.TextBox textBoxGetWeek;
