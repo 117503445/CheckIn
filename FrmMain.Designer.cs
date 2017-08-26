@@ -105,7 +105,7 @@
             this.buttonLoad.TabIndex = 4;
             this.buttonLoad.Text = "读取";
             this.buttonLoad.UseVisualStyleBackColor = true;
-            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            this.buttonLoad.Click += new System.EventHandler(this.ButtonLoad_Click);
             // 
             // buttonSave
             // 
@@ -117,7 +117,7 @@
             this.buttonSave.TabIndex = 5;
             this.buttonSave.Text = "保存";
             this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // buttonEnd
             // 
@@ -129,7 +129,7 @@
             this.buttonEnd.TabIndex = 6;
             this.buttonEnd.Text = "退出";
             this.buttonEnd.UseVisualStyleBackColor = true;
-            this.buttonEnd.Click += new System.EventHandler(this.buttonEnd_Click);
+            this.buttonEnd.Click += new System.EventHandler(this.ButtonEnd_Click);
             // 
             // FrmMain
             // 

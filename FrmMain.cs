@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using System.IO;
 
 namespace CheckIn
 {
@@ -12,17 +13,23 @@ namespace CheckIn
         public string filedsName = "";//例如 周四早眼
         public Students[] students = new Students[51];
         public Button[] btnStudents = new Button[51];//学生按钮
-        Point mouseOff;//鼠标移动位置变量
-        bool leftFlag;//标签是否为左键
+
+        bool mov = false;//初始化
+        int xpos;
+        int ypos;
 
 
         public FrmMain()
         {
             InitializeComponent();
-
+            
+            Console.WriteLine("程序版本" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
             Console.WriteLine("屏幕高度" + Screen.PrimaryScreen.Bounds.Height);
             Console.WriteLine("屏幕宽度" + Screen.PrimaryScreen.Bounds.Width);
-
+            this.Text +=  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+#if DEBUG
+            this.Text += "_DEBUG";
+#endif
             #region 初始化
             for (int i = 0; i < students.Length; i++)
             {
@@ -37,34 +44,86 @@ namespace CheckIn
                 switch (Screen.PrimaryScreen.Bounds.Width)
                 {
                     case 1280: btnStudents[i].Font = new Font(btnStudents[i].Font.FontFamily, 13, btnStudents[i].Font.Style); break;
-                    case 2160: btnStudents[i].Font = new Font(btnStudents[i].Font.FontFamily, 17, btnStudents[i].Font.Style); break;
+                    case 3840: btnStudents[i].Font = new Font(btnStudents[i].Font.FontFamily, 17, btnStudents[i].Font.Style); break;
 
                 }
                 btnStudents[i].FlatStyle = System.Windows.Forms.FlatStyle.Popup;//Style
-                btnStudents[i].Click += new System.EventHandler(this.btnStudents_Click);//注册单击事件
+                btnStudents[i].Click += new System.EventHandler(this.BtnStudents_Click);//注册单击事件
             }
             #endregion
             #region 读取students.txt
+            string txtStudents = Application.StartupPath +
+                    "/file/txt/students.txt";
+            if (!File.Exists(txtStudents))
+            {
+                MessageBox.Show("无法找到students.txt,已停止继续加载", "错误");
+                MessageBox.Show(txtStudents);
 
-            Tools.studentData = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
-                    "/file/txt/students.txt", Encoding.Default);//读取students.txt
-            System.Console.WriteLine("Loading students.txt");
+
+                return;
+            }
+            try
+            {
+                Tools.studentData = System.IO.File.ReadAllLines(txtStudents, Encoding.Default);//读取students.txt
+            }
+            catch
+            {
+                MessageBox.Show("读取students.txt时失败,已停止继续加载", "错误");
+                return;
+            }
+            Console.WriteLine("Loading students.txt");
             foreach (string i in Tools.studentData)
             {
                 string[] strTemp = i.Split(';');
-                int id = Int32.Parse(strTemp[3]);
-                students[id].Name = strTemp[2];
-                if (students[id].Name.Length>3) { btnStudents[id].Font = new Font(btnStudents[id].Font.FontFamily, 13, btnStudents[id].Font.Style); }
-                students[id].Enabled = true;
-                students[id].PositionX = Int32.Parse(strTemp[1]);
-                students[id].PositionY = Int32.Parse(strTemp[0]);
+                int ID = 0;
+                string name = "";
+                int PositionX = 0;
+                int PositionY = 0;
+                bool isEnabled = true;//判断是否继续向下运行
+                try
+                {
+                    ID = Int32.Parse(strTemp[3]);
+                    name = strTemp[2];
+                    PositionX = Int32.Parse(strTemp[1]);
+                    PositionY = Int32.Parse(strTemp[0]);
+                }
+                catch
+                {
+                    MessageBox.Show("读取学生数据" + i + "时出现了问题", "警告");
+                    isEnabled = false;
+                }
+                if (isEnabled)
+                {
+                    if (ID > 50)
+                    {
+                        MessageBox.Show("读取学生数据" + i + "时出现了问题,请检查ID", "警告");
+                    }
+                    else if (PositionX > 8)
+                    {
+                        MessageBox.Show("读取学生数据" + i + "时出现了问题,请检查列", "警告");
+                    }
+                    else if (PositionY > 8)
+                    {
+                        MessageBox.Show("读取学生数据" + i + "时出现了问题,请检查行", "警告");
+                    }
+                    else
+                    {
+                        students[ID].Enabled = true;
 
-                btnStudents[id].Text = students[id].Name;
-                btnStudents[id].Visible = true;
-                btnStudents[id].Top = (int)(0.035 * Screen.PrimaryScreen.Bounds.Width * students[id].PositionX);
-                btnStudents[id].Left = (int)(0.07 * Screen.PrimaryScreen.Bounds.Width * students[id].PositionY);
+                        students[ID].Name = name;
+                        if (students[ID].Name.Length > 3) { btnStudents[ID].Font = new Font(btnStudents[ID].Font.FontFamily, 13, btnStudents[ID].Font.Style); }
 
+                        students[ID].PositionX = PositionX;
+                        students[ID].PositionY = PositionY;
+
+                        btnStudents[ID].Text = students[ID].Name;
+                        btnStudents[ID].Visible = true;
+                        btnStudents[ID].Top = (int)(0.035 * Screen.PrimaryScreen.Bounds.Width * students[ID].PositionX);
+                        btnStudents[ID].Left = (int)(0.07 * Screen.PrimaryScreen.Bounds.Width * students[ID].PositionY);
+                    }
+                }
             }
+
             Console.WriteLine("Finish Loading");
             #endregion
             #region 填充comboBox
@@ -89,8 +148,8 @@ namespace CheckIn
                 case 10: comboBoxTime.Text = "早"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("读"); break;
                 case 12: comboBoxTime.Text = "午"; comboBoxType.Text = "休"; comboBoxType.Items.Add("休"); break;
                 case 15: comboBoxTime.Text = "午"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("休"); break;
-                case 5: comboBoxTime.Text = "晚"; comboBoxType.Text = "修"; comboBoxType.Items.Add("修"); break;
-                case 8: comboBoxTime.Text = "晚"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("修"); break;
+                case 17: comboBoxTime.Text = "晚"; comboBoxType.Text = "修"; comboBoxType.Items.Add("修"); break;
+                case 20: comboBoxTime.Text = "晚"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("修"); break;
                 default: listBox.Items.Add("[Warn]奇怪的时间"); comboBoxType.Items.Add("读"); break;
             }
             comboBoxType.Items.Add("眼");
@@ -98,7 +157,7 @@ namespace CheckIn
             #endregion
 
         }
-        private void btnStudents_Click(object sender, System.EventArgs e)
+        private void BtnStudents_Click(object sender, EventArgs e)
         {
             String[] arrs = ((Button)sender).Text.Split('\n');
             int ID = 0;
@@ -129,14 +188,27 @@ namespace CheckIn
             Console.WriteLine("当前颜色" + ((Button)sender).BackColor);
             Console.WriteLine("当前签到情况" + students[ID].IsCheck);
 
-            string[] tempstr = new string[students.Length];
+            string[] strTemp = new string[students.Length];
 
             for (int i = 0; i < students.Length; i++)
             {
-                tempstr[i] = students[i].color.ToString();
+                strTemp[i] = students[i].color.ToString();
 
             }
-            System.IO.File.WriteAllLines(System.Environment.CurrentDirectory + "/file/txt/temp.txt", tempstr);
+            string txtTemp = Application.StartupPath + "/file/txt/temp.txt";
+            if (File.Exists(txtTemp))
+            {
+                try { System.IO.File.WriteAllLines(txtTemp, strTemp); }
+                catch
+                {
+                    MessageBox.Show("写入temp.txt时失败,无法记录当前签到情况", "警告");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("无法找到temp.txt,无法记录当前签到情况", "警告");
+            }
 
 
         }
@@ -158,8 +230,11 @@ namespace CheckIn
             comboBoxType.Items.Add("眼");
 
         }
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
+            buttonEnd.Enabled = false;
+            Application.DoEvents();//禁用BtnEnd
+
             filedsName = comboBoxDay.Text + comboBoxTime.Text + comboBoxType.Text;
             Console.WriteLine("当前fieldsname" + filedsName);
             listBox.Items.Clear();
@@ -167,124 +242,155 @@ namespace CheckIn
             {
                 if (students[i].Enabled & !students[i].IsCheck) { listBox.Items.Add(i + students[i].Name); }
             }
-            #region 数据库连接
-            OleDbConnection conn = new OleDbConnection(@"Provider = Microsoft.Jet.OLEDB.4.0; Data Source =" + Tools.databasePath);
-            conn.Open();
-            OleDbCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "select * from Students";
-            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter()
+            try
             {
-                SelectCommand = cmd
-            };
-            DataSet myDataSet = new DataSet();
-            myDataAdapter.Fill(myDataSet, "Students");
-            DataTable myTable = myDataSet.Tables["Students"];
-            bool isChecked = false;
-            foreach (DataRow myrow in myTable.Rows)
-            {
-                if ((bool)myrow[filedsName] == true) { isChecked = true; break; }
-            }
-            if (isChecked)
-            {
-                DialogResult receiver = MessageBox.Show("在" + filedsName + "中检测到已有的数据,是否继续签到？", "疑惑", MessageBoxButtons.OKCancel);
-                if (receiver == DialogResult.OK)
+                #region 数据库连接
+                OleDbConnection conn = new OleDbConnection(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source =" + Tools.databasePath);
+                conn.Open();
+                OleDbCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "select * from Students";
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter()
                 {
-                    Console.WriteLine("用户OK");
-                }
-                else
+                    SelectCommand = cmd
+                };
+                DataSet myDataSet = new DataSet();
+                myDataAdapter.Fill(myDataSet, "Students");
+                DataTable myTable = myDataSet.Tables["Students"];
+                bool isChecked = false;
+                foreach (DataRow myrow in myTable.Rows)
                 {
-                    Console.WriteLine("用户NO");
-                    listBox.Items.Clear();
-                    listBox.Items.Add("取消成功");
-                    return;
+                    if ((bool)myrow[filedsName] == true) { isChecked = true; break; }
                 }
-            }
-            foreach (DataRow myrow in myTable.Rows)
-            {
-                myrow[filedsName] = students[(int)myrow["ID"]].IsCheck;
-            }
-            OleDbCommandBuilder myOleDeCommandBuilder = new OleDbCommandBuilder(myDataAdapter);
-            myDataAdapter.Update(myDataSet, "Students");
+                if (isChecked)
+                {
+                    DialogResult receiver = MessageBox.Show("在" + filedsName + "中检测到已有的数据,是否继续签到？", "疑惑", MessageBoxButtons.OKCancel);
+                    if (receiver == DialogResult.OK)
+                    {
+                        Console.WriteLine("用户OK");
+                    }
+                    else
+                    {
+                        Console.WriteLine("用户NO");
+                        listBox.Items.Clear();
+                        listBox.Items.Add("取消成功");
+                        buttonEnd.Enabled = true;
+                        return;
+                    }
+                }
+                foreach (DataRow myrow in myTable.Rows)
+                {
+                    myrow[filedsName] = students[(int)myrow["ID"]].IsCheck;
+                }
+                OleDbCommandBuilder myOleDeCommandBuilder = new OleDbCommandBuilder(myDataAdapter);
+                myDataAdapter.Update(myDataSet, "Students");
 
-            myDataSet.Dispose();        // 释放DataSet对象
-            myDataAdapter.Dispose();    // 释放SqlDataAdapter对象
-            conn.Close();             // 关闭数据库连接
-            conn.Dispose();           // 释放数据库连接对象
-            #endregion
+                myDataSet.Dispose();        // 释放DataSet对象
+                myDataAdapter.Dispose();    // 释放SqlDataAdapter对象
+                conn.Close();             // 关闭数据库连接
+                conn.Dispose();           // 释放数据库连接对象
+                #endregion
+            }
+            catch
+            {
+                MessageBox.Show("无法将写入数据库", "严重警告");
+                return;
+            }
             listBox.Items.Add("签到成功");
             Console.WriteLine("签到成功");
             string[] strBackups;
-            strBackups = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory +
-                    "/file/txt/backup.txt", Encoding.Default);//读取backup.txt
-            string BpVersion = "";
-            System.DateTime currentTime = new System.DateTime();
-            currentTime = System.DateTime.Now;
-            string timeName = currentTime.Month.ToString() + "_" +
-                    currentTime.Day.ToString() + "_" +
-                    currentTime.Hour.ToString() + "_" +
-                    currentTime.Minute.ToString() + "_" +
-                    currentTime.Second.ToString() + "_" +
-                    filedsName;
-
-            Console.WriteLine("timeName=" + timeName);
-            foreach (string s in strBackups)
+            string txtbackup = Application.StartupPath +
+                    "/file/txt/backup.txt";
+            if (File.Exists(txtbackup))
             {
-                string[] strTemp = s.Split(';');
-                string sourcePath = Tools.databasePath;
-                string targetPath = "";
-                switch (strTemp[0])
-                {
-                    case "BpVersion":
-                        BpVersion = strTemp[1];
-                        Console.WriteLine("BpVersion=" + BpVersion);
-                        break;
-                    case "default":
-                        Console.WriteLine("Type=default");
-                        targetPath = strTemp[1] + "/" + timeName + @".mdb";
-                        Console.WriteLine("  sourcePath=" + sourcePath);
-                        Console.WriteLine("  targetPath=" + targetPath);
-                        System.IO.File.Copy(sourcePath, targetPath, true);
-                        Console.WriteLine("BackupFinished");
-                        break;
-                    case "AppPath":
-                        Console.WriteLine("Type:AppPath");
-                        Console.WriteLine("功能没做");
-                        break;
-                    case "NoDisk":
-                        Console.WriteLine("Type:NoDisk");
-                        for (char i = 'A'; i <= 'Z'; i++)
-                        {
 
-                            if (System.IO.Directory.Exists(i + strTemp[1]))
+
+                strBackups = System.IO.File.ReadAllLines(txtbackup, Encoding.Default);//读取backup.txt
+                string BpVersion = "";
+                System.DateTime currentTime = new System.DateTime();
+                currentTime = System.DateTime.Now;
+                string timeName = currentTime.Month.ToString() + "_" +
+                        currentTime.Day.ToString() + "_" +
+                        currentTime.Hour.ToString() + "_" +
+                        currentTime.Minute.ToString() + "_" +
+                        currentTime.Second.ToString() + "_" +
+                        filedsName;
+
+                Console.WriteLine("timeName=" + timeName);
+                foreach (string s in strBackups)
+                {
+                    string[] strTemp = s.Split(';');
+                    string sourcePath = Tools.databasePath;
+                    string targetPath = "";
+                    switch (strTemp[0])
+                    {
+                        case "BpVersion":
+                            BpVersion = strTemp[1];
+                            Console.WriteLine("BpVersion=" + BpVersion);
+                            break;
+                        case "default":
+                            Console.WriteLine("Type=default");
+                            targetPath = strTemp[1] + "/" + timeName + @".mdb";
+                            Console.WriteLine("  sourcePath=" + sourcePath);
+                            Console.WriteLine("  targetPath=" + targetPath);
+                            if (Directory.Exists(strTemp[1]))
                             {
-                                targetPath = i + strTemp[1] + "/" + timeName + @".mdb";
-                                Console.WriteLine("  sourcePath=" + sourcePath);
-                                Console.WriteLine("  targetPath=" + targetPath);
+                                
                                 System.IO.File.Copy(sourcePath, targetPath, true);
                                 Console.WriteLine("BackupFinished");
-                                break;
+                                listBox.Items.Add("备份成功");
                             }
-                        }
-                        break;
+                            else
+                            {
+                                listBox.Items.Add("未找到default型数据" + strTemp[1]);
+                            }
+
+                            break;
+                        case "AppPath":
+                            Console.WriteLine("Type:AppPath");
+                            Console.WriteLine("功能没做");
+                            break;
+                        case "NoDisk":
+                            Console.WriteLine("Type:NoDisk");
+                            bool isFind = false;
+                            for (char i = 'A'; i <= 'Z'; i++)
+                            {
+
+                                if (Directory.Exists(i + strTemp[1]))
+                                {
+                                    targetPath = i + strTemp[1] + "/" + timeName + @".mdb";
+                                    Console.WriteLine("  sourcePath=" + sourcePath);
+                                    Console.WriteLine("  targetPath=" + targetPath);
+                                    System.IO.File.Copy(sourcePath, targetPath, true);
+                                    Console.WriteLine("BackupFinished");
+                                    isFind = true;
+                                    break;
+                                }
+                            }
+                            if (!isFind) { listBox.Items.Add("未找到NoDisk型备份路径" + strTemp[1]); }
+                            break;
+                    }
                 }
-
             }
-
+            else
+            {
+                MessageBox.Show("无法找到backup.txt,无法备份", "严重警告");
+            }
+            buttonEnd.Enabled = true;
         }
-        private void buttonEnd_Click(object sender, EventArgs e)
+        private void ButtonEnd_Click(object sender, EventArgs e)
         {
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
-        private void buttonLoad_Click(object sender, EventArgs e)
+        private void ButtonLoad_Click(object sender, EventArgs e)
         {
-            string[] tempReceiver = System.IO.File.ReadAllLines(System.Environment.CurrentDirectory + "/file/txt/temp.txt", Encoding.Default);
+            string[] tempReceiver = System.IO.File.ReadAllLines(Application.StartupPath + "/file/txt/temp.txt", Encoding.Default);
             for (int i = 0; i < students.Length; i++)
             {
                 string[] tempstr = tempReceiver[i].Split(';');
                 Console.WriteLine(tempstr[0]);
                 switch (tempstr[0])
                 {
-                    case "0": btnStudents[i].BackColor = Color.AliceBlue;students[i].color=0; students[i].IsCheck = true; break;
+                    case "0": btnStudents[i].BackColor = Color.AliceBlue; students[i].color = 0; students[i].IsCheck = true; break;
                     case "1": btnStudents[i].BackColor = Color.Orange; students[i].color = 1; students[i].IsCheck = false; break;
                     case "2": btnStudents[i].BackColor = Color.LightSteelBlue; students[i].color = 2; students[i].IsCheck = true; break;
                 }
@@ -358,27 +464,26 @@ namespace CheckIn
             }
             if (e.Button == MouseButtons.Left)
             {
-                mouseOff = new Point(-e.X, -e.Y); //得到变量的值
-                leftFlag = true;                  //点击左键按下时标注为true;
+                mov = true;
+                xpos = MousePosition.X;//鼠标的x坐标为当前窗体左上角x坐标
+                ypos = MousePosition.Y;//鼠标的y坐标为当前窗体左上角y坐标
             }
 
         }
         private void FrmMain_MouseMove(object sender, MouseEventArgs e)
         {
 
-            if (leftFlag)
+            if (mov)
             {
-                Point mouseSet = Control.MousePosition;
-                mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
-                Location = mouseSet;
+                this.Left += MousePosition.X - xpos;//根据鼠标x坐标确定窗体的左边坐标x
+                this.Top += MousePosition.Y - ypos;//根据鼠标的y坐标窗体的顶部，即Y坐标
+                xpos = MousePosition.X;
+                ypos = MousePosition.Y;
             }
         }
         private void FrmMain_MouseUp(object sender, MouseEventArgs e)
         {
-            if (leftFlag)
-            {
-                leftFlag = false;//释放鼠标后标注为false;
-            }
+            mov = false;//停止移动
 
         }
     }

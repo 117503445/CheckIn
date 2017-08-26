@@ -1,3 +1,2 @@
 BpVersion;1.0.0
-default;E:\Desktop\log
-NoDisk;:\Desktop\log - ¸±±¾
+default;C:\User\File\Check\TempSheet

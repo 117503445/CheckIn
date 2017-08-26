@@ -47,7 +47,7 @@
             this.buttonOneKey.TabIndex = 0;
             this.buttonOneKey.Text = "每周归档";
             this.buttonOneKey.UseVisualStyleBackColor = true;
-            this.buttonOneKey.Click += new System.EventHandler(this.buttonOneKey_Click);
+            this.buttonOneKey.Click += new System.EventHandler(this.ButtonOneKey_Click);
             // 
             // buttonCalculate
             // 
@@ -57,7 +57,7 @@
             this.buttonCalculate.TabIndex = 1;
             this.buttonCalculate.Text = "计算";
             this.buttonCalculate.UseVisualStyleBackColor = true;
-            this.buttonCalculate.Click += new System.EventHandler(this.buttonCalculate_Click);
+            this.buttonCalculate.Click += new System.EventHandler(this.ButtonCalculate_Click);
             // 
             // buttonSetFalse
             // 
@@ -67,7 +67,7 @@
             this.buttonSetFalse.TabIndex = 2;
             this.buttonSetFalse.Text = "全部置为FALSE";
             this.buttonSetFalse.UseVisualStyleBackColor = true;
-            this.buttonSetFalse.Click += new System.EventHandler(this.buttonSetFalse_Click);
+            this.buttonSetFalse.Click += new System.EventHandler(this.ButtonSetFalse_Click);
             // 
             // buttonSetTrue
             // 
@@ -77,7 +77,7 @@
             this.buttonSetTrue.TabIndex = 3;
             this.buttonSetTrue.Text = "全部置为TRUE";
             this.buttonSetTrue.UseVisualStyleBackColor = true;
-            this.buttonSetTrue.Click += new System.EventHandler(this.buttonSetTrue_Click);
+            this.buttonSetTrue.Click += new System.EventHandler(this.ButtonSetTrue_Click);
             // 
             // buttonMoveSeats
             // 
@@ -87,7 +87,7 @@
             this.buttonMoveSeats.TabIndex = 4;
             this.buttonMoveSeats.Text = "换座位";
             this.buttonMoveSeats.UseVisualStyleBackColor = true;
-            this.buttonMoveSeats.Click += new System.EventHandler(this.buttonMoveSeats_Click);
+            this.buttonMoveSeats.Click += new System.EventHandler(this.ButtonMoveSeats_Click);
             // 
             // listBoxOutput
             // 

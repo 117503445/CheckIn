@@ -8,21 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using System.IO;
 
 namespace CheckIn
 {
     public partial class FrmAdmin : Form
     {
+        string pathWeek = Environment.CurrentDirectory + "/file/txt/week.txt";
+
         public FrmAdmin()
         {
             InitializeComponent();
+
+            string week = File.ReadAllText(pathWeek);
+            textBoxGetWeek.Text = week;
         }
         private void FrmAdmin_FormClosed(object sender, FormClosedEventArgs e)
         {
             Tools.isFormAdminActive = false;
 
         }
-        private void buttonCalculate_Click(object sender, EventArgs e)
+        private void ButtonCalculate_Click(object sender, EventArgs e)
         {
             OleDbConnection conn = new OleDbConnection(@"Provider = Microsoft.Jet.OLEDB.4.0; Data Source =" + Tools.databasePath);
             conn.Open();
@@ -54,15 +60,15 @@ namespace CheckIn
             conn.Dispose();           // 释放数据库连接对象
             listBoxOutput.Items.Add("计算分数" );
         }
-        private void buttonSetFalse_Click(object sender, EventArgs e)
+        private void ButtonSetFalse_Click(object sender, EventArgs e)
         {
-            databaseSet(false);
+            DatabaseSet(false);
         }
-        private void buttonSetTrue_Click(object sender, EventArgs e)
+        private void ButtonSetTrue_Click(object sender, EventArgs e)
         {
-            databaseSet(true);
+            DatabaseSet(true);
         }
-        private void databaseSet(bool isTrue)
+        private void DatabaseSet(bool isTrue)
         {
 
             OleDbConnection conn = new OleDbConnection(@"Provider = Microsoft.Jet.OLEDB.4.0; Data Source =" + Tools.databasePath);
@@ -93,7 +99,7 @@ namespace CheckIn
             conn.Dispose();           // 释放数据库连接对象
             listBoxOutput.Items.Add("设置数据库所有数据为：" + isTrue);
         }
-        private void buttonMoveSeats_Click(object sender, EventArgs e)
+        private void ButtonMoveSeats_Click(object sender, EventArgs e)
         {
             string sourcePath = System.Environment.CurrentDirectory+@"\file\txt\students.txt";
             string targetPath= System.Environment.CurrentDirectory + @"\file\txt\students备份.txt";
@@ -116,15 +122,19 @@ namespace CheckIn
             System.IO.File.WriteAllLines(sourcePath,strOutput, Encoding.Default);
             listBoxOutput.Items.Add("更换座位");
         }
-        private void buttonOneKey_Click(object sender, EventArgs e)
+        private void ButtonOneKey_Click(object sender, EventArgs e)
         {
             listBoxOutput.Items.Add("这周是" + textBoxGetWeek.Text + "周");
-            buttonCalculate_Click(new object(), new EventArgs());
-            string targetPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) +@"\"+ textBoxGetWeek.Text + "周签到数据.mdb";
+            ButtonCalculate_Click(new object(), new EventArgs());
+            string targetPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) +@"\"+"第"+ textBoxGetWeek.Text + "周签到数据.mdb";
             System.IO.File.Copy(Tools.databasePath, targetPath);
             listBoxOutput.Items.Add("输出至"+ targetPath);
-            buttonSetFalse_Click(new object(), new EventArgs());
-            buttonCalculate_Click(new object(), new EventArgs());
+            ButtonSetFalse_Click(new object(), new EventArgs());
+            ButtonCalculate_Click(new object(), new EventArgs());
+            listBoxOutput.Items.Add("Week+1");
+            string week = (Int32.Parse(textBoxGetWeek.Text) + 1).ToString();
+            textBoxGetWeek.Text = week;
+            File.WriteAllText(pathWeek,week);
             listBoxOutput.Items.Add("归档已完成");
         }
     }
