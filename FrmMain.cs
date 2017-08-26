@@ -379,7 +379,7 @@ namespace CheckIn
         }
         private void ButtonEnd_Click(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
         private void ButtonLoad_Click(object sender, EventArgs e)
         {
