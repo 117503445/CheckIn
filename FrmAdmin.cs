@@ -14,7 +14,7 @@ namespace CheckIn
 {
     public partial class FrmAdmin : Form
     {
-        string pathWeek = Environment.CurrentDirectory + "/file/txt/week.txt";
+        string pathWeek = Application.StartupPath + "/file/txt/week.txt";
 
         public FrmAdmin()
         {
@@ -101,8 +101,8 @@ namespace CheckIn
         }
         private void ButtonMoveSeats_Click(object sender, EventArgs e)
         {
-            string sourcePath = System.Environment.CurrentDirectory+@"\file\txt\students.txt";
-            string targetPath= System.Environment.CurrentDirectory + @"\file\txt\students备份.txt";
+            string sourcePath = Application.StartupPath + @"\file\txt\students.txt";
+            string targetPath = Application.StartupPath + @"\file\txt\students备份.txt";
 
             System.IO.File.Copy(sourcePath, targetPath,true);
             string[] strOutput=new string[Tools.studentData.Length];
@@ -129,8 +129,8 @@ namespace CheckIn
             string targetPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) +@"\"+"第"+ textBoxGetWeek.Text + "周签到数据.mdb";
             System.IO.File.Copy(Tools.databasePath, targetPath);
             listBoxOutput.Items.Add("输出至"+ targetPath);
-            ButtonSetFalse_Click(new object(), new EventArgs());
-            ButtonCalculate_Click(new object(), new EventArgs());
+            ButtonSetFalse_Click(sender,e);
+            ButtonCalculate_Click(sender,e);
             listBoxOutput.Items.Add("Week+1");
             string week = (Int32.Parse(textBoxGetWeek.Text) + 1).ToString();
             textBoxGetWeek.Text = week;
