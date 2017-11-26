@@ -145,6 +145,8 @@ namespace CheckIn
             switch (hourint)
             {
                 case 6: comboBoxTime.Text = "早"; comboBoxType.Text = "读"; comboBoxType.Items.Add("读"); break;
+                case 9: comboBoxTime.Text = "早"; comboBoxType.Text = "操"; comboBoxType.Items.Add("操"); break;
+
                 case 10: comboBoxTime.Text = "早"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("读"); break;
                 case 12: comboBoxTime.Text = "午"; comboBoxType.Text = "休"; comboBoxType.Items.Add("休"); break;
                 case 15: comboBoxTime.Text = "午"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("休"); break;
@@ -407,6 +409,7 @@ namespace CheckIn
 
             switch (Screen.PrimaryScreen.Bounds.Width)
             {
+
                 case 1280:
                     listBox.Left = this.Width - 150;
                     listBox.Top = 0;
