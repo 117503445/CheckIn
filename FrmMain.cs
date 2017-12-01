@@ -22,11 +22,11 @@ namespace CheckIn
         public FrmMain()
         {
             InitializeComponent();
-            
+
             Console.WriteLine("程序版本" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
             Console.WriteLine("屏幕高度" + Screen.PrimaryScreen.Bounds.Height);
             Console.WriteLine("屏幕宽度" + Screen.PrimaryScreen.Bounds.Width);
-            this.Text +=  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Text += System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 #if DEBUG
             this.Text += "_DEBUG";
 #endif
@@ -139,24 +139,33 @@ namespace CheckIn
                 case "Sunday": comboBoxDay.Text = "周日"; break;
             }
             comboBoxType.Items.Clear();
+            comboBoxDay.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTime.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxType.DropDownStyle = ComboBoxStyle.DropDownList;
             System.DateTime currentTime = new System.DateTime();
             currentTime = System.DateTime.Now;
             int hourint = currentTime.Hour;
+            comboBoxType.Items.Add("眼");
             switch (hourint)
             {
-                case 6: comboBoxTime.Text = "早"; comboBoxType.Text = "读"; comboBoxType.Items.Add("读"); break;
-                case 9: comboBoxTime.Text = "早"; comboBoxType.Text = "操"; comboBoxType.Items.Add("操"); break;
+                case 6: comboBoxType.Items.Add("读"); comboBoxType.Items.Add("操"); comboBoxTime.Text = "早"; comboBoxType.Text = "读"; break;
+                case 9:
 
-                case 10: comboBoxTime.Text = "早"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("读"); break;
-                case 12: comboBoxTime.Text = "午"; comboBoxType.Text = "休"; comboBoxType.Items.Add("休"); break;
-                case 15: comboBoxTime.Text = "午"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("休"); break;
-                case 17: comboBoxTime.Text = "晚"; comboBoxType.Text = "修"; comboBoxType.Items.Add("修"); break;
-                case 20: comboBoxTime.Text = "晚"; comboBoxType.Text = "眼"; comboBoxType.Items.Add("修"); break;
+                    comboBoxType.Items.Add("读");
+                    comboBoxType.Items.Add("操"); comboBoxTime.Text = "早";
+                    comboBoxType.Text = "操";
+                    break;
+                case 10: comboBoxTime.Text = "早"; comboBoxType.Items.Add("读"); comboBoxType.Items.Add("操"); comboBoxType.Text = "眼"; break;
+                case 12: comboBoxTime.Text = "午"; comboBoxType.Items.Add("休"); comboBoxType.Text = "休"; break;
+                case 15: comboBoxTime.Text = "午"; comboBoxType.Items.Add("休"); comboBoxType.Text = "眼"; break;
+                case 17: comboBoxTime.Text = "晚"; comboBoxType.Items.Add("修"); comboBoxType.Text = "修"; break;
+                case 20: comboBoxTime.Text = "晚"; comboBoxType.Items.Add("修"); comboBoxType.Text = "眼"; break;
                 default: listBox.Items.Add("[Warn]奇怪的时间"); comboBoxType.Items.Add("读"); break;
             }
-            comboBoxType.Items.Add("眼");
+
 
             #endregion
+
 
         }
         private void BtnStudents_Click(object sender, EventArgs e)
@@ -223,7 +232,7 @@ namespace CheckIn
             switch (comboBoxTime.Text)
             {
 
-                case "早": comboBoxType.Items.Add("读"); comboBoxType.Text = "读"; break;
+                case "早": comboBoxType.Items.Add("读"); comboBoxType.Items.Add("操"); comboBoxType.Text = "读"; break;
                 case "午": comboBoxType.Items.Add("休"); comboBoxType.Text = "休"; break;
                 case "晚": comboBoxType.Items.Add("修"); comboBoxType.Text = "修"; break;
 
@@ -336,7 +345,7 @@ namespace CheckIn
                             Console.WriteLine("  targetPath=" + targetPath);
                             if (Directory.Exists(strTemp[1]))
                             {
-                                
+
                                 System.IO.File.Copy(sourcePath, targetPath, true);
                                 Console.WriteLine("BackupFinished");
                                 listBox.Items.Add("备份成功");
@@ -409,7 +418,37 @@ namespace CheckIn
 
             switch (Screen.PrimaryScreen.Bounds.Width)
             {
+                case 1920:
+                    listBox.Left = this.Width - 150;
+                    listBox.Top = 0;
+                    listBox.Height = Height;
+                    #region buttonLoad
+                    buttonLoad.Width = btnStudents[1].Width;
+                    buttonLoad.Height = btnStudents[1].Height;
+                    buttonLoad.Left = listBox.Left - buttonLoad.Width - 10;
+                    buttonLoad.Top = 550;
+                    #endregion               
+                    #region buttonSave
+                    buttonSave.Width = btnStudents[1].Width;
+                    buttonSave.Height = btnStudents[1].Height;
+                    buttonSave.Left = listBox.Left - buttonSave.Width - 10;
+                    buttonSave.Top = 600;
+                    #endregion
+                    #region buttonEnd
+                    buttonEnd.Width = btnStudents[1].Width;
+                    buttonEnd.Height = btnStudents[1].Height;
+                    buttonEnd.Left = listBox.Left - buttonEnd.Width - 10;
+                    buttonEnd.Top = 650;
+                    #endregion
+                    comboBoxDay.Left = buttonLoad.Left - comboBoxDay.Width - 20;
+                    comboBoxDay.Top = buttonLoad.Top + 1;
 
+                    comboBoxTime.Left = buttonSave.Left - comboBoxTime.Width - 20;
+                    comboBoxTime.Top = buttonSave.Top + 1;
+
+                    comboBoxType.Left = buttonEnd.Left - comboBoxType.Width - 20;
+                    comboBoxType.Top = buttonEnd.Top + 1;
+                    break;
                 case 1280:
                     listBox.Left = this.Width - 150;
                     listBox.Top = 0;
