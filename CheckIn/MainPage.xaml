@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="CheckIn.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CheckIn"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loading="Page_Loading">
+
+    <Grid x:Name="grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="1800*"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="140*"/>
+            <RowDefinition Height="30*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="BtnExit" Content="退出" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="1096,936,-1441,-1022" Grid.RowSpan="3" VerticalAlignment="Top" Height="86" Width="345" Click="BtnExit_Click"/>
+        <Button x:Name="BtnSave" Content="保存" HorizontalAlignment="Left" Margin="95,26,0,0" VerticalAlignment="Top" Height="86" Width="345" Grid.Column="1" Grid.Row="2" Click="BtnSave_Click" />
+    </Grid>
+</Page>
