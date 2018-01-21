@@ -18,7 +18,7 @@
             <RowDefinition Height="140*"/>
             <RowDefinition Height="30*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="BtnExit" Content="退出" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="1096,936,-1441,-1022" Grid.RowSpan="3" VerticalAlignment="Top" Height="86" Width="345" Click="BtnExit_Click"/>
+        <Button x:Name="BtnExit" Content="退出" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="859,871,-1204,-957" Grid.RowSpan="3" VerticalAlignment="Top" Height="86" Width="345" Click="BtnExit_Click"/>
         <Button x:Name="BtnSave" Content="保存" HorizontalAlignment="Left" Margin="95,26,0,0" VerticalAlignment="Top" Height="86" Width="345" Grid.Column="1" Grid.Row="2" Click="BtnSave_Click" />
     </Grid>
 </Page>
