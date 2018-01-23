@@ -33,22 +33,9 @@ namespace CheckIn
         public MainPage()
         {
             this.InitializeComponent();
+
         }
         List<Student> stus = new List<Student>();
-        private void Btn1_Click(object sender, RoutedEventArgs e)
-        {
-            //string s;
-            //using (Stream file = await file_demonstration.OpenStreamForReadAsync())
-            //{
-            //    using (StreamReader read = new StreamReader(file))
-            //    {
-            //        s = read.ReadToEnd();
-            //    }
-            //}
-
-
-        }
-
         private void Page_Loading(FrameworkElement sender, object args)
         {
             XElement xElement = XElement.Load(@"Assets\Student.xml");
@@ -59,69 +46,57 @@ namespace CheckIn
                 int id = int.Parse(item.Attribute("id").Value);
                 int row = int.Parse(item.Attribute("row").Value);
                 int column = int.Parse(item.Attribute("column").Value);
-                Student student = new Student(name, id, row, column, grid);
+                Student student = new Student(name, id, row, column, GridTable);
+                stus.Add(student);
             }
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            Debug.WriteLine("path={0};", folder.Path);
         }
 
-        private void BtnExit_Click(object sender, RoutedEventArgs e)
-        {
-            App.Current.Exit();
-        }
 
-        private async void BtnSave_ClickAsync(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //XElement xlog = new XElement("log");
-            //DateTime t = DateTime.Now;
-            //xlog.Add(new XAttribute("time", $"{0},{1},1,2"));
-            //xElement.Add(xlog);
-            //Debug.WriteLine(xElement);
-            //XDocument xDocument = new XDocument(xElement);
+            Save();
+        }
+        private async void Save()
+        {
+            Debug.WriteLine("Save");
             try
             {
-                Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                Windows.Storage.StorageFile sampleFile = await storageFolder.CreateFileAsync("sample.xml",
-                    Windows.Storage.CreationCollisionOption.OpenIfExists);
-
-                string text = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
-                Debug.WriteLine(text);
-                XDocument xDoc;//Debug.WriteLine();
-                try
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile file = await storageFolder.CreateFileAsync("log.xml", CreationCollisionOption.OpenIfExists);
+                XDocument xDoc = XDocument.Load(await file.OpenStreamForReadAsync());
+                string missId = "";
+                foreach (var item in stus)
                 {
-                    xDoc = XDocument.Load(text);
-                }
-                catch (Exception)
-                {
-                    xDoc = new XDocument();
-                    xDoc.Add(new XElement("Logs"));
-                    Debug.WriteLine(xDoc);
-                }
-                DateTime t = DateTime.Now;
-                xDoc.Element("Logs").Add(new XElement("Log", new XAttribute("time", 
-                    string.Format("{0},{1},{2},{3}",t.Month,t.Day,t.Hour,t.Minute,t.Second))));
-                var stream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                using (var outputStream = stream.GetOutputStreamAt(0))
-                {
-                    using (var dataWriter = new Windows.Storage.Streams.DataWriter(outputStream))
+                    Debug.WriteLine(item.Id);
+                    Debug.WriteLine(item.Button.IsChecked);
+                    if ((bool)item.Button.IsChecked)
                     {
-                        dataWriter.WriteString(xDoc.ToString());
-                        await dataWriter.StoreAsync();
-                        await outputStream.FlushAsync();
+                        missId += item.Id.ToString() + ",";
                     }
                 }
-                stream.Dispose(); // Or use the stream variable (see previous code snippet) with a using statement as well.
+                if (missId.Length!=0)
+                {
+                    missId=missId.Substring(0,missId.Length-1);
+                }
+                DateTime t = DateTime.Now;
+                xDoc.Element("Logs").Add(new XElement("Log",
+                    new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second)),
+                    new XAttribute("missId", missId)
+                    ));
+                xDoc.Save(await file.OpenStreamForWriteAsync());
             }
             catch (Exception ex)
             {
 
                 Debug.WriteLine(ex);
             }
-            
-
         }
     }
     public class Student
     {
-        private Button button = new Button();
+        private ToggleButton button = new ToggleButton();
         private string name = "";
         private int id = 0;
         private int row = 0;
@@ -134,29 +109,30 @@ namespace CheckIn
             this.Row = row;
             Column = column;
 
-            button.Width = 120;
-            button.Height = 60;
-            button.Name = "Btn" + id.ToString();
-            button.Content = name;
+            //button.Width = 120;
+            //button.Height = 60;
+            Button.Name = "Btn" + id.ToString();
+            Button.Content = name;
 
-            grid.Children.Add(button);
-            Grid.SetRow(button, 1);
-            Grid.SetColumn(button, 1);
-            button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
-            button.HorizontalAlignment = HorizontalAlignment.Left;
-            button.VerticalAlignment = VerticalAlignment.Top;
+            grid.Children.Add(Button);
+            Grid.SetRow(Button, 2 * row - 2);
+            Grid.SetColumn(Button, 2 * column - 2);
+            //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
+            Button.HorizontalAlignment = HorizontalAlignment.Stretch;
+            Button.VerticalAlignment = VerticalAlignment.Stretch;
 
-            button.Click += BtnStu_Click;
+            Button.Click += BtnStu_Click;
         }
         public void BtnStu_Click(object sender, RoutedEventArgs e)
         {
             Debug.Write(Name);
         }
 
-        public Button Button { get => button; set => button = value; }
+
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
+        public ToggleButton Button { get => button; set => button = value; }
     }
 }
