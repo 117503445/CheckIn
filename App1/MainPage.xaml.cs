@@ -29,8 +29,13 @@ namespace App1
         }
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (ShareListBoxItem.IsSelected) { }
-           // else if (FavoritesListBoxItem.IsSelected) { }
+            if (ShareListBoxItem.IsSelected) {
+                MyFrame.Navigate(typeof(Page1));
+            }
+            else if (FavoritesListBoxItem.IsSelected) {
+                MyFrame.Navigate(typeof(Page2));
+            }
+         
         }
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
