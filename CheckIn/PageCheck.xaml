@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="CheckIn.MainPage"
+    x:Class="CheckIn.PageCheck"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CheckIn"
@@ -8,17 +8,11 @@
     mc:Ignorable="d" Loading="Page_Loading">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid>
 
-        </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>

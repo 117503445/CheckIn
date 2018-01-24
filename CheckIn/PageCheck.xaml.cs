@@ -28,16 +28,11 @@ namespace CheckIn
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public  sealed partial class PageCheck : Page
     {
-        public MainPage()
+        public PageCheck()
         {
             this.InitializeComponent();
-
-        }
-        List<Student> stus = new List<Student>();
-        private void Page_Loading(FrameworkElement sender, object args)
-        {
             XElement xElement = XElement.Load(@"Assets\Student.xml");
             foreach (var item in xElement.Elements())
             {
@@ -51,6 +46,11 @@ namespace CheckIn
             }
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             Debug.WriteLine("path={0};", folder.Path);
+        }
+        List<Student> stus = new List<Student>();
+        private void Page_Loading(FrameworkElement sender, object args)
+        {
+            
         }
 
 

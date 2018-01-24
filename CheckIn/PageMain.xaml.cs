@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -14,34 +13,46 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
+// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
-namespace App1
+namespace CheckIn
 {
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class PageMain : Page
     {
-        public MainPage()
+        PageCheck pageCheck = new PageCheck();
+        PageAbout PageAbout = new PageAbout();
+        public PageMain()
         {
             this.InitializeComponent();
+          
         }
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ShareListBoxItem.IsSelected) {
-                MyFrame.Navigate(typeof(Page1));
+            if (LsteCheck.IsSelected)
+            {
+                MyFrame.Content = pageCheck;
             }
-            else if (FavoritesListBoxItem.IsSelected) {
-                MyFrame.Navigate(typeof(Page2));
-            } else if (HamburgerItem.IsSelected) {
+            else if (LsteAbout.IsSelected)
+            {
+                MyFrame.Content = PageAbout;
+            }
+            else if (HamburgerItem.IsSelected)
+            {
                 //MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
             }
-         
+
         }
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+        
         }
     }
 }
