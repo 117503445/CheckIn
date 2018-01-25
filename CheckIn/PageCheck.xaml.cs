@@ -31,12 +31,11 @@ namespace CheckIn
     public sealed partial class PageCheck : Page
     {
         List<Student> stus = new List<Student>();
-        private CheckKind checkKind;
+        private CheckKind CurrentCheckKind { get { return GetCheckKind(); } }
         public PageCheck()
         {
             this.InitializeComponent();
             LoadStu();
-            checkKind = GetCheckKind();
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             Debug.WriteLine("path={0};", folder.Path);
         }
@@ -64,21 +63,37 @@ namespace CheckIn
         }
         private async void SaveLog()
         {
-            if (checkKind==CheckKind.None)
+            if (CurrentCheckKind == CheckKind.None)
             {
                 Debug.WriteLine("你在干什么???");
-                return;
+#if !DEBUG
+return;
+#endif
+
             }
             try
             {
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                XDocument xDoc;
                 StorageFile file = await storageFolder.CreateFileAsync("log.xml", CreationCollisionOption.OpenIfExists);
-                XDocument xDoc = XDocument.Load(await file.OpenStreamForReadAsync());
+                try
+                {
+                    using (var stream = await file.OpenStreamForReadAsync())
+                    {
+                        xDoc = XDocument.Load(stream);
+                    }
+                }
+                catch (Exception)
+                {
+                    xDoc = new XDocument();
+                    XElement root = new XElement("Logs");
+                    xDoc.Add(root);
+                }
                 string missId = "";
                 foreach (var item in stus)
                 {
-                    Debug.WriteLine(item.Id);
-                    Debug.WriteLine(item.Button.IsChecked);
+                    //Debug.WriteLine(item.Id);
+                    //Debug.WriteLine(item.Button.IsChecked);
                     if ((bool)item.Button.IsChecked)
                     {
                         missId += item.Id.ToString() + ",";
@@ -90,11 +105,15 @@ namespace CheckIn
                 }
                 DateTime t = DateTime.Now;
                 xDoc.Element("Logs").Add(new XElement("Log",
-                    new XAttribute("checkKind",checkKind),
-                    new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second)),
-                    new XAttribute("missId", missId)
+                    new XAttribute("checkKind", CurrentCheckKind),
+                    new XAttribute("dayOfWeek", (int)DateTime.Now.DayOfWeek),
+                    new XAttribute("missId", missId),
+                    new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second))
                     ));
-                xDoc.Save(await file.OpenStreamForWriteAsync());
+                using (var stream = await file.OpenStreamForWriteAsync())
+                {
+                    xDoc.Save(stream);
+                }
             }
             catch (Exception ex)
             {
