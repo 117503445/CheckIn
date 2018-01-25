@@ -28,11 +28,23 @@ namespace CheckIn
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public  sealed partial class PageCheck : Page
+    public sealed partial class PageCheck : Page
     {
+        List<Student> stus = new List<Student>();
+        private CheckKind checkKind;
         public PageCheck()
         {
             this.InitializeComponent();
+            LoadStu();
+            checkKind = GetCheckKind();
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            Debug.WriteLine("path={0};", folder.Path);
+        }
+        /// <summary>
+        ///从student.xml中加载学生数据 
+        /// </summary>
+        private void LoadStu()
+        {
             XElement xElement = XElement.Load(@"Assets\Student.xml");
             foreach (var item in xElement.Elements())
             {
@@ -44,23 +56,19 @@ namespace CheckIn
                 Student student = new Student(name, id, row, column, GridTable);
                 stus.Add(student);
             }
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
-            Debug.WriteLine("path={0};", folder.Path);
         }
-        List<Student> stus = new List<Student>();
-        private void Page_Loading(FrameworkElement sender, object args)
-        {
-            
-        }
-
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveLog();
         }
-        private async void Save()
+        private async void SaveLog()
         {
-            Debug.WriteLine("Save");
+            if (checkKind==CheckKind.None)
+            {
+                Debug.WriteLine("你在干什么???");
+                return;
+            }
             try
             {
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
@@ -76,12 +84,13 @@ namespace CheckIn
                         missId += item.Id.ToString() + ",";
                     }
                 }
-                if (missId.Length!=0)
+                if (missId.Length != 0)
                 {
-                    missId=missId.Substring(0,missId.Length-1);
+                    missId = missId.Substring(0, missId.Length - 1);
                 }
                 DateTime t = DateTime.Now;
                 xDoc.Element("Logs").Add(new XElement("Log",
+                    new XAttribute("checkKind",checkKind),
                     new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second)),
                     new XAttribute("missId", missId)
                     ));
@@ -92,6 +101,18 @@ namespace CheckIn
 
                 Debug.WriteLine(ex);
             }
+        }
+        private CheckKind GetCheckKind()
+        {
+            int hour = DateTime.Now.Hour;
+            foreach (int item in Enum.GetValues(typeof(CheckKind)))
+            {
+                if (hour == item)
+                {
+                    return (CheckKind)item;
+                }
+            }
+            return CheckKind.None;
         }
     }
     public class Student
@@ -108,31 +129,35 @@ namespace CheckIn
             this.Id = id;
             this.Row = row;
             Column = column;
-
-            //button.Width = 120;
-            //button.Height = 60;
-            Button.Name = "Btn" + id.ToString();
+            //Button.Name = "Btn" + id.ToString();
             Button.Content = name;
-
             grid.Children.Add(Button);
             Grid.SetRow(Button, 2 * row - 2);
             Grid.SetColumn(Button, 2 * column - 2);
             //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
             Button.HorizontalAlignment = HorizontalAlignment.Stretch;
             Button.VerticalAlignment = VerticalAlignment.Stretch;
-
             Button.Click += BtnStu_Click;
         }
         public void BtnStu_Click(object sender, RoutedEventArgs e)
         {
             Debug.Write(Name);
         }
-
-
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
         public ToggleButton Button { get => button; set => button = value; }
+    }
+    public enum CheckKind
+    {
+        MorningRead = 6,
+        MorningExercise = 9,
+        MorningEye = 10,
+        NoonSleep = 12,
+        AfternoonEye = 15,
+        NightStudy = 17,
+        NightEye = 20,
+        None = 37628,
     }
 }

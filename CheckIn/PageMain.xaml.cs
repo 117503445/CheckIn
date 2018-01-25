@@ -22,22 +22,22 @@ namespace CheckIn
     /// </summary>
     public sealed partial class PageMain : Page
     {
-        PageCheck pageCheck = new PageCheck();
-        PageAbout PageAbout = new PageAbout();
+
         public PageMain()
         {
             this.InitializeComponent();
-          
+            MyFrame.Content = App.PageCheck;
+
         }
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LsteCheck.IsSelected)
             {
-                MyFrame.Content = pageCheck;
+                MyFrame.Content = App.PageCheck;
             }
             else if (LsteAbout.IsSelected)
             {
-                MyFrame.Content = PageAbout;
+                MyFrame.Content = App.PageAbout;
             }
             else if (HamburgerItem.IsSelected)
             {
@@ -52,7 +52,7 @@ namespace CheckIn
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-        
+
         }
     }
 }

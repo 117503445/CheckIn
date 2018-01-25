@@ -31,6 +31,11 @@ namespace CheckIn
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
+       static PageCheck pageCheck = new PageCheck();
+       static PageAbout pageAbout = new PageAbout();
+
+        public static PageCheck PageCheck { get => pageCheck; set => pageCheck = value; }
+        public static PageAbout PageAbout { get => pageAbout; set => pageAbout = value; }
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
