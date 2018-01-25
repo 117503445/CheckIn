@@ -141,7 +141,28 @@ return;
         private int id = 0;
         private int row = 0;
         private int column = 0;
-
+        private CheckType CType
+        {
+            get { return CType; }
+            set
+            {
+                CType = value; switch (value)
+                {
+                    case CheckType.Present:
+                        break;
+                    case CheckType.Absent:
+                        break;
+                    case CheckType.Leave:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public void BtnStu_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.Write(Name);
+        }
         public Student(string name, int id, int row, int column, Grid grid)
         {
             this.Name = name;
@@ -158,10 +179,7 @@ return;
             Button.VerticalAlignment = VerticalAlignment.Stretch;
             Button.Click += BtnStu_Click;
         }
-        public void BtnStu_Click(object sender, RoutedEventArgs e)
-        {
-            Debug.Write(Name);
-        }
+
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }
@@ -178,5 +196,20 @@ return;
         NightStudy = 17,
         NightEye = 20,
         None = 37628,
+    }
+    public enum CheckType
+    {
+        /// <summary>
+        /// 在场
+        /// </summary>
+        Present,
+        /// <summary>
+        /// 缺席
+        /// </summary>
+        Absent,
+        /// <summary>
+        /// 请假
+        /// </summary>
+        Leave
     }
 }
