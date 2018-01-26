@@ -20,6 +20,7 @@ using System.Text;
 using Windows.UI.Popups;
 using Windows.Storage.Streams;
 using Windows.Storage.Pickers;
+using Windows.UI.Xaml.Shapes;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -38,6 +39,7 @@ namespace CheckIn
             LoadStu();
             StorageFolder folder = ApplicationData.Current.LocalFolder;
             Debug.WriteLine("path={0};", folder.Path);
+
         }
         /// <summary>
         ///从student.xml中加载学生数据 
@@ -94,7 +96,7 @@ return;
                 {
                     //Debug.WriteLine(item.Id);
                     //Debug.WriteLine(item.Button.IsChecked);
-                    if ((bool)item.Button.IsChecked)
+                    if (item.CType == CheckType.Absent)
                     {
                         missId += item.Id.ToString() + ",";
                     }
@@ -136,14 +138,17 @@ return;
     }
     public class Student
     {
-        private ToggleButton button = new ToggleButton();
+        private Button button = new Button();
+
         private string name = "";
         private int id = 0;
         private int row = 0;
         private int column = 0;
-        private CheckType CType
+        private Ellipse ellipse;
+        private CheckType cType = CheckType.Present;
+        public CheckType CType
         {
-            get { return CType; }
+            get { return cType; }
             set
             {
                 CType = value; switch (value)
@@ -165,12 +170,34 @@ return;
         }
         public Student(string name, int id, int row, int column, Grid grid)
         {
+
             this.Name = name;
             this.Id = id;
             this.Row = row;
             Column = column;
             //Button.Name = "Btn" + id.ToString();
-            Button.Content = name;
+            //Button.Content = name;
+
+            StackPanel stackPanel = new StackPanel
+            {
+                Padding = new Thickness(0),
+                Orientation = Orientation.Horizontal
+            };
+            TextBlock textBlock = new TextBlock
+            {
+                Text = Name,
+                FontSize = 18
+            };
+            ellipse = new Ellipse
+            {
+                Margin = new Thickness(0, 0, 0, 0),
+                Width = 18,
+                Height = 18,
+                Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
+            }; stackPanel.Children.Add(ellipse);
+            stackPanel.Children.Add(textBlock);
+
+            button.Content = stackPanel;
             grid.Children.Add(Button);
             Grid.SetRow(Button, 2 * row - 2);
             Grid.SetColumn(Button, 2 * column - 2);
@@ -184,7 +211,7 @@ return;
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
-        public ToggleButton Button { get => button; set => button = value; }
+        public Button Button { get => button; set => button = value; }
     }
     public enum CheckKind
     {

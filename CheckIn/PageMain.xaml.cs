@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -27,7 +28,16 @@ namespace CheckIn
         {
             this.InitializeComponent();
             MyFrame.Content = App.PageCheck;
-
+            DispatcherTimer timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            timer.Tick += (s, e) =>
+            {
+                //Debug.WriteLine(MyFrame.ActualHeight);
+                Debug.WriteLine(ActualWidth);
+            };
+            timer.Start();
         }
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
