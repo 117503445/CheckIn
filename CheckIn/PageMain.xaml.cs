@@ -28,16 +28,16 @@ namespace CheckIn
         {
             this.InitializeComponent();
             MyFrame.Content = App.PageCheck;
-            DispatcherTimer timer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            timer.Tick += (s, e) =>
-            {
-                //Debug.WriteLine(MyFrame.ActualHeight);
-                Debug.WriteLine(ActualWidth);
-            };
-            timer.Start();
+            //DispatcherTimer timer = new DispatcherTimer()
+            //{
+            //    Interval = TimeSpan.FromSeconds(1)
+            //};
+            //timer.Tick += (s, e) =>
+            //{
+            //    //Debug.WriteLine(MyFrame.ActualHeight);
+            //    Debug.WriteLine(ActualWidth);
+            //};
+            //timer.Start();
         }
         private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

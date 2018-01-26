@@ -154,8 +154,10 @@ return;
                 CType = value; switch (value)
                 {
                     case CheckType.Present:
+                        ellipse.Opacity = 0;
                         break;
                     case CheckType.Absent:
+                        ellipse.Opacity = 1;
                         break;
                     case CheckType.Leave:
                         break;
@@ -164,10 +166,7 @@ return;
                 }
             }
         }
-        public void BtnStu_Click(object sender, RoutedEventArgs e)
-        {
-            Debug.Write(Name);
-        }
+
         public Student(string name, int id, int row, int column, Grid grid)
         {
 
@@ -196,7 +195,7 @@ return;
                 Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
             }; stackPanel.Children.Add(ellipse);
             stackPanel.Children.Add(textBlock);
-
+            button.HorizontalContentAlignment = HorizontalAlignment.Left;
             button.Content = stackPanel;
             grid.Children.Add(Button);
             Grid.SetRow(Button, 2 * row - 2);
@@ -204,7 +203,24 @@ return;
             //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
             Button.HorizontalAlignment = HorizontalAlignment.Stretch;
             Button.VerticalAlignment = VerticalAlignment.Stretch;
-            Button.Click += BtnStu_Click;
+            Button.PointerPressed += Button_PointerPressed; ;
+        }
+
+        private void Button_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            var temp = e.GetCurrentPoint(sender as Button);
+
+            if (temp.Properties.IsLeftButtonPressed)
+            {
+                if (CType==CheckType.Present)
+                {
+                    CType = CheckType.Absent;
+                }
+                else
+                {
+                    CType = CheckType.Present;
+                }
+            }
         }
 
         public string Name { get => name; set => name = value; }
