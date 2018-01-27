@@ -56,22 +56,47 @@ namespace CheckIn
                 int column = int.Parse(item.Attribute("column").Value);
                 Student student = new Student(name, id, row, column, GridTable);
                 stus.Add(student);
+                student.Button.Click += BtnStu_Click;
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnStu_Click(object sender, RoutedEventArgs e)
         {
-            SaveLog();
+            SaveTemp();
+        }
+        private async void BtnSave_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            // SaveLog();
+            //LoadTemp();
+            bool isBlank = true;
+            foreach (var item in stus)
+            {
+                if (item.CType!=CheckType.Present)
+                {
+                    isBlank = false;
+                    break;
+                }
+            }
+            if (isBlank)
+            {
+                if (await CheckIfLoadTempAsync())
+                {
+                    LoadTemp();
+                }
+            }
+            else
+            {
+                SaveLog();
+            }
         }
         private async void SaveLog()
         {
             if (CurrentCheckKind == CheckKind.None)
             {
-                Debug.WriteLine("你在干什么???");
+                Debug.WriteLine("不是正常的时间");
 #if !DEBUG
 return;
 #endif
-
             }
             try
             {
@@ -92,6 +117,7 @@ return;
                     xDoc.Add(root);
                 }
                 string missId = "";
+                int missNum = 0;
                 foreach (var item in stus)
                 {
                     //Debug.WriteLine(item.Id);
@@ -99,6 +125,7 @@ return;
                     if (item.CType == CheckType.Absent)
                     {
                         missId += item.Id.ToString() + ",";
+                        missNum++;
                     }
                 }
                 if (missId.Length != 0)
@@ -112,16 +139,98 @@ return;
                     new XAttribute("missId", missId),
                     new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second))
                     ));
-                using (var stream = await file.OpenStreamForWriteAsync())
+
+                var dialog = new MessageDialog(string.Format("+{0}s", missNum));
+
+                dialog.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
+                dialog.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
+
+                //设置默认按钮，不设置的话默认的确认按钮是第一个按钮
+                dialog.DefaultCommandIndex = 0;
+                dialog.CancelCommandIndex = 1;
+
+                //获取返回值
+                var result = await dialog.ShowAsync();
+                if ((int)result.Id == 0)
                 {
-                    xDoc.Save(stream);
+                    using (var stream = await file.OpenStreamForWriteAsync())
+                    {
+                        xDoc.Save(stream);
+                    }
                 }
+
             }
             catch (Exception ex)
             {
 
                 Debug.WriteLine(ex);
             }
+        }
+        private async void SaveTemp()
+        {
+            XDocument xDoc = new XDocument(
+                new XElement(
+                 "root",
+                     new XElement("CheckType", CurrentCheckKind),
+                     new XElement("dayOfWeek", (int)DateTime.Now.DayOfWeek),
+                     new XElement("students")
+                            )
+                                          );
+            foreach (var item in stus)
+            {
+                xDoc.Element("root").Element("students").Add(new XElement("student", new XAttribute("ID", item.Id), new XAttribute("CheckType", item.CType)));
+            }
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile file = await storageFolder.CreateFileAsync("temp.xml", CreationCollisionOption.ReplaceExisting);
+            using (var stream = await file.OpenStreamForWriteAsync())
+            {
+                xDoc.Save(stream);
+            }
+        }
+        private async void LoadTemp()
+        {
+            XDocument xDoc = await LoadTempXml();
+            var t = xDoc.Element("root").Element("students").Elements();
+            int i = 0;
+            foreach (var item in t)
+            {
+                var str = item.Attribute("CheckType").Value;
+                stus[i].CType = (CheckType)Enum.Parse(typeof(CheckType), str);
+                i++;
+            }
+
+        }
+        private async Task<bool> CheckIfLoadTempAsync()
+        {
+            XDocument xDoc = await LoadTempXml();
+            if (xDoc == new XDocument())
+            {
+                return false;
+            }
+            else
+            {
+                if (xDoc.Element("root").Element("dayOfWeek").Value == DateTime.Now.DayOfWeek.ToString() || xDoc.Element("root").Element("CheckType").Value == CurrentCheckKind.ToString())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        private async Task<XDocument> LoadTempXml()
+        {
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            try
+            {
+                StorageFile file = await storageFolder.CreateFileAsync("temp.xml", CreationCollisionOption.OpenIfExists);
+                using (var stream = await file.OpenStreamForReadAsync())
+                {
+                    return (XDocument.Load(stream));
+                }
+            }
+            catch { return new XDocument(); }
         }
         private CheckKind GetCheckKind()
         {
@@ -135,6 +244,7 @@ return;
             }
             return CheckKind.None;
         }
+
     }
     public class Student
     {
@@ -151,19 +261,26 @@ return;
             get { return cType; }
             set
             {
-                CType = value; switch (value)
+                switch (value)
                 {
                     case CheckType.Present:
                         ellipse.Opacity = 0;
+                        Debug.WriteLine("在场");
                         break;
                     case CheckType.Absent:
                         ellipse.Opacity = 1;
+                        ellipse.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+                        Debug.WriteLine("不在场");
                         break;
                     case CheckType.Leave:
+                        ellipse.Opacity = 1;
+                        ellipse.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 255));
+                        Debug.WriteLine("Leave");
                         break;
                     default:
                         break;
                 }
+                cType = value;
             }
         }
 
@@ -192,7 +309,7 @@ return;
                 Margin = new Thickness(0, 0, 0, 0),
                 Width = 18,
                 Height = 18,
-                Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
+                //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
             }; stackPanel.Children.Add(ellipse);
             stackPanel.Children.Add(textBlock);
             button.HorizontalContentAlignment = HorizontalAlignment.Left;
@@ -201,27 +318,28 @@ return;
             Grid.SetRow(Button, 2 * row - 2);
             Grid.SetColumn(Button, 2 * column - 2);
             //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
-            Button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            Button.VerticalAlignment = VerticalAlignment.Stretch;
-            Button.PointerPressed += Button_PointerPressed; ;
+            button.HorizontalAlignment = HorizontalAlignment.Stretch;
+            button.VerticalAlignment = VerticalAlignment.Stretch;
+            button.Click += Button_Click;
         }
 
-        private void Button_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var temp = e.GetCurrentPoint(sender as Button);
-
-            if (temp.Properties.IsLeftButtonPressed)
+            if (CType == CheckType.Present)
             {
-                if (CType==CheckType.Present)
-                {
-                    CType = CheckType.Absent;
-                }
-                else
-                {
-                    CType = CheckType.Present;
-                }
+                CType = CheckType.Absent;
+            }
+            else if (CType == CheckType.Absent)
+            {
+                CType = CheckType.Leave;
+            }
+            else
+            {
+                CType = CheckType.Present;
             }
         }
+
+
 
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
