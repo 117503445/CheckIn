@@ -64,7 +64,7 @@ namespace CheckIn
         {
             SaveTemp();
         }
-        private async void BtnSave_ClickAsync(object sender, RoutedEventArgs e)
+        private async void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             // SaveLog();
             //LoadTemp();
@@ -102,7 +102,7 @@ return;
             {
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
                 XDocument xDoc;
-                StorageFile file = await storageFolder.CreateFileAsync("log.xml", CreationCollisionOption.OpenIfExists);
+                StorageFile file = await storageFolder.CreateFileAsync(App.XmlFileName, CreationCollisionOption.OpenIfExists);
                 try
                 {
                     using (var stream = await file.OpenStreamForReadAsync())

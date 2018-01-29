@@ -32,11 +32,24 @@ namespace CheckIn
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-       static PageCheck pageCheck = new PageCheck();
-       static PageAbout pageAbout = new PageAbout();
+        static PageCheck pageCheck = new PageCheck();
+        static PageAbout pageAbout = new PageAbout();
 
         public static PageCheck PageCheck { get => pageCheck; set => pageCheck = value; }
         public static PageAbout PageAbout { get => pageAbout; set => pageAbout = value; }
+        public static string XmlFileName
+        {
+            get
+            {
+                System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("zh-CN");
+                System.Globalization.Calendar calendar = cultureInfo.Calendar;
+
+                int weekOfYear = calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
+                return weekOfYear.ToString() + ".xml";
+            }
+        }
+
+
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
