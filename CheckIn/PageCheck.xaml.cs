@@ -21,9 +21,6 @@ using Windows.UI.Popups;
 using Windows.Storage.Streams;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Shapes;
-
-// https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
-
 namespace CheckIn
 {
     /// <summary>
@@ -38,7 +35,7 @@ namespace CheckIn
             this.InitializeComponent();
             LoadStu();
             StorageFolder folder = ApplicationData.Current.LocalFolder;
-            Debug.WriteLine("path={0};", folder.Path);
+            Debug.WriteLine(folder.Path);
 
         }
         /// <summary>
@@ -71,7 +68,7 @@ namespace CheckIn
             bool isBlank = true;
             foreach (var item in stus)
             {
-                if (item.CType!=CheckType.Present)
+                if (item.CType != CheckType.Present)
                 {
                     isBlank = false;
                     break;
@@ -86,37 +83,55 @@ namespace CheckIn
             }
             else
             {
+                BtnSave.IsEnabled = false;
                 SaveLog();
+                BtnSave.IsEnabled = true;
             }
         }
         private async void SaveLog()
         {
+            Debug.WriteLine("");
+            Debug.WriteLine("-------------开始读取--------------");
+            Debug.WriteLine("");
             if (CurrentCheckKind == CheckKind.None)
             {
                 Debug.WriteLine("不是正常的时间");
 #if !DEBUG
-return;
+                var dialog = new MessageDialog("不是正常的时间,请自行设置签到种类")
+                {
+                    DefaultCommandIndex = 0,
+                };
+                dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+                return;
 #endif
             }
             try
             {
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-                XDocument xDoc;
                 StorageFile file = await storageFolder.CreateFileAsync(App.XmlFileName, CreationCollisionOption.OpenIfExists);
+                XDocument xDoc;
                 try
                 {
-                    using (var stream = await file.OpenStreamForReadAsync())
+                    using (var stream =await  file.OpenStreamForReadAsync())
                     {
                         xDoc = XDocument.Load(stream);
                     }
+                    Debug.WriteLine("读取XML成功");
+                    Debug.WriteLine("---!---");
+                    Debug.WriteLine(xDoc);
+                    Debug.WriteLine("---?---");
                 }
-                catch (Exception)
+                catch (Exception ex)//创建新的document
                 {
+                    Debug.WriteLine("读取失败");
+                    Debug.WriteLine("---!---");
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine("---?---");
                     xDoc = new XDocument();
                     XElement root = new XElement("Logs");
                     xDoc.Add(root);
                 }
-                string missId = "";
+                string missId = "";//记录缺失的学号
                 int missNum = 0;
                 foreach (var item in stus)
                 {
@@ -133,22 +148,52 @@ return;
                     missId = missId.Substring(0, missId.Length - 1);
                 }
                 DateTime t = DateTime.Now;
-                xDoc.Element("Logs").Add(new XElement("Log",
-                    new XAttribute("checkKind", CurrentCheckKind),
-                    new XAttribute("dayOfWeek", (int)DateTime.Now.DayOfWeek),
-                    new XAttribute("missId", missId),
-                    new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second))
-                    ));
 
-                var dialog = new MessageDialog(string.Format("+{0}s", missNum));
+                var i = from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x;
+                if (i.Count() == 0)
+                {
+                    xDoc.Element("Logs").Add(new XElement("Log",
+    new XAttribute("checkKind", CurrentCheckKind),
+    new XAttribute("dayOfWeek", (int)DateTime.Now.DayOfWeek),
+    new XAttribute("missId", missId),
+    new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second))
+    ));
 
+                    Debug.WriteLine("---!---");
+                    Debug.WriteLine("添加记录");
+                    Debug.WriteLine(xDoc);
+                    Debug.WriteLine("---?---");
+
+                }
+                else
+                {
+                    var d2 = new MessageDialog("似乎已经签到过了")
+                    {
+                        DefaultCommandIndex = 0,
+                        CancelCommandIndex = 1
+                    };
+                    d2.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
+                    d2.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
+                    //获取返回值
+                    var r2 = await d2.ShowAsync();
+                    if ((int)r2.Id == 1)
+                    {
+                        return;
+                    }
+                    i.Last().SetAttributeValue("missId", missId);
+                    i.Last().SetAttributeValue("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second));
+                    Debug.WriteLine("---!---");
+                    Debug.WriteLine("修改纪录");
+                    Debug.WriteLine(xDoc);
+                    Debug.WriteLine("---?---");
+                }
+                var dialog = new MessageDialog(string.Format("+{0}s", missNum))
+                {
+                    DefaultCommandIndex = 0,
+                    CancelCommandIndex = 1
+                };
                 dialog.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
                 dialog.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
-
-                //设置默认按钮，不设置的话默认的确认按钮是第一个按钮
-                dialog.DefaultCommandIndex = 0;
-                dialog.CancelCommandIndex = 1;
-
                 //获取返回值
                 var result = await dialog.ShowAsync();
                 if ((int)result.Id == 0)
@@ -157,6 +202,13 @@ return;
                     {
                         xDoc.Save(stream);
                     }
+                    Debug.WriteLine("---!---");
+                    Debug.WriteLine("保存");
+                    Debug.WriteLine(xDoc);
+                    Debug.WriteLine("---?---");
+#if !DEBUG
+                    App.Current.Exit();
+#endif
                 }
 
             }
@@ -165,6 +217,9 @@ return;
 
                 Debug.WriteLine(ex);
             }
+            Debug.WriteLine("");
+            Debug.WriteLine("-------------结束读取--------------");
+            Debug.WriteLine("");
         }
         private async void SaveTemp()
         {
@@ -265,17 +320,14 @@ return;
                 {
                     case CheckType.Present:
                         ellipse.Opacity = 0;
-                        Debug.WriteLine("在场");
                         break;
                     case CheckType.Absent:
                         ellipse.Opacity = 1;
-                        ellipse.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
-                        Debug.WriteLine("不在场");
+                        ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.Orange);
                         break;
                     case CheckType.Leave:
                         ellipse.Opacity = 1;
-                        ellipse.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 255));
-                        Debug.WriteLine("Leave");
+                        ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.DeepSkyBlue);
                         break;
                     default:
                         break;
@@ -286,14 +338,10 @@ return;
 
         public Student(string name, int id, int row, int column, Grid grid)
         {
-
             this.Name = name;
             this.Id = id;
             this.Row = row;
             Column = column;
-            //Button.Name = "Btn" + id.ToString();
-            //Button.Content = name;
-
             StackPanel stackPanel = new StackPanel
             {
                 Padding = new Thickness(0),
@@ -322,7 +370,6 @@ return;
             button.VerticalAlignment = VerticalAlignment.Stretch;
             button.Click += Button_Click;
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (CType == CheckType.Present)
@@ -338,9 +385,6 @@ return;
                 CType = CheckType.Present;
             }
         }
-
-
-
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }

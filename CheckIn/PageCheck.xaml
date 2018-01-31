@@ -62,7 +62,7 @@
             </Button>
 
         </Grid>
-        <Button Grid.Column="1"   Grid.Row="2" HorizontalAlignment="Center" Click="BtnSave_Click" >
+        <Button Name="BtnSave" Grid.Column="1"   Grid.Row="2" HorizontalAlignment="Center" Click="BtnSave_Click" >
             <Button.Content>
                 <Image Source="Assets/Naive.png" ></Image>
             </Button.Content>

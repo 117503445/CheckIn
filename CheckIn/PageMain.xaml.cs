@@ -28,6 +28,7 @@ namespace CheckIn
         {
             this.InitializeComponent();
             MyFrame.Content = App.PageCheck;
+      
             //DispatcherTimer timer = new DispatcherTimer()
             //{
             //    Interval = TimeSpan.FromSeconds(1)
@@ -52,6 +53,15 @@ namespace CheckIn
             else if (HamburgerItem.IsSelected)
             {
                 //MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
+            }
+
+            if (LsteCheck.IsSelected)
+            {
+                MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+            }
+            else
+            {
+                MySplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
             }
 
         }
