@@ -44,7 +44,9 @@ namespace CheckIn
         {
             if (LsteCheck.IsSelected)
             {
+                MyFrame.Content = null;
                 MyFrame.Content = App.PageCheck;
+                Debug.WriteLine(3);
             }
             else if (LsteAbout.IsSelected)
             {
@@ -63,14 +65,14 @@ namespace CheckIn
                 //MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
             }
 
-            if (LsteCheck.IsSelected)
-            {
-                MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
-            }
-            else
-            {
-                MySplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
-            }
+            //if (LsteCheck.IsSelected)
+            //{
+            //    MySplitView.DisplayMode = SplitViewDisplayMode.CompactOverlay;
+            //}
+            //else
+            //{
+            //    MySplitView.DisplayMode = SplitViewDisplayMode.CompactInline;
+            //}
 
         }
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)

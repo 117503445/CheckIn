@@ -32,7 +32,7 @@ namespace CheckIn
 
         public PageCheck()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();LoadStu();
             Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace CheckIn
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadStu();
+            
             if (await CheckIfLoadTempAsync())
             {
                 LoadTemp();
