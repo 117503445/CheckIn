@@ -28,7 +28,7 @@ namespace CheckIn
         {
             this.InitializeComponent();
             MyFrame.Content = App.PageCheck;
-      
+
             //DispatcherTimer timer = new DispatcherTimer()
             //{
             //    Interval = TimeSpan.FromSeconds(1)
@@ -70,9 +70,5 @@ namespace CheckIn
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-    }
+     }
 }

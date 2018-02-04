@@ -33,10 +33,7 @@ namespace CheckIn
         public PageCheck()
         {
             this.InitializeComponent();
-            LoadStu();
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
-            Debug.WriteLine(folder.Path);
-
+            Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
         }
         /// <summary>
         ///从student.xml中加载学生数据 
@@ -56,37 +53,39 @@ namespace CheckIn
                 student.Button.Click += BtnStu_Click;
             }
         }
-
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadStu();
+            if (await CheckIfLoadTempAsync())
+            {
+                LoadTemp();
+            }
+        }
         private void BtnStu_Click(object sender, RoutedEventArgs e)
         {
             SaveTemp();
         }
-        private async void BtnSave_Click(object sender, RoutedEventArgs e)
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             // SaveLog();
             //LoadTemp();
-            bool isBlank = true;
-            foreach (var item in stus)
-            {
-                if (item.CType != CheckType.Present)
-                {
-                    isBlank = false;
-                    break;
-                }
-            }
-            if (isBlank)
-            {
-                if (await CheckIfLoadTempAsync())
-                {
-                    LoadTemp();
-                }
-            }
-            else
-            {
-                BtnSave.IsEnabled = false;
-                SaveLog();
-                BtnSave.IsEnabled = true;
-            }
+            //bool isBlank = true;
+            //foreach (var item in stus)
+            //{
+            //    if (item.CType != CheckType.Present)
+            //    {
+            //        isBlank = false;
+            //        break;
+            //    }
+            //}
+            //if (isBlank)
+            //{
+
+            //}
+            //else
+            //{
+            SaveLog();
+            // }
         }
         private async void SaveLog()
         {
@@ -97,11 +96,12 @@ namespace CheckIn
             {
                 Debug.WriteLine("不是正常的时间");
 #if !DEBUG
-                var dialog = new MessageDialog("不是正常的时间,请自行设置签到种类")
-                {
-                    DefaultCommandIndex = 0,
-                };
-                dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+                //var dialog = new MessageDialog("不是正常的时间,请自行设置签到种类")
+                //{
+                //    DefaultCommandIndex = 0,
+                //};
+                //dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
+                await UMessageDialogAsync("不是正常的时间,请自行设置签到种类", "确定");
                 return;
 #endif
             }
@@ -123,13 +123,13 @@ namespace CheckIn
                 }
                 catch (Exception ex)//创建新的document
                 {
-                    Debug.WriteLine("读取失败");
-                    Debug.WriteLine("---!---");
+                    //Debug.WriteLine("读取失败");
+                    //Debug.WriteLine("---!---");
                     if (ex.Message != "Root element is missing.")
                     {
                         Debug.WriteLine("致命的读取错误:" + ex.Message);
                     }
-                    Debug.WriteLine("---?---");
+                    //Debug.WriteLine("---?---");
                     xDoc = new XDocument();
                     XElement root = new XElement("Logs");
                     xDoc.Add(root);
@@ -160,9 +160,8 @@ namespace CheckIn
     new XAttribute("checkKind", CurrentCheckKind),
     new XAttribute("dayOfWeek", (int)DateTime.Now.DayOfWeek),
     new XAttribute("missId", missId),
-    new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second))
+    new XAttribute("time", TimeStamp())
     ));
-
                     //Debug.WriteLine("---!---");
                     //Debug.WriteLine("添加记录");
                     //Debug.WriteLine(xDoc);
@@ -171,22 +170,13 @@ namespace CheckIn
                 }
                 else
                 {
-                    var d2 = new MessageDialog("似乎已经签到过了")
-                    {
-                        DefaultCommandIndex = 0,
-                        CancelCommandIndex = 1
-                    };
-                    d2.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
-                    d2.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
-                    //获取返回值
-                    var r2 = await d2.ShowAsync();
-                    if ((int)r2.Id == 1)
+                    if (await UMessageDialogAsync("似乎已经签到过了", "吼啊", "取消") == 1)
                     {
                         return;
                     }
                     //Debug.WriteLine("修改了" + i.Last().ToString());
                     i.Last().SetAttributeValue("missId", missId);
-                    i.Last().SetAttributeValue("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second));
+                    i.Last().SetAttributeValue("time", TimeStamp());
                     //Debug.WriteLine("---!---");
                     //Debug.WriteLine("修改纪录");
                     //Debug.WriteLine(xDoc);
@@ -202,9 +192,11 @@ namespace CheckIn
                 //dialog.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
                 ////获取返回值
                 //var result = await dialog.ShowAsync();
-
-                
-                if ((int)result.Id == 0)
+                string message = string.Format("+{0}s", missNum);
+#if DEBUG
+                message += "    程序运行在调试模式.如果你在工作,不用惊慌,正常签到后通知QHT即可";
+#endif
+                if (await UMessageDialogAsync(message, "吼啊", "取消") == 0)
                 {
                     await FileIO.WriteTextAsync(file, xDoc.ToString());
 
@@ -217,7 +209,6 @@ namespace CheckIn
                     App.Current.Exit();
 #endif
                 }
-
             }
             catch (Exception ex)
             {
@@ -306,22 +297,30 @@ namespace CheckIn
             }
             return CheckKind.None;
         }
-        static class UCollection
+
+        private static async Task<int> UMessageDialogAsync(string text, params string[] s)
         {
-            public static async Task<int> UMessageDialogAsync(string s1, string s2, string caption)
+            var dialog = new MessageDialog(text)
             {
-                var dialog = new MessageDialog(caption)
-                {
-                    DefaultCommandIndex = 0,
-                    CancelCommandIndex = 1
-                };
-                dialog.Commands.Add(new UICommand(s1, cmd => { }, commandId: 0));
-                dialog.Commands.Add(new UICommand(s2, cmd => { }, commandId: 1));
-                //获取返回值
-                var result = await dialog.ShowAsync();
-                return (int)result.Id;
+                DefaultCommandIndex = 0,
+                CancelCommandIndex = 1
+            };
+            for (int i = 0; i < s.Length; i++)
+            {
+                dialog.Commands.Add(new UICommand(s[i], cmd => { }, commandId: i));
             }
+
+            //获取返回值
+            var result = await dialog.ShowAsync();
+            return (int)result.Id;
         }
+        private static string TimeStamp()
+        {
+            var t = DateTime.Now;
+            return string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
+        }
+
+        
     }
     public class Student
     {

@@ -14,13 +14,13 @@
                 </ListBoxItem>
                 <ListBoxItem Name="LsteCheck">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE72D;" />
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE77F;" />
                         <TextBlock Text="签到" FontSize="24" Margin="20,0,0,0" />
                     </StackPanel>
                 </ListBoxItem>
                 <ListBoxItem Name="LsteAbout">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE734;" />
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE946;" />
                         <TextBlock Text="关于" FontSize="24" Margin="20,0,0,0" />
                     </StackPanel>
                 </ListBoxItem >

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,10 +33,11 @@ namespace CheckIn
                     Package.Current.Id.Version.Minor,
                     Package.Current.Id.Version.Build,
                     Package.Current.Id.Version.Revision);
+           
 #if DEBUG
             appVersion += ",DEBUG";
 #endif
-            TxtVersion.Text = appVersion;
+            TxtVersion.Text = appVersion+ ApplicationData.Current.LocalFolder.Path;
         }
     }
 }
