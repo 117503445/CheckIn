@@ -32,7 +32,7 @@ namespace CheckIn
 
         public PageCheck()
         {
-            this.InitializeComponent();LoadStu();
+            this.InitializeComponent(); LoadStu();
             Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
         }
         /// <summary>
@@ -55,7 +55,6 @@ namespace CheckIn
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            
             if (await CheckIfLoadTempAsync())
             {
                 LoadTemp();
@@ -176,7 +175,7 @@ namespace CheckIn
                     }
                     //Debug.WriteLine("修改了" + i.Last().ToString());
                     i.Last().SetAttributeValue("missId", missId);
-                    i.Last().SetAttributeValue("time",App. TimeStamp());
+                    i.Last().SetAttributeValue("time", App.TimeStamp());
                     //Debug.WriteLine("---!---");
                     //Debug.WriteLine("修改纪录");
                     //Debug.WriteLine(xDoc);
@@ -285,8 +284,6 @@ namespace CheckIn
             }
             catch { return null; }
         }
-
-
         private static async Task<int> UMessageDialogAsync(string text, params string[] s)
         {
             var dialog = new MessageDialog(text)
@@ -303,10 +300,5 @@ namespace CheckIn
             var result = await dialog.ShowAsync();
             return (int)result.Id;
         }
-
-
-        
     }
-   
-
 }
