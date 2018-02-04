@@ -34,7 +34,13 @@ namespace CheckIn
         }
         static PageCheck pageCheck = new PageCheck();
         static PageAbout pageAbout = new PageAbout();
-
+        static PageAdmin pageAdmin = new PageAdmin();
+        static PageOption pageOption = new PageOption();
+        public static string TimeStamp()
+        {
+            var t = DateTime.Now;
+            return string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
+        }
         public static PageCheck PageCheck { get => pageCheck; set => pageCheck = value; }
         public static PageAbout PageAbout { get => pageAbout; set => pageAbout = value; }
         public static string XmlFileName
@@ -48,6 +54,37 @@ namespace CheckIn
                 return weekOfYear.ToString() + ".xml";
             }
         }
+
+        private static CheckKind currentCheckKind = CheckKind.None;
+        public static CheckKind CurrentCheckKind
+        {
+            set
+            {
+                currentCheckKind = value;
+            }
+            get
+            {
+                if (currentCheckKind == CheckKind.None)
+                {
+                    int hour = DateTime.Now.Hour;
+                    foreach (int item in Enum.GetValues(typeof(CheckKind)))
+                    {
+                        if (hour == item)
+                        {
+                            return (CheckKind)item;
+                        }
+                    }
+                    return CheckKind.None;
+                }
+                else
+                {
+                    return currentCheckKind;
+                }
+
+            }
+        }
+        public static PageAdmin PageAdmin { get => pageAdmin; set => pageAdmin = value; }
+        public static PageOption PageOption { get => pageOption; set => pageOption = value; }
 
 
 

@@ -18,6 +18,18 @@
                         <TextBlock Text="签到" FontSize="24" Margin="20,0,0,0" />
                     </StackPanel>
                 </ListBoxItem>
+                <ListBoxItem Name="LsteOption">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE7B8;" />
+                        <TextBlock Text="选项" FontSize="24" Margin="20,0,0,0" />
+                    </StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Name="LsteAdmin">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE912;" />
+                        <TextBlock Text="管理" FontSize="24" Margin="20,0,0,0" />
+                    </StackPanel>
+                </ListBoxItem >
                 <ListBoxItem Name="LsteAbout">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="36" Text="&#xE946;" />

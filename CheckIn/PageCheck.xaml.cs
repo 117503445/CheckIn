@@ -29,7 +29,7 @@ namespace CheckIn
     public sealed partial class PageCheck : Page
     {
         List<Student> stus = new List<Student>();
-        private CheckKind CurrentCheckKind { get { return GetCheckKind(); } }
+
         public PageCheck()
         {
             this.InitializeComponent();
@@ -92,7 +92,7 @@ namespace CheckIn
             //Debug.WriteLine("");
             //Debug.WriteLine("-------------开始读取--------------");
             //Debug.WriteLine("");
-            if (CurrentCheckKind == CheckKind.None)
+            if (App.CurrentCheckKind == CheckKind.None)
             {
                 Debug.WriteLine("不是正常的时间");
 #if !DEBUG
@@ -153,14 +153,14 @@ namespace CheckIn
                 Debug.WriteLine(string.Format("missId={0}", missId));
                 DateTime t = DateTime.Now;
 
-                var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x).ToList();
+                var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == App.CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x).ToList();
                 if (i.Count() == 0)
                 {
                     xDoc.Element("Logs").Add(new XElement("Log",
-    new XAttribute("checkKind", CurrentCheckKind),
+    new XAttribute("checkKind", App.CurrentCheckKind),
     new XAttribute("dayOfWeek", (int)DateTime.Now.DayOfWeek),
     new XAttribute("missId", missId),
-    new XAttribute("time", TimeStamp())
+    new XAttribute("time", App.TimeStamp())
     ));
                     //Debug.WriteLine("---!---");
                     //Debug.WriteLine("添加记录");
@@ -176,7 +176,7 @@ namespace CheckIn
                     }
                     //Debug.WriteLine("修改了" + i.Last().ToString());
                     i.Last().SetAttributeValue("missId", missId);
-                    i.Last().SetAttributeValue("time", TimeStamp());
+                    i.Last().SetAttributeValue("time",App. TimeStamp());
                     //Debug.WriteLine("---!---");
                     //Debug.WriteLine("修改纪录");
                     //Debug.WriteLine(xDoc);
@@ -224,7 +224,7 @@ namespace CheckIn
             XDocument xDoc = new XDocument(
                 new XElement(
                  "root",
-                     new XElement("CheckType", CurrentCheckKind),
+                     new XElement("CheckType", App.CurrentCheckKind),
                      new XElement("dayOfWeek", (int)DateTime.Now.DayOfWeek),
                      new XElement("students")
                             )
@@ -256,13 +256,13 @@ namespace CheckIn
         private async Task<bool> CheckIfLoadTempAsync()
         {
             XDocument xDoc = await LoadTempXml();
-            if (xDoc == new XDocument())
+            if (xDoc == null)
             {
                 return false;
             }
             else
             {
-                if (xDoc.Element("root").Element("dayOfWeek").Value == DateTime.Now.DayOfWeek.ToString() || xDoc.Element("root").Element("CheckType").Value == CurrentCheckKind.ToString())
+                if (xDoc.Element("root").Element("dayOfWeek").Value == DateTime.Now.DayOfWeek.ToString() || xDoc.Element("root").Element("CheckType").Value == App.CurrentCheckKind.ToString())
                 {
                     return true;
                 }
@@ -283,20 +283,9 @@ namespace CheckIn
                     return (XDocument.Load(stream));
                 }
             }
-            catch { return new XDocument(); }
+            catch { return null; }
         }
-        private CheckKind GetCheckKind()
-        {
-            int hour = DateTime.Now.Hour;
-            foreach (int item in Enum.GetValues(typeof(CheckKind)))
-            {
-                if (hour == item)
-                {
-                    return (CheckKind)item;
-                }
-            }
-            return CheckKind.None;
-        }
+
 
         private static async Task<int> UMessageDialogAsync(string text, params string[] s)
         {
@@ -314,128 +303,10 @@ namespace CheckIn
             var result = await dialog.ShowAsync();
             return (int)result.Id;
         }
-        private static string TimeStamp()
-        {
-            var t = DateTime.Now;
-            return string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
-        }
+
 
         
     }
-    public class Student
-    {
-        private Button button = new Button();
+   
 
-        private string name = "";
-        private int id = 0;
-        private int row = 0;
-        private int column = 0;
-        private Ellipse ellipse;
-        private CheckType cType = CheckType.Present;
-        public CheckType CType
-        {
-            get { return cType; }
-            set
-            {
-                switch (value)
-                {
-                    case CheckType.Present:
-                        ellipse.Opacity = 0;
-                        break;
-                    case CheckType.Absent:
-                        ellipse.Opacity = 1;
-                        ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.Orange);
-                        break;
-                    case CheckType.Leave:
-                        ellipse.Opacity = 1;
-                        ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.DeepSkyBlue);
-                        break;
-                    default:
-                        break;
-                }
-                cType = value;
-            }
-        }
-
-        public Student(string name, int id, int row, int column, Grid grid)
-        {
-            this.Name = name;
-            this.Id = id;
-            this.Row = row;
-            Column = column;
-            StackPanel stackPanel = new StackPanel
-            {
-                Padding = new Thickness(0),
-                Orientation = Orientation.Horizontal
-            };
-            TextBlock textBlock = new TextBlock
-            {
-                Text = Name,
-                FontSize = 18
-            };
-            ellipse = new Ellipse
-            {
-                Margin = new Thickness(0, 0, 0, 0),
-                Width = 18,
-                Height = 18,
-                //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
-            }; stackPanel.Children.Add(ellipse);
-            stackPanel.Children.Add(textBlock);
-            button.HorizontalContentAlignment = HorizontalAlignment.Left;
-            button.Content = stackPanel;
-            grid.Children.Add(Button);
-            Grid.SetRow(Button, 2 * row - 2);
-            Grid.SetColumn(Button, 2 * column - 2);
-            //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
-            button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            button.VerticalAlignment = VerticalAlignment.Stretch;
-            button.Click += Button_Click;
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (CType == CheckType.Present)
-            {
-                CType = CheckType.Absent;
-            }
-            else if (CType == CheckType.Absent)
-            {
-                CType = CheckType.Leave;
-            }
-            else
-            {
-                CType = CheckType.Present;
-            }
-        }
-        public string Name { get => name; set => name = value; }
-        public int Id { get => id; set => id = value; }
-        public int Row { get => row; set => row = value; }
-        public int Column { get => column; set => column = value; }
-        public Button Button { get => button; set => button = value; }
-    }
-    public enum CheckKind
-    {
-        MorningRead = 6,
-        MorningExercise = 9,
-        MorningEye = 10,
-        NoonSleep = 12,
-        AfternoonEye = 15,
-        NightStudy = 17,
-        NightEye = 20,
-        None = 37628,
-    }
-    public enum CheckType
-    {
-        /// <summary>
-        /// 在场
-        /// </summary>
-        Present,
-        /// <summary>
-        /// 缺席
-        /// </summary>
-        Absent,
-        /// <summary>
-        /// 请假
-        /// </summary>
-        Leave
-    }
 }

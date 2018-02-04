@@ -50,6 +50,14 @@ namespace CheckIn
             {
                 MyFrame.Content = App.PageAbout;
             }
+            else if (LsteAdmin.IsSelected)
+            {
+                MyFrame.Content = App.PageAdmin;
+            }
+            else if (LsteOption.IsSelected)
+            {
+                MyFrame.Content = App.PageOption;
+            }
             else if (HamburgerItem.IsSelected)
             {
                 //MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
@@ -70,5 +78,5 @@ namespace CheckIn
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
-     }
+    }
 }
