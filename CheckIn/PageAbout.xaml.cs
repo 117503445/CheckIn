@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,6 +26,15 @@ namespace CheckIn
         public PageAbout()
         {
             this.InitializeComponent();
+            string appVersion = string.Format("CheckIn {0}.{1}.{2}.{3},Copyright © 2017 HT",
+                    Package.Current.Id.Version.Major,
+                    Package.Current.Id.Version.Minor,
+                    Package.Current.Id.Version.Build,
+                    Package.Current.Id.Version.Revision);
+#if DEBUG
+            appVersion += ",DEBUG";
+#endif
+            TxtVersion.Text = appVersion;
         }
     }
 }

@@ -90,9 +90,9 @@ namespace CheckIn
         }
         private async void SaveLog()
         {
-            Debug.WriteLine("");
-            Debug.WriteLine("-------------开始读取--------------");
-            Debug.WriteLine("");
+            //Debug.WriteLine("");
+            //Debug.WriteLine("-------------开始读取--------------");
+            //Debug.WriteLine("");
             if (CurrentCheckKind == CheckKind.None)
             {
                 Debug.WriteLine("不是正常的时间");
@@ -112,20 +112,23 @@ namespace CheckIn
                 XDocument xDoc;
                 try
                 {
-                    using (var stream =await  file.OpenStreamForReadAsync())
+                    using (var stream = await file.OpenStreamForReadAsync())
                     {
                         xDoc = XDocument.Load(stream);
                     }
-                    Debug.WriteLine("读取XML成功");
-                    Debug.WriteLine("---!---");
-                    Debug.WriteLine(xDoc);
-                    Debug.WriteLine("---?---");
+                    //Debug.WriteLine("读取XML成功");
+                    //Debug.WriteLine("---!---");
+                    //Debug.WriteLine(xDoc);
+                    //Debug.WriteLine("---?---");
                 }
                 catch (Exception ex)//创建新的document
                 {
                     Debug.WriteLine("读取失败");
                     Debug.WriteLine("---!---");
-                    Debug.WriteLine(ex.Message);
+                    if (ex.Message != "Root element is missing.")
+                    {
+                        Debug.WriteLine("致命的读取错误:" + ex.Message);
+                    }
                     Debug.WriteLine("---?---");
                     xDoc = new XDocument();
                     XElement root = new XElement("Logs");
@@ -147,9 +150,10 @@ namespace CheckIn
                 {
                     missId = missId.Substring(0, missId.Length - 1);
                 }
+                Debug.WriteLine(string.Format("missId={0}", missId));
                 DateTime t = DateTime.Now;
 
-                var i = from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x;
+                var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x).ToList();
                 if (i.Count() == 0)
                 {
                     xDoc.Element("Logs").Add(new XElement("Log",
@@ -159,10 +163,10 @@ namespace CheckIn
     new XAttribute("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second))
     ));
 
-                    Debug.WriteLine("---!---");
-                    Debug.WriteLine("添加记录");
-                    Debug.WriteLine(xDoc);
-                    Debug.WriteLine("---?---");
+                    //Debug.WriteLine("---!---");
+                    //Debug.WriteLine("添加记录");
+                    //Debug.WriteLine(xDoc);
+                    //Debug.WriteLine("---?---");
 
                 }
                 else
@@ -180,32 +184,35 @@ namespace CheckIn
                     {
                         return;
                     }
+                    //Debug.WriteLine("修改了" + i.Last().ToString());
                     i.Last().SetAttributeValue("missId", missId);
                     i.Last().SetAttributeValue("time", string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second));
-                    Debug.WriteLine("---!---");
-                    Debug.WriteLine("修改纪录");
-                    Debug.WriteLine(xDoc);
-                    Debug.WriteLine("---?---");
+                    //Debug.WriteLine("---!---");
+                    //Debug.WriteLine("修改纪录");
+                    //Debug.WriteLine(xDoc);
+                    //Debug.WriteLine("---?---");
                 }
-                var dialog = new MessageDialog(string.Format("+{0}s", missNum))
-                {
-                    DefaultCommandIndex = 0,
-                    CancelCommandIndex = 1
-                };
-                dialog.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
-                dialog.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
-                //获取返回值
-                var result = await dialog.ShowAsync();
+
+                //var dialog = new MessageDialog(string.Format("+{0}s", missNum))
+                //{
+                //    DefaultCommandIndex = 0,
+                //    CancelCommandIndex = 1
+                //};
+                //dialog.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
+                //dialog.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
+                ////获取返回值
+                //var result = await dialog.ShowAsync();
+
+                
                 if ((int)result.Id == 0)
                 {
-                    using (var stream = await file.OpenStreamForWriteAsync())
-                    {
-                        xDoc.Save(stream);
-                    }
-                    Debug.WriteLine("---!---");
-                    Debug.WriteLine("保存");
-                    Debug.WriteLine(xDoc);
-                    Debug.WriteLine("---?---");
+                    await FileIO.WriteTextAsync(file, xDoc.ToString());
+
+                    //Debug.WriteLine("---!---");
+                    //Debug.WriteLine("保存");
+                    //Debug.WriteLine(xDoc);
+                    //Debug.WriteLine("---?---");
+
 #if !DEBUG
                     App.Current.Exit();
 #endif
@@ -217,9 +224,9 @@ namespace CheckIn
 
                 Debug.WriteLine(ex);
             }
-            Debug.WriteLine("");
-            Debug.WriteLine("-------------结束读取--------------");
-            Debug.WriteLine("");
+            //Debug.WriteLine("");
+            //Debug.WriteLine("-------------结束读取--------------");
+            //Debug.WriteLine("");
         }
         private async void SaveTemp()
         {
@@ -299,7 +306,22 @@ namespace CheckIn
             }
             return CheckKind.None;
         }
-
+        static class UCollection
+        {
+            public static async Task<int> UMessageDialogAsync(string s1, string s2, string caption)
+            {
+                var dialog = new MessageDialog(caption)
+                {
+                    DefaultCommandIndex = 0,
+                    CancelCommandIndex = 1
+                };
+                dialog.Commands.Add(new UICommand(s1, cmd => { }, commandId: 0));
+                dialog.Commands.Add(new UICommand(s2, cmd => { }, commandId: 1));
+                //获取返回值
+                var result = await dialog.ShowAsync();
+                return (int)result.Id;
+            }
+        }
     }
     public class Student
     {
