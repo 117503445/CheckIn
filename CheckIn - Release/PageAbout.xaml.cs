@@ -28,7 +28,7 @@ namespace CheckIn
         public PageAbout()
         {
             this.InitializeComponent();
-            string appVersion = string.Format("CheckIn {0}.{1}.{2}.{3},Copyright © 2017-2018 HT",
+            string appVersion = string.Format("CheckIn {0}.{1}.{2}.{3},Copyright © 2017 HT",
                     Package.Current.Id.Version.Major,
                     Package.Current.Id.Version.Minor,
                     Package.Current.Id.Version.Build,

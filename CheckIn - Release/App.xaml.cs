@@ -32,9 +32,6 @@ namespace CheckIn
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-
-        private static List<Student> stus = new List<Student>();
-
         static PageCheck pageCheck = new PageCheck();
         static PageAbout pageAbout = new PageAbout();
         static PageAdmin pageAdmin = new PageAdmin();
@@ -88,7 +85,6 @@ namespace CheckIn
         }
         public static PageAdmin PageAdmin { get => pageAdmin; set => pageAdmin = value; }
         public static PageOption PageOption { get => pageOption; set => pageOption = value; }
-        public static List<Student> Stus { get => stus; set => stus = value; }
 
 
 

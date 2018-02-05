@@ -1,0 +1,147 @@
+﻿<Page
+    x:Class="CheckIn.PageAdmin"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CheckIn"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <GridView Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0"></TextBlock>
+        </GridViewItem>
+    </GridView>
+</Page>

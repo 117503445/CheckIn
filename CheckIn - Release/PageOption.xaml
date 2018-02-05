@@ -1,0 +1,16 @@
+﻿<Page
+    x:Class="CheckIn.PageOption"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CheckIn"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock Name="TbTime" HorizontalAlignment="Left" Text="签到时间:2,4,14,20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="72"/>
+        <ComboBox Name="CbDayOfWeek" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="375,291,0,0" Width="140" FontSize="36"/>
+        <ComboBox Name="CbCheckKind"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="589,289,0,0" Width="140" FontSize="36"/>
+
+    </Grid>
+</Page>

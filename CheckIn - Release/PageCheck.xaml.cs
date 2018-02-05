@@ -28,7 +28,7 @@ namespace CheckIn
     /// </summary>
     public sealed partial class PageCheck : Page
     {
-
+        List<Student> stus = new List<Student>();
 
         public PageCheck()
         {
@@ -48,45 +48,11 @@ namespace CheckIn
                 int id = int.Parse(item.Attribute("id").Value);
                 int row = int.Parse(item.Attribute("row").Value);
                 int column = int.Parse(item.Attribute("column").Value);
-                Student student = new Student(name, id, row, column);
-                App.Stus.Add(student);
-                ShowButtonOfStudent(student);
+                Student student = new Student(name, id, row, column, GridTable);
+                stus.Add(student);
+                student.Button.Click += BtnStu_Click;
             }
         }
-        private void ShowButtonOfStudent(Student student)
-        {
-            Button button = new Button();
-            Ellipse ellipse;
-            StackPanel stackPanel = new StackPanel
-            {
-                Padding = new Thickness(0),
-                Orientation = Orientation.Horizontal
-            };
-            TextBlock textBlock = new TextBlock
-            {
-                Text = Name,
-                FontSize = 18
-            };
-            ellipse = new Ellipse
-            {
-                Margin = new Thickness(0, 0, 0, 0),
-                Width = 18,
-                Height = 18,
-                //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
-            }; stackPanel.Children.Add(ellipse);
-            stackPanel.Children.Add(textBlock);
-            button.HorizontalContentAlignment = HorizontalAlignment.Left;
-            button.Content = stackPanel;
-            GridTable.Children.Add(button);
-            Grid.SetRow(button, 2 *student.Row - 2);
-            Grid.SetColumn(button, 2 * student.Column - 2);
-            //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
-            button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            button.VerticalAlignment = VerticalAlignment.Stretch;
-            button.Click += App.Stus.Button_Click;
-
-        }
-
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (await CheckIfLoadTempAsync())
@@ -169,7 +135,7 @@ namespace CheckIn
                 }
                 string missId = "";//记录缺失的学号
                 int missNum = 0;
-                foreach (var item in App.Stus)
+                foreach (var item in stus)
                 {
                     //Debug.WriteLine(item.Id);
                     //Debug.WriteLine(item.Button.IsChecked);
@@ -262,7 +228,7 @@ namespace CheckIn
                      new XElement("students")
                             )
                                           );
-            foreach (var item in App.Stus)
+            foreach (var item in stus)
             {
                 xDoc.Element("root").Element("students").Add(new XElement("student", new XAttribute("ID", item.Id), new XAttribute("CheckType", item.CType)));
             }
@@ -281,7 +247,7 @@ namespace CheckIn
             foreach (var item in t)
             {
                 var str = item.Attribute("CheckType").Value;
-                App.Stus[i].CType = (CheckType)Enum.Parse(typeof(CheckType), str);
+                stus[i].CType = (CheckType)Enum.Parse(typeof(CheckType), str);
                 i++;
             }
 
