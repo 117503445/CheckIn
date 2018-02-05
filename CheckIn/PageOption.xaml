@@ -8,9 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Name="TbTime" HorizontalAlignment="Left" Text="签到时间:2,4,14,20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="72"/>
-        <ComboBox Name="CbDayOfWeek" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="375,291,0,0" Width="140" FontSize="36"/>
-        <ComboBox Name="CbCheckKind"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="589,289,0,0" Width="140" FontSize="36"/>
+        <TextBlock Name="TbTime" HorizontalAlignment="Center" Text="签到时间:2,4,14,20" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="72" Margin="0"/>
+        <ComboBox Name="CbDayOfWeek" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="375,250,0,0" Width="140" FontSize="36"/>
+        <ComboBox Name="CbCheckKind"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="747,250,0,0" Width="140" FontSize="36" SelectionChanged="CbCheckKind_SelectionChanged"/>
 
     </Grid>
 </Page>

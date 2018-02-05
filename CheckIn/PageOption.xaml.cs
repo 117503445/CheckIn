@@ -30,8 +30,8 @@ namespace CheckIn
             timer.Start();
             CbDayOfWeek.ItemsSource = new List<string> { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
             CbDayOfWeek.SelectedIndex = (int)DateTime.Now.DayOfWeek;
-            CbCheckKind.ItemsSource = new List<string> { "早读", "晨练", "早眼", "午休", "午眼", "晚修", "晚眼" };
-            int i= GetIndex(Enum.GetName(typeof(CheckKind), App.CurrentCheckKind));
+            CbCheckKind.ItemsSource = new List<string> { "早读", "晨练", "早眼", "午休", "午眼", "晚修", "晚眼", "无" };
+            int i = GetIndex(Enum.GetName(typeof(CheckKind), App.CurrentCheckKind));
             CbCheckKind.SelectedIndex = i;
         }
 
@@ -45,7 +45,7 @@ namespace CheckIn
             System.Diagnostics.Debug.WriteLine(kind);
             foreach (string item in Enum.GetNames(typeof(CheckKind)))
             {
-                System.Diagnostics.Debug.WriteLine(item);
+                //System.Diagnostics.Debug.WriteLine(item);
                 if (item == kind)
                 {
                     return i;
@@ -53,6 +53,27 @@ namespace CheckIn
                 i++;
             }
             return -1;
+        }
+
+        private void CbCheckKind_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            App.CurrentCheckKind = GetCheckKindByIndex(CbCheckKind.SelectedIndex);
+        }
+        private CheckKind GetCheckKindByIndex(int i)
+        {
+            switch (i)
+            {
+                case 0: return CheckKind.MorningRead;
+                case 1: return CheckKind.MorningExercise;
+                case 2: return CheckKind.MorningEye;
+                case 3: return CheckKind.NoonSleep;
+                case 4: return CheckKind.AfternoonEye;
+                case 5: return CheckKind.NightStudy;
+                case 6: return CheckKind.NightEye;
+                case 7: return CheckKind.None;
+                default: return CheckKind.None;
+            }
+
         }
     }
 }

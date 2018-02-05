@@ -16,7 +16,7 @@ namespace CheckIn
         private int id = 0;
         private int row = 0;
         private int column = 0;
- 
+
         private CheckType cType = CheckType.Present;
         public CheckType CType
         {
@@ -49,13 +49,49 @@ namespace CheckIn
             this.Id = id;
             this.Row = row;
             Column = column;
-            
-        }
 
+        }
+        Ellipse ellipse;
+        Button button = new Button();
+        public void ShowButtonOfStudent(Grid grid)
+        {
+           
+
+            StackPanel stackPanel = new StackPanel
+            {
+                Padding = new Thickness(0),
+                Orientation = Orientation.Horizontal
+            };
+            TextBlock textBlock = new TextBlock
+            {
+                Text = Name,
+                FontSize = 18
+            };
+            ellipse = new Ellipse
+            {
+                Margin = new Thickness(0, 0, 0, 0),
+                Width = 18,
+                Height = 18,
+                //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
+            }; stackPanel.Children.Add(ellipse);
+            stackPanel.Children.Add(textBlock);
+            Button.HorizontalContentAlignment = HorizontalAlignment.Left;
+            Button.Content = stackPanel;
+            grid.Children.Add(Button);
+            Grid.SetRow(Button, 2 * Row - 2);
+            Grid.SetColumn(Button, 2 * Column - 2);
+            //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
+            Button.HorizontalAlignment = HorizontalAlignment.Stretch;
+            Button.VerticalAlignment = VerticalAlignment.Stretch;
+            Button.Click += Button_Click;
+
+
+        }
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
+        public Button Button { get => button; set => button = value; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

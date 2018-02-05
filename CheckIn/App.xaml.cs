@@ -35,10 +35,11 @@ namespace CheckIn
 
         private static List<Student> stus = new List<Student>();
 
-        static PageCheck pageCheck = new PageCheck();
-        static PageAbout pageAbout = new PageAbout();
-        static PageAdmin pageAdmin = new PageAdmin();
-        static PageOption pageOption = new PageOption();
+        static PageCheck pageCheck;
+        static PageAbout pageAbout;
+        static PageAdmin pageAdmin;
+        static PageOption pageOption;
+        static int CheckDayOfWeek;
         public static string TimeStamp()
         {
             var t = DateTime.Now;
@@ -46,6 +47,8 @@ namespace CheckIn
         }
         public static PageCheck PageCheck { get => pageCheck; set => pageCheck = value; }
         public static PageAbout PageAbout { get => pageAbout; set => pageAbout = value; }
+        public static PageAdmin PageAdmin { get => pageAdmin; set => pageAdmin = value; }
+        public static PageOption PageOption { get => pageOption; set => pageOption = value; }
         public static string XmlFileName
         {
             get
@@ -57,7 +60,6 @@ namespace CheckIn
                 return weekOfYear.ToString() + ".xml";
             }
         }
-
         private static CheckKind currentCheckKind = CheckKind.None;
         public static CheckKind CurrentCheckKind
         {
@@ -86,11 +88,8 @@ namespace CheckIn
 
             }
         }
-        public static PageAdmin PageAdmin { get => pageAdmin; set => pageAdmin = value; }
-        public static PageOption PageOption { get => pageOption; set => pageOption = value; }
         public static List<Student> Stus { get => stus; set => stus = value; }
-
-
+        public static int CheckDayOfWeek1 { get => CheckDayOfWeek; set => CheckDayOfWeek = value; }
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
@@ -132,7 +131,6 @@ namespace CheckIn
                 Window.Current.Activate();
             }
         }
-
         /// <summary>
         /// 导航到特定页失败时调用
         /// </summary>
@@ -142,7 +140,6 @@ namespace CheckIn
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
-
         /// <summary>
         /// 在将要挂起应用程序执行时调用。  在不知道应用程序
         /// 无需知道应用程序会被终止还是会恢复，

@@ -50,42 +50,11 @@ namespace CheckIn
                 int column = int.Parse(item.Attribute("column").Value);
                 Student student = new Student(name, id, row, column);
                 App.Stus.Add(student);
-                ShowButtonOfStudent(student);
+                student.Button.Click += BtnStu_Click;
+                student.ShowButtonOfStudent(GridTable);
             }
         }
-        private void ShowButtonOfStudent(Student student)
-        {
-            Button button = new Button();
-            Ellipse ellipse;
-            StackPanel stackPanel = new StackPanel
-            {
-                Padding = new Thickness(0),
-                Orientation = Orientation.Horizontal
-            };
-            TextBlock textBlock = new TextBlock
-            {
-                Text = Name,
-                FontSize = 18
-            };
-            ellipse = new Ellipse
-            {
-                Margin = new Thickness(0, 0, 0, 0),
-                Width = 18,
-                Height = 18,
-                //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
-            }; stackPanel.Children.Add(ellipse);
-            stackPanel.Children.Add(textBlock);
-            button.HorizontalContentAlignment = HorizontalAlignment.Left;
-            button.Content = stackPanel;
-            GridTable.Children.Add(button);
-            Grid.SetRow(button, 2 *student.Row - 2);
-            Grid.SetColumn(button, 2 * student.Column - 2);
-            //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
-            button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            button.VerticalAlignment = VerticalAlignment.Stretch;
-            button.Click += App.Stus.Button_Click;
 
-        }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -183,7 +152,7 @@ namespace CheckIn
                 {
                     missId = missId.Substring(0, missId.Length - 1);
                 }
-                Debug.WriteLine(string.Format("missId={0}", missId));
+                //Debug.WriteLine(string.Format("missId={0}", missId));
                 DateTime t = DateTime.Now;
 
                 var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == App.CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x).ToList();
@@ -272,6 +241,7 @@ namespace CheckIn
             {
                 xDoc.Save(stream);
             }
+            //Debug.WriteLine("Finish SaveTemp");
         }
         private async void LoadTemp()
         {

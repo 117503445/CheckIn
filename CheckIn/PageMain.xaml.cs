@@ -27,6 +27,10 @@ namespace CheckIn
         public PageMain()
         {
             this.InitializeComponent();
+            if (App.PageCheck == null)
+            {
+                App.PageCheck = new PageCheck();
+            }
             MyFrame.Content = App.PageCheck;
 
             //DispatcherTimer timer = new DispatcherTimer()
@@ -44,20 +48,34 @@ namespace CheckIn
         {
             if (LsteCheck.IsSelected)
             {
-                MyFrame.Content = null;
+                if (App.PageCheck == null)
+                {
+                    App.PageCheck = new PageCheck();
+                }
                 MyFrame.Content = App.PageCheck;
-                Debug.WriteLine(3);
             }
             else if (LsteAbout.IsSelected)
             {
+                if (App.PageAbout == null)
+                {
+                    App.PageAbout = new PageAbout();
+                }
                 MyFrame.Content = App.PageAbout;
             }
             else if (LsteAdmin.IsSelected)
             {
+                if (App.PageAdmin == null)
+                {
+                    App.PageAdmin = new PageAdmin();
+                }
                 MyFrame.Content = App.PageAdmin;
             }
             else if (LsteOption.IsSelected)
             {
+                if (App.PageOption == null)
+                {
+                    App.PageOption = new PageOption();
+                }
                 MyFrame.Content = App.PageOption;
             }
             else if (HamburgerItem.IsSelected)
