@@ -155,12 +155,12 @@ namespace CheckIn
                 //Debug.WriteLine(string.Format("missId={0}", missId));
                 DateTime t = DateTime.Now;
 
-                var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == App.CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == (int)DateTime.Now.DayOfWeek select x).ToList();
+                var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == App.CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == App.CheckDayOfWeek select x).ToList();
                 if (i.Count() == 0)
                 {
                     xDoc.Element("Logs").Add(new XElement("Log",
     new XAttribute("checkKind", App.CurrentCheckKind),
-    new XAttribute("dayOfWeek", (int)DateTime.Now.DayOfWeek),
+    new XAttribute("dayOfWeek", (int)App.CheckDayOfWeek),
     new XAttribute("missId", missId),
     new XAttribute("time", App.TimeStamp())
     ));
@@ -227,7 +227,7 @@ namespace CheckIn
                 new XElement(
                  "root",
                      new XElement("CheckType", App.CurrentCheckKind),
-                     new XElement("dayOfWeek", (int)DateTime.Now.DayOfWeek),
+                     new XElement("dayOfWeek", App.CheckDayOfWeek),
                      new XElement("students")
                             )
                                           );
@@ -265,7 +265,7 @@ namespace CheckIn
             }
             else
             {
-                if (xDoc.Element("root").Element("dayOfWeek").Value == DateTime.Now.DayOfWeek.ToString() || xDoc.Element("root").Element("CheckType").Value == App.CurrentCheckKind.ToString())
+                if (xDoc.Element("root").Element("dayOfWeek").Value == App.CheckDayOfWeek.ToString() || xDoc.Element("root").Element("CheckType").Value == App.CurrentCheckKind.ToString())
                 {
                     return true;
                 }
