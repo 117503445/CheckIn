@@ -1,7 +1,0 @@
-标识符;路径
-
-标识符：
-BpVersion//定义版本号 例：1.0.0
-default//绝对路径 例：E:\Desktop\log
-AppPath//在路径前添加程序路径//觉得没卵用，不做
-NoDisk//自动匹配磁盘 例：   :\Desktop\log

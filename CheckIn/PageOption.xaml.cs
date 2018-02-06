@@ -29,7 +29,7 @@ namespace CheckIn
             timer.Tick += Timer_Tick;
             timer.Start();
             CbDayOfWeek.ItemsSource = new List<string> { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
-            CbDayOfWeek.SelectedIndex = (int)DateTime.Now.DayOfWeek;
+            CbDayOfWeek.SelectedIndex = (int)App.CheckDayOfWeek;
             CbCheckKind.ItemsSource = new List<string> { "早读", "晨练", "早眼", "午休", "午眼", "晚修", "晚眼", "无" };
             int i = GetIndex(Enum.GetName(typeof(CheckKind), App.CurrentCheckKind));
             CbCheckKind.SelectedIndex = i;
@@ -42,7 +42,7 @@ namespace CheckIn
         private int GetIndex(string kind)
         {
             int i = 0;
-            System.Diagnostics.Debug.WriteLine(kind);
+            //System.Diagnostics.Debug.WriteLine(kind);
             foreach (string item in Enum.GetNames(typeof(CheckKind)))
             {
                 //System.Diagnostics.Debug.WriteLine(item);
@@ -74,6 +74,11 @@ namespace CheckIn
                 default: return CheckKind.None;
             }
 
+        }
+
+        private void CbDayOfWeek_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            App.CheckDayOfWeek = CbDayOfWeek.SelectedIndex;
         }
     }
 }

@@ -32,14 +32,12 @@ namespace CheckIn
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-
-        private static List<Student> stus = new List<Student>();
-
+        private static SortedSet<Student> stus = new SortedSet<Student>(new SortedStudentById());
         static PageCheck pageCheck;
         static PageAbout pageAbout;
         static PageAdmin pageAdmin;
         static PageOption pageOption;
-        static int CheckDayOfWeek;
+        static int checkDayOfWeek = (int)DateTime.Now.DayOfWeek;
         public static string TimeStamp()
         {
             var t = DateTime.Now;
@@ -88,8 +86,10 @@ namespace CheckIn
 
             }
         }
-        public static List<Student> Stus { get => stus; set => stus = value; }
-        public static int CheckDayOfWeek1 { get => CheckDayOfWeek; set => CheckDayOfWeek = value; }
+
+        public static int CheckDayOfWeek { get => checkDayOfWeek; set => checkDayOfWeek = value; }
+        public static SortedSet<Student> Stus { get => stus; set => stus = value; }
+
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
