@@ -32,12 +32,14 @@ namespace CheckIn
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-        private static SortedSet<Student> stus = new SortedSet<Student>(new SortedStudentById());
+
+        private static List<Student> stus = new List<Student>();
+
         static PageCheck pageCheck;
         static PageAbout pageAbout;
         static PageAdmin pageAdmin;
         static PageOption pageOption;
-        static int checkDayOfWeek = (int)DateTime.Now.DayOfWeek;
+        static int checkDayOfWeek=(int)DateTime.Now.DayOfWeek;
         public static string TimeStamp()
         {
             var t = DateTime.Now;
@@ -86,9 +88,8 @@ namespace CheckIn
 
             }
         }
-
+        public static List<Student> Stus { get => stus; set => stus = value; }
         public static int CheckDayOfWeek { get => checkDayOfWeek; set => checkDayOfWeek = value; }
-        public static SortedSet<Student> Stus { get => stus; set => stus = value; }
 
 
         /// <summary>

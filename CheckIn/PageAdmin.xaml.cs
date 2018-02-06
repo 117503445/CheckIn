@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -25,15 +24,14 @@ namespace CheckIn
     /// </summary>
     public sealed partial class PageAdmin : Page
     {
-        public  PageAdmin()
+        public PageAdmin()
         {
             this.InitializeComponent();
-  
-
-            ShowGridViewItemOfStusAsync(App.Stus);
+            CalculateStusScoreAsync();
+            ShowGridViewItemOfStus(App.Stus);
 
         }
-        private async Task CalculateStusScoreAsync()
+        private async void CalculateStusScoreAsync()
         {
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
             StorageFile file = await storageFolder.CreateFileAsync(App.XmlFileName, CreationCollisionOption.OpenIfExists);
@@ -42,44 +40,35 @@ namespace CheckIn
             {
                 xEle = XElement.Load(stream);
             }
-            // System.Diagnostics.Debug.WriteLine(xEle);
+           // System.Diagnostics.Debug.WriteLine(xEle);
             var i = from x in xEle.Elements() select x.Attribute("missId").Value;
-            List<int> list = new List<int>();
+            List<string> list = new List<string>();
 
             foreach (var item in i)
             {
                 string[] s = item.Split(',');
                 foreach (var t in s)
                 {
-                    list.Add(int.Parse(t));
+                    list.Add(t);
                 }
             }
 
-            //#warning cht;
+//#warning cht;
             foreach (var item in list)
             {
-                //System.Diagnostics.Debug.WriteLine();
-                App.Stus.ElementAt(item - 1).Score -= 1;
-                System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Name);
-                System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Score);
+                System.Diagnostics.Debug.WriteLine(item);
             }
-            System.Diagnostics.Debug.WriteLine("Finished");
         }
-        private async Task ShowGridViewItemOfStusAsync(IEnumerable<Student> stus)
+        private void ShowGridViewItemOfStus(List<Student> stus)
         {
-            await CalculateStusScoreAsync();
             foreach (var item in stus)
-            { TextBlock block = new TextBlock() { Text = item.Name + " " + item.Score.ToString(), FontSize = 20 };
+            {
                 GridViewItem gvItem = new GridViewItem()
                 {
-                    Content =block,
-                    Width=100
+                    Content = new TextBlock() { Text = item.Name + " 0", FontSize = 24 }
                 };
-                //System.Diagnostics.Debug.WriteLine(item.Name);
-                //System.Diagnostics.Debug.WriteLine(item.Score);
                 Gv.Items.Add(gvItem);
             }
-            System.Diagnostics.Debug.WriteLine("Show Finish");
         }
     }
 }

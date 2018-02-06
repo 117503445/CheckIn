@@ -251,7 +251,7 @@ namespace CheckIn
             foreach (var item in t)
             {
                 var str = item.Attribute("CheckType").Value;
-                App.Stus.ElementAt(i).CType = (CheckType)Enum.Parse(typeof(CheckType), str);
+                App.Stus[i].CType = (CheckType)Enum.Parse(typeof(CheckType), str);
                 i++;
             }
 
