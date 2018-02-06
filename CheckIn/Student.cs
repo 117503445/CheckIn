@@ -111,7 +111,7 @@ namespace CheckIn
         }
 
     }
-    public class Students : IComparer<Student>
+    public class SortedStudentById : IComparer<Student>
     {
         public int Compare(Student x, Student y)
         {
