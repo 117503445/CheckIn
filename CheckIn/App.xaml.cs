@@ -39,7 +39,7 @@ namespace CheckIn
         static PageAbout pageAbout;
         static PageAdmin pageAdmin;
         static PageOption pageOption;
-        static int checkDayOfWeek=(int)DateTime.Now.DayOfWeek;
+        static int CheckDayOfWeek;
         public static string TimeStamp()
         {
             var t = DateTime.Now;
@@ -89,8 +89,7 @@ namespace CheckIn
             }
         }
         public static List<Student> Stus { get => stus; set => stus = value; }
-        public static int CheckDayOfWeek { get => checkDayOfWeek; set => checkDayOfWeek = value; }
-
+        public static int CheckDayOfWeek1 { get => CheckDayOfWeek; set => CheckDayOfWeek = value; }
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。

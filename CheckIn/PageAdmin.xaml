@@ -7,7 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <GridView Name="Gv" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <GridView Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <GridViewItem>
+            <TextBlock Text="齐浩天 0" FontSize="36"></TextBlock>
+        </GridViewItem>
     </GridView>
 </Page>

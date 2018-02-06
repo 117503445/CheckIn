@@ -16,7 +16,7 @@ namespace CheckIn
         private int id = 0;
         private int row = 0;
         private int column = 0;
-        private int score = 0;
+
         private CheckType cType = CheckType.Present;
         public CheckType CType
         {
@@ -55,7 +55,7 @@ namespace CheckIn
         Button button = new Button();
         public void ShowButtonOfStudent(Grid grid)
         {
-
+           
 
             StackPanel stackPanel = new StackPanel
             {
@@ -92,7 +92,6 @@ namespace CheckIn
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
         public Button Button { get => button; set => button = value; }
-        public int Score { get => score; set => score = value; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -110,23 +109,5 @@ namespace CheckIn
             }
         }
 
-    }
-    public class Students : IComparer<Student>
-    {
-        public int Compare(Student x, Student y)
-        {
-            if (x.Id > y.Id)
-            {
-                return 1;
-            }
-            else if (x.Id < y.Id)
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
-        }
     }
 }
