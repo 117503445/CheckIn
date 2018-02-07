@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -31,9 +32,9 @@ namespace CheckIn
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-         
+
         }
-        private static SortedSet<Student> stus = new SortedSet<Student>(new SortedStudentById());
+        private static SortedSet<Student> stus = new SortedSet<Student>();
         static PageCheck pageCheck;
         static PageAbout pageAbout;
         static PageAdmin pageAdmin;
@@ -96,8 +97,19 @@ namespace CheckIn
         }
 
         public static int CheckDayOfWeek { get => checkDayOfWeek; set => checkDayOfWeek = value; }
-        public static SortedSet<Student> Stus { get => stus; set => stus = value; }
-
+        public static SortedSet<Student> Stus
+        {
+            get
+            {
+                if (stus.Count != NumStudents)
+                {
+                    Task.Run(async () => { await Logger.WriteAsync("未满足48人的限制"); });
+                }
+                return stus;
+            }
+            set => stus = value;
+        }
+        private const int NumStudents = 48;
 
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。

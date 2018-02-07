@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace CheckIn
 {
-    public class Student
+    public class Student:IComparable<Student>
     {
         private string name = "";
         private int id = 0;
@@ -109,23 +109,27 @@ namespace CheckIn
             }
         }
 
-    }
-    public class SortedStudentById : IComparer<Student>
-    {
-        public int Compare(Student x, Student y)
+        public int CompareTo(Student other)
         {
-            if (x.Id > y.Id)
-            {
-                return 1;
-            }
-            else if (x.Id < y.Id)
-            {
-                return -1;
-            }
-            else
-            {
-                return 0;
-            }
+            return id - other.id;
         }
     }
+    //public class SortedStudentById : IComparer<Student>
+    //{
+    //    public int Compare(Student x, Student y)
+    //    {
+    //        if (x.Id > y.Id)
+    //        {
+    //            return 1;
+    //        }
+    //        else if (x.Id < y.Id)
+    //        {
+    //            return -1;
+    //        }
+    //        else
+    //        {
+    //            return 0;
+    //        }
+    //    }
+    //}
 }

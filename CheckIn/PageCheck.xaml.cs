@@ -57,6 +57,7 @@ namespace CheckIn
                 xElement = XElement.Load(@"Student.xml");
                 await Logger.WriteAsync("缺失Student.xml,读取默认XML");
             }
+            SortedSet<Student> tempSet = new SortedSet<Student>();
             foreach (var item in xElement.Elements())
             {
                 //Debug.WriteLine(item);
@@ -65,10 +66,11 @@ namespace CheckIn
                 int row = int.Parse(item.Attribute("row").Value);
                 int column = int.Parse(item.Attribute("column").Value);
                 Student student = new Student(name, id, row, column);
-                App.Stus.Add(student);
+                tempSet.Add(student);
                 student.Btnstu.AddHandler(PointerReleasedEvent, new PointerEventHandler(Btnstu_PointerReleased), true);
                 student.ShowButtonOfStudent(GridTable);
             }
+            App.Stus = tempSet;
         }
         private void Btnstu_PointerReleased(object sender, PointerRoutedEventArgs e)
         {
