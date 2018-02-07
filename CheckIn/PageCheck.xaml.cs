@@ -35,7 +35,13 @@ namespace CheckIn
             this.InitializeComponent();
             LoadStu();
             Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
+            //BtnSave.AddHandler(PointerPressedEvent, new PointerEventHandler(Button_OnPointerPressed), true);
         }
+        //private void Button_OnPointerPressed(object sender, PointerRoutedEventArgs e)
+        //{
+        //    Debug.WriteLine("Button_OnPointerPressed");
+        //    Debug.WriteLine(e.Handled);
+        //}
         /// <summary>
         ///从student.xml中加载学生数据 
         /// </summary>
@@ -51,46 +57,20 @@ namespace CheckIn
                 int column = int.Parse(item.Attribute("column").Value);
                 Student student = new Student(name, id, row, column);
                 App.Stus.Add(student);
-                student.Button.Click += BtnStu_Click;
+                student.Btnstu.AddHandler(PointerReleasedEvent, new PointerEventHandler(Btnstu_PointerReleased), true);
                 student.ShowButtonOfStudent(GridTable);
             }
         }
-
-
+        private void Btnstu_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            SaveTemp();
+        }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             if (await CheckIfLoadTempAsync())
             {
                 LoadTemp();
             }
-        }
-        private async void BtnStu_Click(object sender, RoutedEventArgs e)
-        {
-            await Task.Delay(20);
-            //Debug.WriteLine("外部click");
-            SaveTemp();
-        }
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
-        {
-            // SaveLog();
-            //LoadTemp();
-            //bool isBlank = true;
-            //foreach (var item in stus)
-            //{
-            //    if (item.CType != CheckType.Present)
-            //    {
-            //        isBlank = false;
-            //        break;
-            //    }
-            //}
-            //if (isBlank)
-            //{
-
-            //}
-            //else
-            //{
-            SaveLog();
-            // }
         }
         private async void SaveLog()
         {
@@ -202,8 +182,8 @@ namespace CheckIn
 #if DEBUG
                 message += "    程序运行在调试模式.如果你在工作,不用惊慌,正常签到后通知QHT即可";
 #endif
-                StorageFolder backupFolder = await storageFolder.CreateFolderAsync("backup",CreationCollisionOption.OpenIfExists);
-                StorageFile backupFile = await backupFolder.CreateFileAsync(App.TimeStamp()+"_"+App.XmlFileName, CreationCollisionOption.OpenIfExists);
+                StorageFolder backupFolder = await storageFolder.CreateFolderAsync("backup", CreationCollisionOption.OpenIfExists);
+                StorageFile backupFile = await backupFolder.CreateFileAsync(App.TimeStamp() + "_" + App.XmlFileName, CreationCollisionOption.OpenIfExists);
                 Debug.WriteLine(App.TimeStamp());
                 if (await UMessageDialogAsync(message, "吼啊", "取消") == 0)
                 {
@@ -286,7 +266,7 @@ namespace CheckIn
         }
         private async Task<XDocument> LoadTempXml()
         {
-            Debug.WriteLine("LoadTempXml");
+            //Debug.WriteLine("LoadTempXml");
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
             try
             {
@@ -298,23 +278,29 @@ namespace CheckIn
             }
             catch { return null; }
         }
-        private static async Task<int> UMessageDialogAsync(string text, params string[] s)
+        /// <summary>
+        /// 对MessageDialog进行封装
+        /// </summary>
+        /// <param name="message">消息框</param>
+        /// <param name="info">确认,取消...</param>
+        /// <returns></returns>
+        private static async Task<int> UMessageDialogAsync(string message, params string[] info)
         {
-            var dialog = new MessageDialog(text)
+            var dialog = new MessageDialog(message)
             {
                 DefaultCommandIndex = 0,
                 CancelCommandIndex = 1
             };
-            for (int i = 0; i < s.Length; i++)
+            for (int i = 0; i < info.Length; i++)
             {
-                dialog.Commands.Add(new UICommand(s[i], cmd => { }, commandId: i));
+                dialog.Commands.Add(new UICommand(info[i], cmd => { }, commandId: i));
             }
-
-            //获取返回值
             var result = await dialog.ShowAsync();
             return (int)result.Id;
         }
-
-
+        private void BtnMain_Click(object sender, RoutedEventArgs e)
+        {
+            SaveLog();
+        }
     }
 }

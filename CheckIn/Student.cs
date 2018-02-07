@@ -52,7 +52,7 @@ namespace CheckIn
 
         }
         Ellipse ellipse;
-        Button button = new Button();
+        Button btnStu = new Button();
         public void ShowButtonOfStudent(Grid grid)
         {
 
@@ -75,15 +75,15 @@ namespace CheckIn
                 //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
             }; stackPanel.Children.Add(ellipse);
             stackPanel.Children.Add(textBlock);
-            Button.HorizontalContentAlignment = HorizontalAlignment.Left;
-            Button.Content = stackPanel;
-            grid.Children.Add(Button);
-            Grid.SetRow(Button, 2 * Row - 2);
-            Grid.SetColumn(Button, 2 * Column - 2);
+            Btnstu.HorizontalContentAlignment = HorizontalAlignment.Left;
+            Btnstu.Content = stackPanel;
+            grid.Children.Add(Btnstu);
+            Grid.SetRow(Btnstu, 2 * Row - 2);
+            Grid.SetColumn(Btnstu, 2 * Column - 2);
             //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
-            Button.HorizontalAlignment = HorizontalAlignment.Stretch;
-            Button.VerticalAlignment = VerticalAlignment.Stretch;
-            Button.Click += Button_Click;
+            Btnstu.HorizontalAlignment = HorizontalAlignment.Stretch;
+            Btnstu.VerticalAlignment = VerticalAlignment.Stretch;
+            Btnstu.Click += Button_Click;
 
 
         }
@@ -91,7 +91,7 @@ namespace CheckIn
         public int Id { get => id; set => id = value; }
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
-        public Button Button { get => button; set => button = value; }
+        public Button Btnstu { get => btnStu; set => btnStu = value; }
         public int Score { get => score; set => score = value; }
 
         private void Button_Click(object sender, RoutedEventArgs e)
