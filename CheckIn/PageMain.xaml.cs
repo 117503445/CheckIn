@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -27,11 +28,12 @@ namespace CheckIn
         public PageMain()
         {
             this.InitializeComponent();
-            if (App.PageCheck == null)
-            {
-                App.PageCheck = new PageCheck();
-            }
-            MyFrame.Content = App.PageCheck;
+            //if (App.PageCheck == null)
+            //{
+            //    App.PageCheck = new PageCheck();
+            //}
+            //MyFrame.Content = App.PageCheck;
+            IconsListBox.SelectedIndex=1;
 
             //DispatcherTimer timer = new DispatcherTimer()
             //{
@@ -44,8 +46,10 @@ namespace CheckIn
             //};
             //timer.Start();
         }
-        private void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void IconsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            await Task.Delay(20);
+
             if (LsteCheck.IsSelected)
             {
                 if (App.PageCheck == null)
@@ -98,5 +102,9 @@ namespace CheckIn
             MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
         }
 
+        private void MySplitView_DragOver(object sender, DragEventArgs e)
+        {
+           
+        }
     }
 }

@@ -96,6 +96,7 @@ namespace CheckIn
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //System.Diagnostics.Debug.WriteLine("内部click");
             if (CType == CheckType.Present)
             {
                 CType = CheckType.Absent;

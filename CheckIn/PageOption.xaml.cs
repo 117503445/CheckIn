@@ -28,6 +28,7 @@ namespace CheckIn
             DispatcherTimer timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
             timer.Tick += Timer_Tick;
             timer.Start();
+            Timer_Tick(this,new object());
             CbDayOfWeek.ItemsSource = new List<string> { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
             CbDayOfWeek.SelectedIndex = (int)App.CheckDayOfWeek;
             CbCheckKind.ItemsSource = new List<string> { "早读", "晨练", "早眼", "午休", "午眼", "晚修", "晚眼", "无" };

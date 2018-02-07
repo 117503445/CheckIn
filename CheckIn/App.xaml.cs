@@ -31,6 +31,7 @@ namespace CheckIn
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+         
         }
         private static SortedSet<Student> stus = new SortedSet<Student>(new SortedStudentById());
         static PageCheck pageCheck;
@@ -41,12 +42,13 @@ namespace CheckIn
         public static string TimeStamp()
         {
             var t = DateTime.Now;
-            return string.Format("{0},{1},{2},{3}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
+            return string.Format("{0},{1},{2},{3},{4}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
         }
         public static PageCheck PageCheck { get => pageCheck; set => pageCheck = value; }
         public static PageAbout PageAbout { get => pageAbout; set => pageAbout = value; }
         public static PageAdmin PageAdmin { get => pageAdmin; set => pageAdmin = value; }
         public static PageOption PageOption { get => pageOption; set => pageOption = value; }
+
         public static string XmlFileName
         {
             get
@@ -55,9 +57,15 @@ namespace CheckIn
                 System.Globalization.Calendar calendar = cultureInfo.Calendar;
 
                 int weekOfYear = calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
+#if DEBUG
+                return weekOfYear.ToString() + "_DEBUG.xml";
+#else
                 return weekOfYear.ToString() + ".xml";
+#endif
+
             }
         }
+
         private static CheckKind currentCheckKind = CheckKind.None;
         public static CheckKind CurrentCheckKind
         {

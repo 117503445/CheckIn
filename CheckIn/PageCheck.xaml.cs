@@ -32,7 +32,8 @@ namespace CheckIn
 
         public PageCheck()
         {
-            this.InitializeComponent(); LoadStu();
+            this.InitializeComponent();
+            LoadStu();
             Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
         }
         /// <summary>
@@ -63,8 +64,10 @@ namespace CheckIn
                 LoadTemp();
             }
         }
-        private void BtnStu_Click(object sender, RoutedEventArgs e)
+        private async void BtnStu_Click(object sender, RoutedEventArgs e)
         {
+            await Task.Delay(20);
+            //Debug.WriteLine("外部click");
             SaveTemp();
         }
         private void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -129,7 +132,8 @@ namespace CheckIn
                     //Debug.WriteLine("---!---");
                     if (ex.Message != "Root element is missing.")
                     {
-                        Debug.WriteLine("致命的读取错误:" + ex.Message);
+                        //Debug.WriteLine();
+                        await UMessageDialogAsync("致命的读取错误:" + ex.Message, "我去找QHT了");
                     }
                     //Debug.WriteLine("---?---");
                     xDoc = new XDocument();
@@ -198,10 +202,13 @@ namespace CheckIn
 #if DEBUG
                 message += "    程序运行在调试模式.如果你在工作,不用惊慌,正常签到后通知QHT即可";
 #endif
+                StorageFolder backupFolder = await storageFolder.CreateFolderAsync("backup",CreationCollisionOption.OpenIfExists);
+                StorageFile backupFile = await backupFolder.CreateFileAsync(App.TimeStamp()+"_"+App.XmlFileName, CreationCollisionOption.OpenIfExists);
+                Debug.WriteLine(App.TimeStamp());
                 if (await UMessageDialogAsync(message, "吼啊", "取消") == 0)
                 {
                     await FileIO.WriteTextAsync(file, xDoc.ToString());
-
+                    await FileIO.WriteTextAsync(backupFile, xDoc.ToString());
                     //Debug.WriteLine("---!---");
                     //Debug.WriteLine("保存");
                     //Debug.WriteLine(xDoc);
@@ -221,12 +228,12 @@ namespace CheckIn
             //Debug.WriteLine("-------------结束读取--------------");
             //Debug.WriteLine("");
         }
-        private async void SaveTemp()
+        public async void SaveTemp()
         {
             XDocument xDoc = new XDocument(
                 new XElement(
                  "root",
-                     new XElement("CheckType", App.CurrentCheckKind),
+                     new XElement("CheckHour", DateTime.Now.Hour),
                      new XElement("dayOfWeek", App.CheckDayOfWeek),
                      new XElement("students")
                             )
@@ -245,6 +252,7 @@ namespace CheckIn
         }
         private async void LoadTemp()
         {
+            Debug.WriteLine("LoadTemp");
             XDocument xDoc = await LoadTempXml();
             var t = xDoc.Element("root").Element("students").Elements();
             int i = 0;
@@ -258,6 +266,7 @@ namespace CheckIn
         }
         private async Task<bool> CheckIfLoadTempAsync()
         {
+            Debug.WriteLine("CheckIfLoadTempAsync");
             XDocument xDoc = await LoadTempXml();
             if (xDoc == null)
             {
@@ -265,7 +274,7 @@ namespace CheckIn
             }
             else
             {
-                if (xDoc.Element("root").Element("dayOfWeek").Value == App.CheckDayOfWeek.ToString() || xDoc.Element("root").Element("CheckType").Value == App.CurrentCheckKind.ToString())
+                if (xDoc.Element("root").Element("dayOfWeek").Value == App.CheckDayOfWeek.ToString() && xDoc.Element("root").Element("CheckHour").Value == DateTime.Now.Hour.ToString())
                 {
                     return true;
                 }
@@ -277,6 +286,7 @@ namespace CheckIn
         }
         private async Task<XDocument> LoadTempXml()
         {
+            Debug.WriteLine("LoadTempXml");
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
             try
             {
@@ -304,5 +314,7 @@ namespace CheckIn
             var result = await dialog.ShowAsync();
             return (int)result.Id;
         }
+
+
     }
 }

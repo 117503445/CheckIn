@@ -27,11 +27,8 @@ namespace CheckIn
     {
         public  PageAdmin()
         {
-            this.InitializeComponent();
-  
-
+            this.InitializeComponent();  
             ShowGridViewItemOfStusAsync(App.Stus);
-
         }
         private async Task CalculateStusScoreAsync()
         {
@@ -45,7 +42,6 @@ namespace CheckIn
             // System.Diagnostics.Debug.WriteLine(xEle);
             var i = from x in xEle.Elements() select x.Attribute("missId").Value;
             List<int> list = new List<int>();
-
             foreach (var item in i)
             {
                 string[] s = item.Split(',');
@@ -54,18 +50,16 @@ namespace CheckIn
                     list.Add(int.Parse(t));
                 }
             }
-
-            //#warning cht;
             foreach (var item in list)
             {
                 //System.Diagnostics.Debug.WriteLine();
                 App.Stus.ElementAt(item - 1).Score -= 1;
-                System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Name);
-                System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Score);
+                //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Name);
+                //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Score);
             }
-            System.Diagnostics.Debug.WriteLine("Finished");
+            //System.Diagnostics.Debug.WriteLine("Finished");
         }
-        private async Task ShowGridViewItemOfStusAsync(IEnumerable<Student> stus)
+        private async void ShowGridViewItemOfStusAsync(IEnumerable<Student> stus)
         {
             await CalculateStusScoreAsync();
             foreach (var item in stus)
@@ -79,7 +73,7 @@ namespace CheckIn
                 //System.Diagnostics.Debug.WriteLine(item.Score);
                 Gv.Items.Add(gvItem);
             }
-            System.Diagnostics.Debug.WriteLine("Show Finish");
+            //System.Diagnostics.Debug.WriteLine("Show Finish");
         }
     }
 }

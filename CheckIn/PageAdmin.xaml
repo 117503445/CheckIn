@@ -8,6 +8,5 @@
     mc:Ignorable="d">
 
     <GridView Name="Gv" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
     </GridView>
 </Page>

@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" >
-    <SplitView Name="MySplitView"  DisplayMode="CompactOverlay" OpenPaneLength="200" CompactPaneLength="56" >
+    <SplitView Name="MySplitView"  DisplayMode="CompactOverlay" OpenPaneLength="200" CompactPaneLength="56" DragOver="MySplitView_DragOver" >
         <SplitView.Pane>
             <ListBox SelectionMode="Single"  Name="IconsListBox" SelectionChanged="IconsListBox_SelectionChanged">
                 <ListBoxItem Name="HamburgerItem" Padding="0">
