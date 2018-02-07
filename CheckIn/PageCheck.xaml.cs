@@ -40,9 +40,23 @@ namespace CheckIn
         /// <summary>
         ///从student.xml中加载学生数据 
         /// </summary>
-        private void LoadStu()
+        private async void LoadStu()
         {
-            XElement xElement = XElement.Load(@"Assets\Student.xml");
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            XElement xElement;
+            try
+            {
+                StorageFile file = await folder.GetFileAsync("Student.xml");
+                using (var stream = await file.OpenStreamForReadAsync())
+                {
+                    xElement = XElement.Load(stream);
+                }
+            }
+            catch (Exception)
+            {
+                xElement = XElement.Load(@"Student.xml");
+                await Logger.WriteAsync("缺失Student.xml,读取默认XML");
+            }
             foreach (var item in xElement.Elements())
             {
                 //Debug.WriteLine(item);
