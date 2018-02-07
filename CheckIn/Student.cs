@@ -84,8 +84,6 @@ namespace CheckIn
             Btnstu.HorizontalAlignment = HorizontalAlignment.Stretch;
             Btnstu.VerticalAlignment = VerticalAlignment.Stretch;
             Btnstu.Click += Button_Click;
-
-
         }
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }

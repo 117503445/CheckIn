@@ -37,11 +37,6 @@ namespace CheckIn
             Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
             //BtnSave.AddHandler(PointerPressedEvent, new PointerEventHandler(Button_OnPointerPressed), true);
         }
-        //private void Button_OnPointerPressed(object sender, PointerRoutedEventArgs e)
-        //{
-        //    Debug.WriteLine("Button_OnPointerPressed");
-        //    Debug.WriteLine(e.Handled);
-        //}
         /// <summary>
         ///从student.xml中加载学生数据 
         /// </summary>
@@ -67,7 +62,8 @@ namespace CheckIn
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (await CheckIfLoadTempAsync())
+            XDocument xDoc = await LoadTempXml();
+            if (CheckIfLoadTempAsync(xDoc))
             {
                 LoadTemp();
             }
@@ -81,11 +77,6 @@ namespace CheckIn
             {
                 Debug.WriteLine("不是正常的时间");
 #if !DEBUG
-                //var dialog = new MessageDialog("不是正常的时间,请自行设置签到种类")
-                //{
-                //    DefaultCommandIndex = 0,
-                //};
-                //dialog.Commands.Add(new UICommand("确定", cmd => { }, commandId: 0));
                 await UMessageDialogAsync("不是正常的时间,请自行设置签到种类", "确定");
                 return;
 #endif
@@ -106,19 +97,26 @@ namespace CheckIn
                     //Debug.WriteLine(xDoc);
                     //Debug.WriteLine("---?---");
                 }
-                catch (Exception ex)//创建新的document
+                catch (Exception exp)//创建新的document
                 {
+                    //Debug.WriteLine(exp.Message);
                     //Debug.WriteLine("读取失败");
                     //Debug.WriteLine("---!---");
-                    if (ex.Message != "Root element is missing.")
+                    if (exp.Message != "Root element is missing.")
                     {
-                        //Debug.WriteLine();
-                        await UMessageDialogAsync("致命的读取错误:" + ex.Message, "我去找QHT了");
+                        await Logger.WriteAsync(exp, true);
+                        if ((await UMessageDialogAsync("致命的读取错误:" + exp.Message, "我不管", "取消操作,我去找QHT了") == 1))
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        await Logger.WriteAsync("创建新的XML");
                     }
                     //Debug.WriteLine("---?---");
                     xDoc = new XDocument();
-                    XElement root = new XElement("Logs");
-                    xDoc.Add(root);
+                    xDoc.Add(new XElement("Logs"));
                 }
                 string missId = "";//记录缺失的学号
                 int missNum = 0;
@@ -138,7 +136,6 @@ namespace CheckIn
                 }
                 //Debug.WriteLine(string.Format("missId={0}", missId));
                 DateTime t = DateTime.Now;
-
                 var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == App.CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == App.CheckDayOfWeek select x).ToList();
                 if (i.Count() == 0)
                 {
@@ -152,7 +149,6 @@ namespace CheckIn
                     //Debug.WriteLine("添加记录");
                     //Debug.WriteLine(xDoc);
                     //Debug.WriteLine("---?---");
-
                 }
                 else
                 {
@@ -168,23 +164,13 @@ namespace CheckIn
                     //Debug.WriteLine(xDoc);
                     //Debug.WriteLine("---?---");
                 }
-
-                //var dialog = new MessageDialog(string.Format("+{0}s", missNum))
-                //{
-                //    DefaultCommandIndex = 0,
-                //    CancelCommandIndex = 1
-                //};
-                //dialog.Commands.Add(new UICommand("吼啊", cmd => { }, commandId: 0));
-                //dialog.Commands.Add(new UICommand("取消", cmd => { }, commandId: 1));
-                ////获取返回值
-                //var result = await dialog.ShowAsync();
                 string message = string.Format("+{0}s", missNum);
 #if DEBUG
                 message += "    程序运行在调试模式.如果你在工作,不用惊慌,正常签到后通知QHT即可";
 #endif
                 StorageFolder backupFolder = await storageFolder.CreateFolderAsync("backup", CreationCollisionOption.OpenIfExists);
                 StorageFile backupFile = await backupFolder.CreateFileAsync(App.TimeStamp() + "_" + App.XmlFileName, CreationCollisionOption.OpenIfExists);
-                Debug.WriteLine(App.TimeStamp());
+                //Debug.WriteLine(App.TimeStamp());
                 if (await UMessageDialogAsync(message, "吼啊", "取消") == 0)
                 {
                     await FileIO.WriteTextAsync(file, xDoc.ToString());
@@ -201,8 +187,7 @@ namespace CheckIn
             }
             catch (Exception ex)
             {
-
-                Debug.WriteLine(ex);
+                await Logger.WriteAsync(ex);
             }
             //Debug.WriteLine("");
             //Debug.WriteLine("-------------结束读取--------------");
@@ -232,7 +217,7 @@ namespace CheckIn
         }
         private async void LoadTemp()
         {
-            Debug.WriteLine("LoadTemp");
+            //Debug.WriteLine("LoadTemp");
             XDocument xDoc = await LoadTempXml();
             var t = xDoc.Element("root").Element("students").Elements();
             int i = 0;
@@ -244,10 +229,10 @@ namespace CheckIn
             }
 
         }
-        private async Task<bool> CheckIfLoadTempAsync()
+        private bool CheckIfLoadTempAsync(XDocument xDoc)
         {
-            Debug.WriteLine("CheckIfLoadTempAsync");
-            XDocument xDoc = await LoadTempXml();
+            //Debug.WriteLine("CheckIfLoadTempAsync");
+            //XDocument xDoc = await LoadTempXml();
             if (xDoc == null)
             {
                 return false;
