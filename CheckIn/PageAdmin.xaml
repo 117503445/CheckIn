@@ -6,7 +6,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Grid x:Name="grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <GridView Name="Gv"  Grid.Row="1" Grid.Column="0">
+        </GridView>
+        <ComboBox x:Name="CboFile" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2"></ComboBox>
+        <TextBlock x:Name="TxtWrong" Text="读取错误" Grid.Row="1" Grid.Column="0" FontSize="144" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <Button Name="BtnChangeSeat"  Content="换座位" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="20" Click="BtnChangeSeat_Click"></Button>
+    </Grid>
 
-    <GridView Name="Gv" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    </GridView>
 </Page>
