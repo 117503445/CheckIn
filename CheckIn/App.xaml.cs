@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -49,7 +51,23 @@ namespace CheckIn
         public static PageAbout PageAbout { get => pageAbout; set => pageAbout = value; }
         public static PageAdmin PageAdmin { get => pageAdmin; set => pageAdmin = value; }
         public static PageOption PageOption { get => pageOption; set => pageOption = value; }
+        public async static void SaveStudentsAsync()
+        {
+            XDocument xDoc = new XDocument(
+                   new XElement(
+                    "students"
+)
+                                             );
+            foreach (var item in App.Stus)
+            {
+                xDoc.Element("students").Add(new XElement("student", new XAttribute("id", item.Id), new XAttribute("name", item.Name), new XAttribute("column", item.Column), new XAttribute("row", item.Row)));
+            }
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile file = await storageFolder.CreateFileAsync("student.xml", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, xDoc.ToString());
 
+
+        }
         public static string XmlFileName
         {
             get

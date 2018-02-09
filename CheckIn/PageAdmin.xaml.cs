@@ -141,7 +141,7 @@ namespace CheckIn
         {
             foreach (var item in App.Stus)
             {
-                if (item.Column == 1 || item.Column ==2 || item.Column == 6 || item.Column == 7)
+                if (item.Column == 1 || item.Column == 2 || item.Column == 6 || item.Column == 7)
                 {
                     item.Column += 2;
                 }
@@ -154,24 +154,8 @@ namespace CheckIn
                     item.Column -= 7;
                 }
             }
-            SaveStudentsAsync();
+            App.SaveStudentsAsync();
         }
-        private async void SaveStudentsAsync()
-        {
-            XDocument xDoc = new XDocument(
-                   new XElement(
-                    "students"
-)
-                                             );
-            foreach (var item in App.Stus)
-            {
-                xDoc.Element("students").Add(new XElement("student", new XAttribute("id", item.Id), new XAttribute("name", item.Name),new XAttribute("column",item.Column),new XAttribute("row",item.Row)));
-            }
-            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            StorageFile file = await storageFolder.CreateFileAsync("student.xml", CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, xDoc.ToString());
 
-
-        }
     }
 }
