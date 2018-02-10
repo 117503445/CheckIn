@@ -31,10 +31,10 @@ namespace CheckIn
         {
             this.InitializeComponent();
 
-            DemoAsync();
+            ShowListAsync();
             ShowGridViewItemOfStusAsync(App.Stus);
         }
-        private async void DemoAsync()
+        private async void ShowListAsync()
         {
             try
             {
@@ -43,7 +43,6 @@ namespace CheckIn
             }
             catch (Exception)
             {
-
 
             }
 
@@ -55,7 +54,12 @@ namespace CheckIn
             {
 
                 var i = await storageFolder.GetFilesAsync();
+#if DEBUG
                 var files = from x in i where x.DisplayName.Contains("_DEBUG") select x.DisplayName;
+#else
+                 var files = from x in i where x.DisplayName.Length==1 select x.DisplayName;
+#endif
+
                 return files.ToList();
 
             }
@@ -124,15 +128,19 @@ namespace CheckIn
             }
             foreach (var item in stus)
             {
-                TextBlock block = new TextBlock() { Text = item.Name + " " + item.Score.ToString(), FontSize = 20 };
-                GridViewItem gvItem = new GridViewItem()
-                {
-                    Content = block,
-                    Width = 100
-                };
+
+                //TextBlock block = new TextBlock() { Text = item.Name + " " + item.Score.ToString(), FontSize = 20 };
+                //GridViewItem gvItem = new GridViewItem()
+                //{
+                //    Content = block,
+                //    Width = 100
+                //};
+
                 //System.Diagnostics.Debug.WriteLine(item.Name);
                 //System.Diagnostics.Debug.WriteLine(item.Score);
-                Gv.Items.Add(gvItem);
+                //Gv.Items.Add(gvItem);
+
+                Gv.Items.Add(item.GvItem);
             }
             //System.Diagnostics.Debug.WriteLine("Show Finish");
         }
@@ -157,5 +165,9 @@ namespace CheckIn
             App.SaveStudentsAsync();
         }
 
+        private void CboFile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

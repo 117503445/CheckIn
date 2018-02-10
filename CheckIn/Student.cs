@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Shapes;
 
 namespace CheckIn
 {
-    public class Student:IComparable<Student>
+    public class Student : IComparable<Student>
     {
         private string name = "";
         private int id = 0;
@@ -43,6 +43,8 @@ namespace CheckIn
             }
         }
 
+        GridViewItem gvItem = new GridViewItem { Width = 100 };
+        TextBlock gvTb = new TextBlock { FontSize = 20, Text = "null" };
         public Student(string name, int id, int row, int column)
         {
             this.Name = name;
@@ -90,7 +92,25 @@ namespace CheckIn
         public int Row { get => row; set => row = value; }
         public int Column { get => column; set => column = value; }
         public Button Btnstu { get => btnStu; set => btnStu = value; }
-        public int Score { get => score; set => score = value; }
+        public int Score
+        {
+            get => score;
+            set
+            {
+                gvTb.Text = Name + " " + Score.ToString();
+                score = value;
+            }
+        }
+        public GridViewItem GvItem
+        {
+            get
+            {
+                gvTb.Text = Name + " " + Score.ToString();
+                gvItem.Content = gvTb;
+                return gvItem;
+            }
+            set => gvItem = value;
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
