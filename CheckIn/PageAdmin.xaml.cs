@@ -29,122 +29,11 @@ namespace CheckIn
         StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
         public PageAdmin()
         {
-            this.InitializeComponent();
-
-            ShowListAsync();
-            ShowGridViewItemOfStusAsync(App.Stus);
-        }
-        private async void ShowListAsync()
-        {
-            try
-            {
-                var i = await GetFiles();
-                CboFile.ItemsSource = i;
-            }
-            catch (Exception)
-            {
-
-            }
+            InitializeComponent();
+            LoadGVItem();
+            LoadCboFileListAsync();
 
         }
-
-        private async Task<List<string>> GetFiles()
-        {
-            try
-            {
-
-                var i = await storageFolder.GetFilesAsync();
-#if DEBUG
-                var files = from x in i where x.DisplayName.Contains("_DEBUG") select x.DisplayName;
-#else
-                 var files = from x in i where x.DisplayName.Length==1 select x.DisplayName;
-#endif
-
-                return files.ToList();
-
-            }
-            catch (Exception)
-            {
-
-                Debug.WriteLine("Error");
-                return null;
-            }
-
-
-
-        }
-        private async Task<bool> CalculateStusScoreAsync()
-        {
-
-            StorageFile file = await storageFolder.CreateFileAsync(App.XmlFileName, CreationCollisionOption.OpenIfExists);
-            XElement xEle;
-            try
-            {
-                using (var stream = await file.OpenStreamForReadAsync())
-                {
-                    xEle = XElement.Load(stream);
-                }
-                var i = from x in xEle.Elements() select x.Attribute("missId").Value;
-
-
-                List<int> list = new List<int>();
-                foreach (var item in i)
-                {
-                    string[] s = item.Split(',');
-                    foreach (var t in s)
-                    {
-                        list.Add(int.Parse(t));
-                    }
-                }
-                foreach (var item in list)
-                {
-                    //System.Diagnostics.Debug.WriteLine();
-                    App.Stus.ElementAt(item - 1).Score -= 1;
-                    //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Name);
-                    //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Score);
-                }
-                //System.Diagnostics.Debug.WriteLine("Finished");
-
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-            // System.Diagnostics.Debug.WriteLine(xEle);
-
-        }
-
-        private async void ShowGridViewItemOfStusAsync(IEnumerable<Student> stus)
-        {
-            if (await CalculateStusScoreAsync())
-            {
-                TxtWrong.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                TxtWrong.Visibility = Visibility.Visible;
-                return;
-            }
-            foreach (var item in stus)
-            {
-
-                //TextBlock block = new TextBlock() { Text = item.Name + " " + item.Score.ToString(), FontSize = 20 };
-                //GridViewItem gvItem = new GridViewItem()
-                //{
-                //    Content = block,
-                //    Width = 100
-                //};
-
-                //System.Diagnostics.Debug.WriteLine(item.Name);
-                //System.Diagnostics.Debug.WriteLine(item.Score);
-                //Gv.Items.Add(gvItem);
-
-                Gv.Items.Add(item.GvItem);
-            }
-            //System.Diagnostics.Debug.WriteLine("Show Finish");
-        }
-
         private void BtnChangeSeat_Click(object sender, RoutedEventArgs e)
         {
             foreach (var item in App.Stus)
@@ -164,10 +53,135 @@ namespace CheckIn
             }
             App.SaveStudentsAsync();
         }
-
-        private void CboFile_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void CboFile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            await CalculateStusScoreAsync(CboFile.SelectedValue + ".xml");
+            //ShowGridViewItemOfStusAsync(App.Stus, );
+        }
+        /// <summary>
+        /// 把App.Stus的GridViewItem加载进gridview
+        /// </summary>
+        private void LoadGVItem()
+        {
+            foreach (var item in App.Stus)
+            {
+                Gv.Items.Add(item.GvItem);
+            }
+        }
+        private async void LoadCboFileListAsync()
+        {
+            try
+            {
+                filesName = await GetFiles();
+                CboFile.ItemsSource = filesName;
+                CboFile.SelectedIndex = CboFile.Items.Count - 1;
+            }
+            catch (Exception ex)
+            {
+                await Logger.WriteAsync(ex);
+            }
 
+        }
+        List<string> filesName = new List<string>();
+        private async Task<List<string>> GetFiles()
+        {
+            try
+            {
+                var i = await storageFolder.GetFilesAsync();
+#if DEBUG
+                var files = (from x in i where x.DisplayName.Contains("_DEBUG") select x.DisplayName).ToList();
+#else
+                 var files = from x in i where x.DisplayName.Length==1 select x.DisplayName;
+#endif
+                files.Insert(0,"All");
+                return files;
+            }
+            catch (Exception ex)
+            {
+                await Logger.WriteAsync(ex);
+                return null;
+            }
+        }
+        private async Task<bool> CalculateStusScoreAsync(string xmlFileName)
+        {
+            try
+            {
+                if (xmlFileName != "All.xml")
+                {
+
+                    List<int> list = await GetMissId(xmlFileName);
+                    //重置分数
+                    foreach (var item in App.Stus)
+                    {
+                        item.Score = 0;
+                    }
+                    foreach (var item in list)
+                    {
+                        //System.Diagnostics.Debug.WriteLine();
+                        App.Stus.ElementAt(item - 1).Score -= 1;
+                        //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Name);
+                        //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Score);
+                    }
+                    //System.Diagnostics.Debug.WriteLine("Finished");
+                }
+                else
+                {
+
+                    //var files = await storageFolder.GetFileAsync();
+                    foreach (var item in App.Stus)
+                    {
+                        item.Score = 0;
+                    }
+                    foreach (var file in filesName)
+                    {
+                        if (file=="All")
+                        {
+                            continue;
+                        }
+                        List<int> list = await GetMissId(file+".xml");
+                        foreach (var item in list)
+                        {
+                            //System.Diagnostics.Debug.WriteLine();
+                            App.Stus.ElementAt(item - 1).Score -= 1;
+                            //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Name);
+                            //System.Diagnostics.Debug.WriteLine(App.Stus.ElementAt(item - 1).Score);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                await Logger.WriteAsync(ex);
+                return false;
+            }
+            return true;
+        }
+
+        private async Task<List<int>> GetMissId(string xmlFileName)
+        {
+            StorageFile file = await storageFolder.CreateFileAsync(xmlFileName, CreationCollisionOption.OpenIfExists);
+            return await GetMissId(file);
+        }
+        private async Task<List<int>> GetMissId(StorageFile file)
+        {
+            XElement xEle;
+            using (var stream = await file.OpenStreamForReadAsync())
+            {
+                xEle = XElement.Load(stream);
+            }
+            var missids = from x in xEle.Elements() select x.Attribute("missId").Value;
+            List<int> list = new List<int>();
+            foreach (var strMissid in missids)
+            {
+                string[] strMissids = strMissid.Split(',');
+                foreach (var t in strMissids)
+                {
+                    list.Add(int.Parse(t));
+                }
+            }
+            return list;
         }
     }
 }

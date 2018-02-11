@@ -32,7 +32,7 @@ namespace CheckIn
 
         public PageCheck()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             LoadStu();
             Debug.WriteLine(ApplicationData.Current.LocalFolder.Path);
             //BtnSave.AddHandler(PointerPressedEvent, new PointerEventHandler(Button_OnPointerPressed), true);

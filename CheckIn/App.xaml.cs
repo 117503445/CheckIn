@@ -32,8 +32,8 @@ namespace CheckIn
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
 
         }
         private static SortedSet<Student> stus = new SortedSet<Student>();

@@ -17,6 +17,10 @@ namespace CheckIn
         private int row = 0;
         private int column = 0;
         private int score = 0;
+        public string Name { get => name; set => name = value; }
+        public int Id { get => id; set => id = value; }
+        public int Row { get => row; set => row = value; }
+        public int Column { get => column; set => column = value; }
         private CheckType cType = CheckType.Present;
         public CheckType CType
         {
@@ -47,18 +51,15 @@ namespace CheckIn
         TextBlock gvTb = new TextBlock { FontSize = 20, Text = "null" };
         public Student(string name, int id, int row, int column)
         {
-            this.Name = name;
-            this.Id = id;
-            this.Row = row;
+            Name = name;
+            Id = id;
+            Row = row;
             Column = column;
-
         }
         Ellipse ellipse;
         Button btnStu = new Button();
         public void ShowButtonOfStudent(Grid grid)
         {
-
-
             StackPanel stackPanel = new StackPanel
             {
                 Padding = new Thickness(0),
@@ -87,18 +88,15 @@ namespace CheckIn
             Btnstu.VerticalAlignment = VerticalAlignment.Stretch;
             Btnstu.Click += Button_Click;
         }
-        public string Name { get => name; set => name = value; }
-        public int Id { get => id; set => id = value; }
-        public int Row { get => row; set => row = value; }
-        public int Column { get => column; set => column = value; }
+
         public Button Btnstu { get => btnStu; set => btnStu = value; }
         public int Score
         {
             get => score;
             set
             {
-                gvTb.Text = Name + " " + Score.ToString();
                 score = value;
+                gvTb.Text = Name + " " + Score.ToString();
             }
         }
         public GridViewItem GvItem
@@ -111,7 +109,11 @@ namespace CheckIn
             }
             set => gvItem = value;
         }
-
+        /// <summary>
+        /// 内部click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine("内部click");
@@ -128,28 +130,9 @@ namespace CheckIn
                 CType = CheckType.Present;
             }
         }
-
         public int CompareTo(Student other)
         {
             return id - other.id;
         }
     }
-    //public class SortedStudentById : IComparer<Student>
-    //{
-    //    public int Compare(Student x, Student y)
-    //    {
-    //        if (x.Id > y.Id)
-    //        {
-    //            return 1;
-    //        }
-    //        else if (x.Id < y.Id)
-    //        {
-    //            return -1;
-    //        }
-    //        else
-    //        {
-    //            return 0;
-    //        }
-    //    }
-    //}
 }

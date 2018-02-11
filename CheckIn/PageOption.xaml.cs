@@ -24,7 +24,7 @@ namespace CheckIn
     {
         public PageOption()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             DispatcherTimer timer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
             timer.Tick += Timer_Tick;
             timer.Start();

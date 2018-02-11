@@ -27,7 +27,7 @@ namespace CheckIn
 
         public PageMain()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             //if (App.PageCheck == null)
             //{
             //    App.PageCheck = new PageCheck();
