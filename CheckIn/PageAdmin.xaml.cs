@@ -91,7 +91,7 @@ namespace CheckIn
 #if DEBUG
                 var files = (from x in i where x.DisplayName.Contains("_DEBUG") select x.DisplayName).ToList();
 #else
-                 var files = from x in i where x.DisplayName.Length==1 select x.DisplayName;
+                 var files = (from x in i where x.DisplayName.Length==1 select x.DisplayName).ToList();
 #endif
                 files.Insert(0,"All");
                 return files;
