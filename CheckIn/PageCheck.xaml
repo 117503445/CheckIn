@@ -54,9 +54,9 @@
 
 
         </Grid>
-        <Button Name="BtnMain" Grid.Column="1"   Grid.Row="2" HorizontalAlignment="Center" Click="BtnMain_Click"   >
+        <Button Name="BtnMain" Grid.Column="1"   Grid.Row="2" HorizontalAlignment="Center" Click="BtnMain_Click" Background="{x:Null}"   >
             <Button.Content>
-                <Image Source="Assets/Naive.png" ></Image>
+                <Image Source="UserAssets/Naive.png" ></Image>
             </Button.Content>
         </Button>
     </Grid>

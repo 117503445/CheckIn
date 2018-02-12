@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="6e999582-9c39-48e7-a8eb-4c0dcb856386" Publisher="CN=t117503445" Version="1.3.0.0" />
+  <Identity Name="6e999582-9c39-48e7-a8eb-4c0dcb856386" Publisher="CN=t117503445" Version="1.4.0.0" />
   <mp:PhoneIdentity PhoneProductId="6e999582-9c39-48e7-a8eb-4c0dcb856386" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>CheckIn</DisplayName>
@@ -19,7 +19,7 @@
         <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png" />
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square310x310Logo="Assets\LargeTile.png" Square71x71Logo="Assets\SmallTile.png">
         </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="whiteSmoke" />
       </uap:VisualElements>
     </Application>
   </Applications>

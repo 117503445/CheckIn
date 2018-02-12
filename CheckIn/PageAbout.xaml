@@ -8,7 +8,8 @@
     mc:Ignorable="d" FontSize="18">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Name="TxtVersion" HorizontalAlignment="Left" Text="CheckIn 1.0.0.0,Copyright © 2017 HT" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="28"/>
 
+        <TextBlock Name="TxtInfo" HorizontalAlignment="Center" Text="CheckIn 1.0.0.0,Copyright © 2017 HT"  VerticalAlignment="Center" FontSize="28"
+                   />
     </Grid>
 </Page>

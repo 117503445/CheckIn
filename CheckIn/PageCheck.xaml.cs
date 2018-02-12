@@ -120,7 +120,7 @@ namespace CheckIn
                     //Debug.WriteLine(exp.Message);
                     //Debug.WriteLine("读取失败");
                     //Debug.WriteLine("---!---");
-                    if (exp.Message != "Root element is missing.")
+                    if (exp.Message != "Root element is missing."&&exp.Message!= "Xml_MissingRoot")
                     {
                         await Logger.WriteAsync(exp, true);
                         if ((await UMessageDialogAsync("致命的读取错误:" + exp.Message, "我不管", "取消操作,我去找QHT了") == 1))

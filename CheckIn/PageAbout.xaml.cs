@@ -28,16 +28,24 @@ namespace CheckIn
         public PageAbout()
         {
             InitializeComponent();
+
+            TxtInfo.Text = TxtVersion()+"\n"+TxtGithub();
+        }
+        private string TxtVersion()
+        {
             string appVersion = string.Format("CheckIn {0}.{1}.{2}.{3},Copyright © 2017-2018 HT",
-                    Package.Current.Id.Version.Major,
-                    Package.Current.Id.Version.Minor,
-                    Package.Current.Id.Version.Build,
-                    Package.Current.Id.Version.Revision);
-           
+        Package.Current.Id.Version.Major,
+        Package.Current.Id.Version.Minor,
+        Package.Current.Id.Version.Build,
+        Package.Current.Id.Version.Revision);
+
 #if DEBUG
             appVersion += ",DEBUG";
 #endif
-            TxtVersion.Text = appVersion;
+            return appVersion;
+        }
+        private string TxtGithub() {
+            return "https://github.com/117503445/CheckIn";
         }
     }
 }
