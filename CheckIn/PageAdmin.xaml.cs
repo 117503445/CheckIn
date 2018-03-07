@@ -91,9 +91,9 @@ namespace CheckIn
 #if DEBUG
                 var files = (from x in i where x.DisplayName.Contains("_DEBUG") select x.DisplayName).ToList();
 #else
-                 var files = (from x in i where x.DisplayName.Length==1 select x.DisplayName).ToList();
+                 var files = (from x in i where x.DisplayName.Length<=2 select x.DisplayName).ToList();
 #endif
-                files.Insert(0,"All");
+                files.Insert(0, "All");
                 return files;
             }
             catch (Exception ex)
@@ -134,11 +134,11 @@ namespace CheckIn
                     }
                     foreach (var file in filesName)
                     {
-                        if (file=="All")
+                        if (file == "All")
                         {
                             continue;
                         }
-                        List<int> list = await GetMissId(file+".xml");
+                        List<int> list = await GetMissId(file + ".xml");
                         foreach (var item in list)
                         {
                             //System.Diagnostics.Debug.WriteLine();
@@ -175,11 +175,15 @@ namespace CheckIn
             List<int> list = new List<int>();
             foreach (var strMissid in missids)
             {
-                string[] strMissids = strMissid.Split(',');
-                foreach (var t in strMissids)
+                if (strMissid != string.Empty)
                 {
-                    list.Add(int.Parse(t));
+                    string[] strMissids = strMissid.Split(',');
+                    foreach (var t in strMissids)
+                    {
+                        list.Add(int.Parse(t));
+                    }
                 }
+
             }
             return list;
         }
