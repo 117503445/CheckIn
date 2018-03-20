@@ -30,15 +30,20 @@ namespace CheckIn
                 switch (value)
                 {
                     case CheckType.Present:
-                        ellipse.Opacity = 0;
+                        //Btnstu.BorderBrush = new SolidColorBrush(Windows.UI.Colors.ForestGreen);
+                        //Btnstu.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 0, 255, 0));
+                        //Btnstu.BorderThickness = new Thickness(0);
+                        Btnstu.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black);
+                        Btnstu.BorderThickness = new Thickness(1);
                         break;
                     case CheckType.Absent:
-                        ellipse.Opacity = 1;
-                        ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.Orange);
+
+                        Btnstu.BorderBrush = new SolidColorBrush(Windows.UI.Colors.Orange);
+                        Btnstu.BorderThickness = new Thickness(4);
                         break;
                     case CheckType.Leave:
-                        ellipse.Opacity = 1;
-                        ellipse.Fill = new SolidColorBrush(Windows.UI.Colors.DeepSkyBlue);
+                        Btnstu.BorderBrush = new SolidColorBrush(Windows.UI.Colors.DeepSkyBlue);
+                        Btnstu.BorderThickness = new Thickness(4);
                         break;
                     default:
                         break;
@@ -56,30 +61,14 @@ namespace CheckIn
             Row = row;
             Column = column;
         }
-        Ellipse ellipse;
+
         Button btnStu = new Button();
         public void ShowButtonOfStudent(Grid grid)
         {
-            StackPanel stackPanel = new StackPanel
-            {
-                Padding = new Thickness(0),
-                Orientation = Orientation.Horizontal
-            };
-            TextBlock textBlock = new TextBlock
-            {
-                Text = Name,
-                FontSize = 18
-            };
-            ellipse = new Ellipse
-            {
-                Margin = new Thickness(0, 0, 0, 0),
-                Width = 18,
-                Height = 18,
-                //Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0))
-            }; stackPanel.Children.Add(ellipse);
-            stackPanel.Children.Add(textBlock);
-            Btnstu.HorizontalContentAlignment = HorizontalAlignment.Left;
-            Btnstu.Content = stackPanel;
+            Btnstu.FontSize = 24;
+            //Btnstu.BorderThickness = new Thickness(1);
+            Btnstu.HorizontalContentAlignment = HorizontalAlignment.Center;
+            Btnstu.Content = Name;
             grid.Children.Add(Btnstu);
             Grid.SetRow(Btnstu, 2 * Row - 2);
             Grid.SetColumn(Btnstu, 2 * Column - 2);
