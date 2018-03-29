@@ -62,11 +62,18 @@ namespace CheckIn
             Column = column;
         }
 
-        Button btnStu = new Button { FontSize = 24, BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black) };
+        Button btnStu = new Button {  BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black) };
         public void ShowButtonOfStudent(Grid grid)
         {
             //Btnstu.HorizontalContentAlignment = HorizontalAlignment.Center;
-            Btnstu.Content = Name;
+            Btnstu.Content = new Viewbox
+            {
+                Child = new TextBlock
+                {
+                    Text = Name
+                }
+            };
+
             grid.Children.Add(Btnstu);
             Grid.SetRow(Btnstu, 2 * Row - 2);
             Grid.SetColumn(Btnstu, 2 * Column - 2);
