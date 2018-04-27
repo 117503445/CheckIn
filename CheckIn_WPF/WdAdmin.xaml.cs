@@ -140,7 +140,16 @@ namespace CheckIn_WPF
                 var i = item.Split(',');
                 foreach (var u in i)
                 {
-                    t.Add(Int32.Parse(u));
+                    try
+                    {
+                        t.Add(Int32.Parse(u));
+                    }
+                    catch (Exception)
+                    {
+
+
+                    }
+
                 }
             }
             return t;
