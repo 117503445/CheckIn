@@ -26,6 +26,9 @@ namespace CheckIn_WPF
             InitializeComponent();
             LoadCboFileList();
             TxtVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+#if DEBUG
+            TxtVersion.Text += "_DEBUG";
+#endif
         }
 
         private void BtnChangeSeat_Click(object sender, RoutedEventArgs e)
