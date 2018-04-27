@@ -13,7 +13,7 @@
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="Microsoft YaHei" Loaded="Window_Loaded" MouseDown="Window_MouseDown" MouseDoubleClick="Window_MouseDoubleClick"
+        FontFamily="Microsoft YaHei" Loaded="Window_Loaded" MouseDown="Window_MouseDown" MouseDoubleClick="Window_MouseDoubleClick" Closed="Window_Closed"
         >
     <Grid>
         <Grid.ColumnDefinitions>

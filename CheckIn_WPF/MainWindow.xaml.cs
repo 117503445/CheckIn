@@ -32,22 +32,29 @@ namespace CheckIn_WPF
         /// </summary>
         private void LoadStu()
         {
-            //StorageFolder folder = ApplicationData.Current.LocalFolder;
-            //XElement xElement;
-            //try
-            //{
-            //    StorageFile file = await folder.GetFileAsync("Student.xml");
-            //    using (var stream = await file.OpenStreamForReadAsync())
-            //    {
-            //        xElement = XElement.Load(stream);
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    xElement = XElement.Load(@"Student.xml");
-            //    //await Logger.WriteAsync("缺失Student.xml,读取默认XML");
-            //}
-            XElement xElement = XElement.Load("Student.xml");
+            XElement xElement;
+            string pathStuXML = App.path_Dir_Root + "Student.xml";
+            string pathDefaultStuXML = App.path_Dir_Root + "DefaultStudent.xml";
+            if (!File.Exists(pathStuXML))
+            {
+                if (!File.Exists(pathDefaultStuXML))
+                {
+                    throw new Exception("默认XML缺失！");
+                }
+                else
+                {
+                    File.Copy(pathDefaultStuXML, pathStuXML);
+                }
+            }
+            try
+            {
+                xElement = XElement.Load(pathStuXML);
+            }
+            catch (Exception)
+            {
+                // "缺失Student.xml,读取默认XML"
+                xElement = XElement.Load(App.path_Dir_Root + "DefaultStudent.xml");
+            }
             SortedSet<Student> tempSet = new SortedSet<Student>();
             foreach (var item in xElement.Elements())
             {
@@ -64,20 +71,12 @@ namespace CheckIn_WPF
             App.Stus = tempSet;
             App.SaveStudentsAsync();
         }
-        //private void Btnstu_PointerReleased(object sender, PointerRoutedEventArgs e)
-        //{
-        //    SaveTemp();
-        //}
+
         private void SaveLog()
         {
-
-
-
             if (App.CurrentCheckKind == CheckKind.None)
             {
-
 #if !DEBUG
-                //await UMessageDialogAsync("不是正常的时间,请自行设置签到种类", "确定");
                 MessageBox.Show("不是正常的时间,请自行设置签到种类", "确定");
                 return;
 #endif
@@ -87,7 +86,7 @@ namespace CheckIn_WPF
                 XDocument xDoc;
                 try
                 {
-                    xDoc = XDocument.Load(App.XmlFileName);
+                    xDoc = XDocument.Load(App.path_Dir_File + App.XmlFileName);
                 }
                 catch (Exception exp)//创建新的document
                 {
@@ -149,9 +148,9 @@ namespace CheckIn_WPF
 
                 if (MessageBox.Show(message, "OK", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
-                    xDoc.Save(App.XmlFileName);
-                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "/backup/");
-                    xDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "/backup/" + App.TimeStamp() + "_" + App.XmlFileName);
+                    xDoc.Save(App.path_Dir_File + App.XmlFileName);
+
+                    xDoc.Save(App.path_Dir_Backup + App.TimeStamp() + "_" + App.XmlFileName);
 #if !DEBUG
                     App.Current.Shutdown();
 #endif
@@ -161,10 +160,6 @@ namespace CheckIn_WPF
             {
                 //await Logger.WriteAsync(ex);
             }
-        }
-        public static int UMessageDialogAsync(params string[] a)
-        {
-            return 1;
         }
         public void SaveTemp()
         {
@@ -180,19 +175,11 @@ namespace CheckIn_WPF
             {
                 xDoc.Element("root").Element("students").Add(new XElement("student", new XAttribute("ID", item.Id), new XAttribute("CheckType", item.CType)));
             }
-            //StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            //StorageFile file = await storageFolder.CreateFileAsync("temp.xml", CreationCollisionOption.ReplaceExisting);
-            //using (var stream = await file.OpenStreamForWriteAsync())
-            //{
-            //    xDoc.Save(stream);
-            //}
-            xDoc.Save("temp.xml");
-            Console.WriteLine("Save");
+            xDoc.Save(App.path_File_TempXML);
         }
         private void LoadTemp()
         {
-            Console.WriteLine("LoadTemp");
-            XDocument xDoc = LoadTempXml();
+            XDocument xDoc = XDocument.Load(App.path_File_TempXML);
             var t = xDoc.Element("root").Element("students").Elements();
             int i = 0;
             foreach (var item in t)
@@ -221,48 +208,14 @@ namespace CheckIn_WPF
                 }
             }
         }
-        private XDocument LoadTempXml()
-        {
-            //StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            //try
-            //{
-            //    StorageFile file = await storageFolder.CreateFileAsync("temp.xml", CreationCollisionOption.OpenIfExists);
-            //    using (var stream = await file.OpenStreamForReadAsync())
-            //    {
-            //        return (XDocument.Load(stream));
-            //    }
-            //}
-            //catch { return null; }
-            return XDocument.Load("temp.xml");
-        }
-        /// <summary>
-        /// 对MessageDialog进行封装
-        /// </summary>
-        /// <param name="message">消息框</param>
-        /// <param name="info">确认,取消...</param>
-        /// <returns></returns>
-        //private static async Task<int> UMessageDialogAsync(string message, params string[] info)
-        //{
-        //    var dialog = new MessageDialog(message)
-        //    {
-        //        DefaultCommandIndex = 0,
-        //        CancelCommandIndex = 1
-        //    };
-        //    for (int i = 0; i < info.Length; i++)
-        //    {
-        //        dialog.Commands.Add(new UICommand(info[i], cmd => { }, commandId: i));
-        //    }
-        //    var result = await dialog.ShowAsync();
-        //    return (int)result.Id;
-        //}
+
         private void BtnMain_Click(object sender, RoutedEventArgs e)
         {
             SaveLog();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Load");
-            XDocument xDoc = LoadTempXml();
+            XDocument xDoc = XDocument.Load(App.path_File_TempXML);
             if (CheckIfLoadTempAsync(xDoc))
             {
                 LoadTemp();
@@ -274,7 +227,6 @@ namespace CheckIn_WPF
             {
                 DragMove();
             }
-
         }
 
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -291,7 +243,16 @@ namespace CheckIn_WPF
 
         private void BtnMain_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (App.wdAdmin==null)
+            {
+                App.wdAdmin = new WdAdmin();
+            }
             App.wdAdmin.Show();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            App.Current.Shutdown();
         }
     }
 }

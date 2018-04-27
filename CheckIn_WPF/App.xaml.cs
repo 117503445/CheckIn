@@ -15,7 +15,7 @@ namespace CheckIn_WPF
     /// </summary>
     public partial class App : Application
     {
-        public static WdAdmin wdAdmin=new WdAdmin();
+        public static WdAdmin wdAdmin;
         private static SortedSet<Student> stus = new SortedSet<Student>();
         static int checkDayOfWeek = (int)DateTime.Now.DayOfWeek;
         public static string TimeStamp()
@@ -38,7 +38,7 @@ namespace CheckIn_WPF
             //StorageFile file = await storageFolder.CreateFileAsync("student.xml", CreationCollisionOption.ReplaceExisting);
             //await FileIO.WriteTextAsync(file, xDoc.ToString());
 
-            xDoc.Save("student.xml");
+            xDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "/Student.xml");
         }
         public static string XmlFileName
         {
@@ -46,7 +46,6 @@ namespace CheckIn_WPF
             {
                 System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("zh-CN");
                 System.Globalization.Calendar calendar = cultureInfo.Calendar;
-
                 int weekOfYear = calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
 #if DEBUG
                 return weekOfYear.ToString() + "_DEBUG.xml";
@@ -100,5 +99,16 @@ namespace CheckIn_WPF
             set => stus = value;
         }
         private const int NumStudents = 48;
+
+        public static string path_Dir_Root = AppDomain.CurrentDomain.BaseDirectory;
+        public static string path_Dir_File = path_Dir_Root + "/File/";
+        public static string path_File_TempXML = path_Dir_File + "/temp.xml";
+        public static string path_Dir_Backup=App.path_Dir_File + "/backup/";
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            Directory.CreateDirectory(path_Dir_File);
+            Directory.CreateDirectory(path_Dir_Backup);
+        }
     }
 }

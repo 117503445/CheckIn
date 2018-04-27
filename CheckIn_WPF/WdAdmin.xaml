@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CheckIn_WPF"
         mc:Ignorable="d"
-        Title="WdAdmin" Height="450" Width="800">
-    <Grid>
+        Title="WdAdmin" Height="450" Width="800"
+                TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="Microsoft YaHei" Closing="Window_Closing" MouseDown="Window_MouseDown" 
+        >
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Button x:Name="BtnChangeSeat" Content="换座位" d:LayoutOverrides="Height" Click="BtnChangeSeat_Click"/>
+            <ComboBox x:Name="CboStus" VerticalAlignment="Stretch" SelectionChanged="CboStus_SelectionChanged"/>
+            <TextBlock Name="TxtVersion"/>
+        </StackPanel>
+        <TextBlock Name="TxtStus" Grid.Column="1" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" FontSize="22"/>
         
     </Grid>
 </Window>
