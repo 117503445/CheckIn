@@ -80,7 +80,7 @@ namespace CheckIn_WPF
 #if DEBUG
                 var files = (from x in i where x.Name.Contains("_DEBUG") select x.Name).ToList();
 #else
-                 var files = (from x in i where x.Length<=2 select x).ToList();
+                 var files = (from x in i where x.Length<=2 select x.Name).ToList();
 #endif
                 files.Insert(0, "All");
                 return files;
