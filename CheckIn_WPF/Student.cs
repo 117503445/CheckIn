@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-namespace CheckIn_WPF 
+namespace CheckIn_WPF
 {
     public class Student : IComparable<Student>
     {
@@ -50,8 +50,6 @@ namespace CheckIn_WPF
             }
         }
 
-        
-        TextBlock gvTb = new TextBlock { FontSize = 20, Text = "null" };
         public Student(string name, int id, int row, int column)
         {
             Name = name;
@@ -60,22 +58,20 @@ namespace CheckIn_WPF
             Column = column;
         }
 
-        Button btnStu = new Button {  BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Colors.Black) };
+        Button btnStu = new Button { BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Colors.Black), Height = double.NaN };
         public void ShowButtonOfStudent(Grid grid)
         {
-            //Btnstu.HorizontalContentAlignment = HorizontalAlignment.Center;
             Btnstu.Content = new Viewbox
             {
                 Child = new TextBlock
                 {
-                    Text = Name
+                    Text = Name,
                 }
             };
 
             grid.Children.Add(Btnstu);
             Grid.SetRow(Btnstu, 2 * Row - 2);
             Grid.SetColumn(Btnstu, 2 * Column - 2);
-            //button.Margin = new Thickness(150 * column, 90 * row, 0, 0);
             Btnstu.HorizontalAlignment = HorizontalAlignment.Stretch;
             Btnstu.VerticalAlignment = VerticalAlignment.Stretch;
             Btnstu.Click += Button_Click;
@@ -88,7 +84,6 @@ namespace CheckIn_WPF
             set
             {
                 score = value;
-                gvTb.Text = Name + " " + Score.ToString();
             }
         }
         /// <summary>
@@ -111,7 +106,9 @@ namespace CheckIn_WPF
             {
                 CType = CheckType.Present;
             }
+            BtnClick(this, new EventArgs());
         }
+        public event EventHandler BtnClick;
         public int CompareTo(Student other)
         {
             return id - other.id;

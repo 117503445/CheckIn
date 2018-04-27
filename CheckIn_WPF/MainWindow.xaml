@@ -5,7 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CheckIn_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="CheckIn" Height="450" Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="Microsoft YaHei" Loaded="Window_Loaded" MouseDown="Window_MouseDown"
+        >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
@@ -50,8 +59,6 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="7*"/>
             </Grid.RowDefinitions>
-
-
         </Grid>
         <Button Name="BtnMain" Grid.Column="1"   Grid.Row="2" HorizontalAlignment="Center" Click="BtnMain_Click" Background="{x:Null}"   >
             <Button.Content>

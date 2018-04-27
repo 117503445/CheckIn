@@ -22,7 +22,7 @@ namespace CheckIn_WPF
             var t = DateTime.Now;
             return string.Format("{0},{1},{2},{3},{4}", t.Month, t.Day, t.Hour, t.Minute, t.Second);
         }
-        public async static void SaveStudentsAsync()
+        public  static void SaveStudentsAsync()
         {
             XDocument xDoc = new XDocument(
                    new XElement(
@@ -92,10 +92,7 @@ namespace CheckIn_WPF
             {
                 if (stus.Count != NumStudents)
                 {
-                    Task.Run(async () =>
-                    {
                         //await Logger.WriteAsync("未满足48人的限制"); 
-                    });
                 }
                 return stus;
             }
