@@ -33,8 +33,8 @@ namespace CheckIn_WPF
         private void LoadStu()
         {
             XElement xElement;
-            string pathStuXML = App.path_Dir_Root + "Student.xml";
-            string pathDefaultStuXML = App.path_Dir_Root + "DefaultStudent.xml";
+            string pathStuXML = App.path_Dir_File + "Student.xml";
+            string pathDefaultStuXML = App.path_Dir_File + "DefaultStudent.xml";
             if (!File.Exists(pathStuXML))
             {
                 if (!File.Exists(pathDefaultStuXML))
@@ -53,7 +53,7 @@ namespace CheckIn_WPF
             catch (Exception)
             {
                 // "缺失Student.xml,读取默认XML"
-                xElement = XElement.Load(App.path_Dir_Root + "DefaultStudent.xml");
+                xElement = XElement.Load(pathDefaultStuXML);
             }
             SortedSet<Student> tempSet = new SortedSet<Student>();
             foreach (var item in xElement.Elements())

@@ -132,7 +132,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DefaultStudent.xml">
+    <Content Include="File\DefaultStudent.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Help\CheckIn.ico" />
@@ -140,9 +140,7 @@
   <ItemGroup>
     <Resource Include="UserAssets\Naive.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="File\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
