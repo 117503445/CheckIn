@@ -120,7 +120,6 @@ namespace CheckIn_WPF
                 {
                     missId = missId.Substring(0, missId.Length - 1);
                 }
-                Console.WriteLine("MissID=" + missId);
                 DateTime t = DateTime.Now;
                 var i = (from x in xDoc.Root.Elements() where x.Attribute("checkKind").Value == App.CurrentCheckKind.ToString() && int.Parse(x.Attribute("dayOfWeek").Value) == App.CheckDayOfWeek select x).ToList();
                 if (i.Count() == 0)
