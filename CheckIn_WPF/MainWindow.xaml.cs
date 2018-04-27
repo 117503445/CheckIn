@@ -135,7 +135,7 @@ namespace CheckIn_WPF
                 }
                 else
                 {
-                    if (MessageBox.Show("似乎已经签到过了，确定继续","疑惑",MessageBoxButton.OKCancel)==MessageBoxResult.OK)//UMessageDialogAsync("似乎已经签到过了", "吼啊", "取消") == 
+                    if (MessageBox.Show("似乎已经签到过了，确定继续", "疑惑", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)//UMessageDialogAsync("似乎已经签到过了", "吼啊", "取消") == 
                     {
                         return;
                     }
@@ -270,7 +270,28 @@ namespace CheckIn_WPF
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+
+        }
+
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void BtnMain_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            App.wdAdmin.Show();
         }
     }
 }
