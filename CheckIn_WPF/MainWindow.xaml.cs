@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using User.SoftWare;
 
 namespace CheckIn_WPF
 {
@@ -92,7 +93,7 @@ namespace CheckIn_WPF
                 {
                     if (exp.Message != "Root element is missing." && exp.Message != "Xml_MissingRoot")
                     {
-                        //await Logger.WriteAsync(exp, true);
+                        ULogger.WriteException(exp);
                         if (MessageBox.Show("致命的读取错误，按确定继续" + "exp.Message", "错误", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                         {
                             return;
@@ -100,7 +101,7 @@ namespace CheckIn_WPF
                     }
                     else
                     {
-                        //await Logger.WriteAsync("创建新的XML");
+                        ULogger.WriteInfo("Info","创建新的XML");
                     }
 
                     xDoc = new XDocument();
@@ -157,7 +158,7 @@ namespace CheckIn_WPF
             }
             catch (Exception ex)
             {
-                //await Logger.WriteAsync(ex);
+                ULogger.WriteException(ex);
             }
         }
         public void SaveTemp()
@@ -214,10 +215,13 @@ namespace CheckIn_WPF
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            XDocument xDoc = XDocument.Load(App.path_File_TempXML);
-            if (CheckIfLoadTempAsync(xDoc))
+            if (File.Exists(App.path_File_TempXML))
             {
-                LoadTemp();
+                XDocument xDoc = XDocument.Load(App.path_File_TempXML);
+                if (CheckIfLoadTempAsync(xDoc))
+                {
+                    LoadTemp();
+                }
             }
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -242,7 +246,7 @@ namespace CheckIn_WPF
 
         private void BtnMain_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (App.wdAdmin==null)
+            if (App.wdAdmin == null)
             {
                 App.wdAdmin = new WdAdmin();
             }

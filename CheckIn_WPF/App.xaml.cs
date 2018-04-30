@@ -34,10 +34,6 @@ namespace CheckIn_WPF
             {
                 xDoc.Element("students").Add(new XElement("student", new XAttribute("id", item.Id), new XAttribute("name", item.Name), new XAttribute("column", item.Column), new XAttribute("row", item.Row)));
             }
-            //StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-            //StorageFile file = await storageFolder.CreateFileAsync("student.xml", CreationCollisionOption.ReplaceExisting);
-            //await FileIO.WriteTextAsync(file, xDoc.ToString());
-
             xDoc.Save(AppDomain.CurrentDomain.BaseDirectory + "/Student.xml");
         }
         public static string XmlFileName
@@ -101,9 +97,9 @@ namespace CheckIn_WPF
         private const int NumStudents = 48;
 
         public static string path_Dir_Root = AppDomain.CurrentDomain.BaseDirectory;
-        public static string path_Dir_File = path_Dir_Root + "/File/";
-        public static string path_File_TempXML = path_Dir_File + "/temp.xml";
-        public static string path_Dir_Backup=App.path_Dir_File + "/backup/";
+        public static string path_Dir_File = path_Dir_Root + @"\File\";
+        public static string path_File_TempXML = path_Dir_File + @"\temp.xml";
+        public static string path_Dir_Backup = path_Dir_File + @"\backup\";
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {

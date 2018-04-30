@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using User.SoftWare;
 
 namespace CheckIn_WPF
 {
@@ -46,8 +47,7 @@ namespace CheckIn_WPF
                 else if (item.Column == 8 || item.Column == 9)
                 {
                     item.Column -= 7;
-                }
-                Console.WriteLine(item.Name + item.Column);
+                }       
             }
             App.SaveStudentsAsync();
         }
@@ -68,7 +68,7 @@ namespace CheckIn_WPF
             }
             catch (Exception ex)
             {
-                //await Logger.WriteAsync(ex);
+                ULogger.WriteException(ex);
             }
 
         }
@@ -77,21 +77,19 @@ namespace CheckIn_WPF
         {
             try
             {
-                Console.WriteLine(App.path_Dir_File);
                 DirectoryInfo dirInfo = new DirectoryInfo(App.path_Dir_File);
                 var i = dirInfo.GetFiles();
 #if DEBUG
                 var files = (from x in i where x.Name.Contains("_DEBUG") select x.Name).ToList();
 #else
-                 var files = (from x in i where x.Name.Length<=6 select x.Name).ToList();
+                var files = (from x in i where x.Name.Length <= 6 select x.Name).ToList();
 #endif
                 files.Insert(0, "All");
                 return files;
             }
             catch (Exception ex)
             {
-
-                //await Logger.WriteAsync(ex);
+                ULogger.WriteException(ex);
                 return null;
             }
         }
@@ -142,12 +140,14 @@ namespace CheckIn_WPF
                 {
                     try
                     {
-                        t.Add(Int32.Parse(u));
+                        if (u != "")
+                        {
+                            t.Add(Int32.Parse(u));
+                        }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
-
+                        ULogger.WriteException(ex);
                     }
 
                 }

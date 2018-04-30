@@ -56,6 +56,10 @@
     <StartupObject>CheckIn_WPF.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HTLibrary, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\HTLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -122,6 +126,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="DLL\HTLibrary.dll.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -132,6 +137,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DLL\HTLibrary.dll" />
+    <Content Include="DLL\HTLibrary.pdb" />
+    <Content Include="DLL\HTLibrary.XmlSerializers.dll" />
     <Content Include="File\DefaultStudent.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
